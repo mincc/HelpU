@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">HelpU</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_register">Register</string>
+    <string name="title_activity_hire">Hire</string>
+    <string name="title_activity_work">Work</string>
+
+    <string-array name="hire_list">
+        <item>0|Please select...</item>
+        <item>1|Contractor</item>
+        <item>2|Plumber</item>
+        <item>3|Handyman</item>
+        <item>4|Interior Designer</item>
+        <item>5|Cleaning Service</item>
+        <item>6|Move House</item>
+        <item>7|Photographer</item>
+        <item>8|Videographer</item>
+        <item>9|Hair and Makeup</item>
+        <item>10|Wedding Planner</item>
+    </string-array>
+
+    <string name="title_activity_application_list">Application List</string>
+    <string name="title_activity_work_list">Work List</string>
+    <string name="title_activity_service_provider_list">Service Provider List</string>
+    <string name="title_activity_test">Test</string>
+    <string name="title_activity_user_profile_setting">User Profile Setting</string>
+    <string name="server_uri">http://192.168.1.8/HelpU/</string>
+    <string name="title_activity_customer_request_list">Customer Request List</string>
+    <string name="title_activity_customer_request_by_id">Customer Request By ID</string>
+    <string name="title_activity_service_provider_by_id">Service Provider By ID</string>
+    <string name="title_activity_help">Help</string>
+    <!--<string name="server_uri">http://helpu.hostei.com/</string>-->
+</resources>

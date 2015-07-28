@@ -1,0 +1,110 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:padding="10dp"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:weightSum="1"
+    android:screenOrientation="portrait">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome "
+        android:id="@+id/textView3"
+        android:layout_gravity="start"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Username"
+        android:id="@+id/txUsername"
+        android:layout_toRightOf="@id/textView3"
+        android:textStyle="bold"
+        android:textColor="@color/selector_link"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/bLogout"
+        android:text="Logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="50dp"
+        android:layout_weight="0.27">
+
+        <Button
+            android:layout_width="147dp"
+            android:layout_height="wrap_content"
+            android:text="Hire"
+            android:id="@+id/bHire"
+            android:textSize="30sp"
+            android:layout_margin="10dp" />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Work"
+            android:id="@+id/bWork"
+            android:textSize="30sp"
+            android:layout_margin="10dp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total Request [Hire]               :"
+        android:id="@+id/textView4"
+        android:layout_below="@+id/textView3"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="42dp"
+        android:textSize="20sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total Service Provide [Work]:"
+        android:id="@+id/textView5"
+        android:textSize="20sp"
+        android:layout_below="@+id/textView4"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="36dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:id="@+id/tvTotalCountHire"
+        android:textStyle="bold"
+        android:textColor="@color/selector_link"
+        android:layout_above="@+id/textView5"
+        android:layout_toRightOf="@+id/textView5"
+        android:layout_toEndOf="@+id/textView5"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:textSize="20sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:id="@+id/tvTotalCountWork"
+        android:textStyle="bold"
+        android:textColor="@color/selector_link"
+        android:textSize="20sp"
+        android:layout_alignTop="@+id/textView5"
+        android:layout_alignLeft="@+id/tvTotalCountHire"
+        android:layout_alignStart="@+id/tvTotalCountHire" />
+</RelativeLayout>

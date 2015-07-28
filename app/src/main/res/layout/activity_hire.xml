@@ -1,0 +1,81 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.example.chungmin.helpu.Hire">
+
+    <TextView
+        android:text="Hire Or Find Professionals For These Services"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spHire"
+        android:layout_below="@+id/textView"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/tvMoreDescription"
+        android:layout_toEndOf="@+id/tvMoreDescription" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="More Description :"
+        android:id="@+id/tvMoreDescription"
+        android:layout_below="@+id/spHire"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:inputType="textMultiLine"
+        android:lines="8"
+        android:minLines="2"
+        android:gravity="top|left"
+        android:maxLines="10"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:scrollbars="vertical"
+        android:id="@+id/etDescription"
+        android:layout_below="@+id/tvMoreDescription"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:imeOptions="actionDone"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Types : "
+        android:id="@+id/textView2"
+        android:layout_alignBottom="@+id/spHire"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/spHire"
+        android:layout_toLeftOf="@+id/spHire"
+        android:layout_toStartOf="@+id/spHire" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:id="@+id/bCancel"
+        android:layout_below="@+id/etDescription"
+        android:layout_alignRight="@+id/textView"
+        android:layout_alignEnd="@+id/textView"
+        android:layout_marginTop="60dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OK"
+        android:id="@+id/bOk"
+        android:layout_alignTop="@+id/bCancel"
+        android:layout_toLeftOf="@+id/bCancel"
+        android:layout_toStartOf="@+id/bCancel"
+        android:layout_marginRight="45dp"
+        android:layout_marginEnd="45dp" />
+
+</RelativeLayout>
