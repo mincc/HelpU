@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.chungmin.helpu.CustomerRequestByID">
+    tools:context="com.example.chungmin.fragment.CustomerRequestByID">
 
     <TextView
         android:layout_width="wrap_content"

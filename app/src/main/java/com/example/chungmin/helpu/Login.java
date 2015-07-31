@@ -53,7 +53,7 @@ public class Login extends ActionBarActivity implements View.OnClickListener{
     }
 
     private void authenticate(User user) {
-        String url = getString(R.string.server_uri) + "UserGetByUsernameAndPassword.php";
+        String url = getString(R.string.server_uri) + ((Globals)getApplication()).getUserGetByUsernameAndPassword();
         UserServerRequests serverRequest = new UserServerRequests(this);
         serverRequest.fetchUserDataAsyncTask(user, url, new GetUserCallback() {
             @Override

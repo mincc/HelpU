@@ -140,7 +140,7 @@ public class Work extends ActionBarActivity implements AdapterView.OnItemSelecte
     }
 
     private void registerServiceProvider(ServiceProvider serviceProvider) {
-        String url = getString(R.string.server_uri) + "ServiceProviderInsert.php";
+        String url = getString(R.string.server_uri) + ((Globals)getApplication()).getServiceProviderInsert();
         ServiceProviderServerRequests serviceProviderServerRequest = new ServiceProviderServerRequests(this);
         serviceProviderServerRequest.storeServiceProviderDataInBackground(serviceProvider, url, new GetServiceProviderCallback() {
             @Override

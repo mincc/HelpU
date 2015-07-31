@@ -19,10 +19,12 @@ public class ServiceProvider {
         this.email = email;
     }
 
-    public ServiceProvider(int serviceProviderId, int userId, int serviceId, String phone, String email) {
+    public ServiceProvider(int serviceProviderId, int userId, String userName, int serviceId, String serviceName, String phone, String email) {
         this.serviceProviderId = serviceProviderId;
         this.userId = userId;
+        this.userName = userName;
         this.serviceId = serviceId;
+        this.serviceName = serviceName;
         this.phone = phone;
         this.email = email;
     }

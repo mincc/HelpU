@@ -43,7 +43,7 @@ public class Register extends ActionBarActivity implements View.OnClickListener{
     }
 
     private void registerUser(User user) {
-        String url = getString(R.string.server_uri) + "UserInsert.php";
+        String url = getString(R.string.server_uri) + ((Globals)getApplication()).getUserInsert();
         UserServerRequests serverRequest = new UserServerRequests(this);
         serverRequest.storeUserDataInBackground(user, url, new GetUserCallback() {
             @Override

@@ -27,9 +27,14 @@
     <string name="title_activity_test">Test</string>
     <string name="title_activity_user_profile_setting">User Profile Setting</string>
     <string name="server_uri">http://192.168.1.8/HelpU/</string>
+    <!--<string name="server_uri">http://helpu.hostei.com/</string>-->
     <string name="title_activity_customer_request_list">Customer Request List</string>
     <string name="title_activity_customer_request_by_id">Customer Request By ID</string>
     <string name="title_activity_service_provider_by_id">Service Provider By ID</string>
     <string name="title_activity_help">Help</string>
-    <!--<string name="server_uri">http://helpu.hostei.com/</string>-->
+    <string name="title_activity_customer_request_pick_service_provider">
+        Customer Request Pick Service Provider
+    </string>
+
+
 </resources>

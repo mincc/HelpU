@@ -12,6 +12,8 @@ public class CustomerRequest {
     private String description;
     private ProjectStatus projectStatus;
     private String projectStatusName;
+    private int serviceProviderId;
+    private double quotation;
 
     public CustomerRequest() {
 
@@ -23,16 +25,24 @@ public class CustomerRequest {
         this.serviceId = serviceId;
         this.description = description;
         this.projectStatus = projectStatus;
+        this.serviceProviderId = -1;
+        this.quotation = 0;
     }
 
-    public CustomerRequest(int customerRequestId, int serviceId, int userId, String description, ProjectStatus projectStatus, String userName, String projectStatusName) {
+    public CustomerRequest(int customerRequestId, int serviceId, String serviceName, int userId, String description,
+                           ProjectStatus projectStatus, String userName, String projectStatusName,
+                           int serviceProviderId, double quotation) {
         this.customerRequestId = customerRequestId;
         this.userId = userId;
         this.serviceId = serviceId;
+        this.serviceName = serviceName;
         this.description = description;
         this.projectStatus = projectStatus;
         this.userName = userName;
         this.projectStatusName = projectStatusName;
+        this.serviceProviderId = serviceProviderId;
+        this.quotation = quotation;
+
     }
 
     public int getCustomerRequestId() {
@@ -67,6 +77,21 @@ public class CustomerRequest {
     }
     public void setProjectStatusId(int productStatusId) {
         this.projectStatus = ProjectStatus.values()[productStatusId];
+    }
+    public int getProjectStatusId() {
+        return projectStatus.getId();
+    }
+    public int getServiceProviderId() {
+        return serviceProviderId;
+    }
+    public void setServiceProviderId(int serviceProviderId) {
+        this.serviceProviderId = serviceProviderId;
+    }
+    public double getQuotation() {
+        return quotation;
+    }
+    public void setQuotation(int quotation) {
+        this.quotation = quotation;
     }
 
     //User Table

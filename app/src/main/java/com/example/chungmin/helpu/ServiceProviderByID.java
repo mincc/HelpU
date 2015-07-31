@@ -31,7 +31,7 @@ public class ServiceProviderByID extends ActionBarActivity {
         Bundle b = getIntent().getExtras();
         int serviceProviderId =b.getInt("serviceProviderId",0);
 
-        String url = getString(R.string.server_uri) + "ServiceProviderGetByID.php";
+        String url = getString(R.string.server_uri) + ((Globals)getApplication()).getServiceProviderGetByID();
         ServiceProviderServerRequests serverRequest = new ServiceProviderServerRequests(this);
         serverRequest.getServiceProviderByID(serviceProviderId, url, new GetServiceProviderCallback() {
             @Override

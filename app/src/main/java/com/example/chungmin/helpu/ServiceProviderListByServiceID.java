@@ -35,14 +35,25 @@ public class ServiceProviderListByServiceID extends ListActivity implements Fetc
         // Adding button to listview at footer
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //user choose the provider and change the project status to Pick(3)
                 TextView tvServiceProviderId = (TextView) view.findViewById(R.id.tvServiceProviderId);
                 int serviceProviderId = Integer.parseInt((String) tvServiceProviderId.getText());
-
-                Intent i = new Intent(ServiceProviderListByServiceID.this, ServiceProviderByID.class);
-                Bundle b = new Bundle();
-                b.putInt("serviceProviderId", serviceProviderId);
-                i.putExtras(b);
-                startActivity(i);
+                int projectStatusId = ProjectStatus.Pick.getId();
+                CustomerRequest customerRequest = ((Globals)getApplication()).getCustomerRequest();
+                customerRequest.setServiceProviderId(serviceProviderId);
+                customerRequest.setProjectStatusId(projectStatusId);
+                String url = getString(R.string.server_uri) + ((Globals)getApplication()).getCustomerRequestUpdate();
+                CustomerRequestServerRequests serverRequest = new CustomerRequestServerRequests(view.getContext());
+                serverRequest.getCustomerRequestUpdate(customerRequest, url, new GetCustomerRequestCallback() {
+                    @Override
+                    public void done(CustomerRequest returnedCustomerRequest) {
+                        Intent i = new Intent(ServiceProviderListByServiceID.this, CustomerRequestPickServiceProvider.class);
+//                        Bundle b = new Bundle();
+//                        b.putInt("serviceProviderId", serviceProviderId);
+//                        i.putExtras(b);
+                        startActivity(i);
+                    }
+                });
             }
         });
 
@@ -53,7 +64,7 @@ public class ServiceProviderListByServiceID extends ListActivity implements Fetc
         Bundle b = getIntent().getExtras();
         int serviceId =b.getInt("serviceId", 0);
 
-        String url = getString(R.string.server_uri) + "ServiceProviderGetByServiceID.php";
+        String url = getString(R.string.server_uri) + ((Globals)getApplication()).getServiceProviderGetByServiceID();
         ServiceProviderServerRequests serverRequest = new ServiceProviderServerRequests(this);
         serverRequest.getServiceProviderByServiceID(serviceId, url, new GetServiceProviderListCallback() {
             @Override

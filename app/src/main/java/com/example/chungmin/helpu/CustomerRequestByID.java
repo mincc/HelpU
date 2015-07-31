@@ -30,7 +30,7 @@ public class CustomerRequestByID extends ActionBarActivity {
         Bundle b = getIntent().getExtras();
         int customerRequestId =b.getInt("customerRequestId",0);
 
-        String url = getString(R.string.server_uri) + "CustomerRequestGetByID.php";
+        String url = getString(R.string.server_uri) + ((Globals)getApplication()).getCustomerRequestGetByID();
         CustomerRequestServerRequests serverRequest = new CustomerRequestServerRequests(this);
         serverRequest.getCustomerRequestByID(customerRequestId, url, new GetCustomerRequestCallback() {
             @Override

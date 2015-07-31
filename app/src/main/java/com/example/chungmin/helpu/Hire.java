@@ -134,7 +134,7 @@ public class Hire extends ActionBarActivity implements AdapterView.OnItemSelecte
     }
 
     private void registerCustomerRequest(CustomerRequest customerRequest) {
-        String url = getString(R.string.server_uri)+ "CustomerRequestInsert.php";
+        String url = getString(R.string.server_uri)+ ((Globals)getApplication()).getCustomerRequestInsert();
         CustomerRequestServerRequests customerRequestServerRequest = new CustomerRequestServerRequests(this);
         customerRequestServerRequest.storeCustomerRequestDataInBackground(customerRequest, url, new GetCustomerRequestCallback() {
             @Override

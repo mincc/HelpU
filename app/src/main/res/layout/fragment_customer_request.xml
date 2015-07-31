@@ -1,0 +1,81 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="fragments.CustomerRequestFragment">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Customer"
+        android:id="@+id/title"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/TextView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Customer Request ID : "
+        android:layout_below="@+id/title"/>
+
+    <TextView
+        android:id="@+id/tvCustomerRequestId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="123456"
+        android:layout_alignTop="@+id/TextView1"
+        android:layout_toRightOf="@+id/TextView1"
+        android:layout_toEndOf="@+id/TextView1" />
+
+    <TextView
+        android:id="@+id/TextView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Service Type : "
+        android:layout_below="@+id/TextView1" />
+
+    <TextView
+        android:id="@+id/tvServiceName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Handyman"
+        android:layout_below="@id/TextView1"
+        android:layout_toRightOf="@id/TextView1"
+        android:layout_toEndOf="@id/TextView1" />
+
+    <TextView
+        android:id="@+id/TextView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Project Status : "
+        android:layout_below="@+id/TextView2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="000000"
+        android:id="@+id/tvProjectStatus"
+        android:layout_below="@id/TextView2"
+        android:layout_toRightOf="@id/TextView1"
+        android:layout_toEndOf="@id/TextView1" />
+
+    <TextView
+        android:id="@+id/TextView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Description : "
+        android:layout_below="@id/TextView4" />
+
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!!!"
+        android:layout_below="@id/TextView3" />
+
+</RelativeLayout>

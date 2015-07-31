@@ -61,7 +61,7 @@ public class ServiceProviderList extends ListActivity implements FetchServicePro
         // show progress dialog
         dialog = ProgressDialog.show(this, "", "Loading...");
 
-        String url = getString(R.string.server_uri)+"ServiceProviderGetByUserID.php";
+        String url = getString(R.string.server_uri) + ((Globals)getApplication()).getServiceProviderGetByUserID();
 
         UserLocalStore userLocalStore = new UserLocalStore(this);
         User user = userLocalStore.getLoggedInUser();

@@ -7,6 +7,7 @@ package com.example.chungmin.helpu;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,14 +73,38 @@ public class CustomerRequestAdapter extends ArrayAdapter<CustomerRequest>{
             Button btnChangeState= (Button) v.findViewById(R.id.btnChangeState);
             btnChangeState.setOnClickListener(new Button.OnClickListener() {
                 public void onClick(View v) {
-                    Intent redirect = new Intent(mContext, ServiceProviderListByServiceID.class);
-                    Bundle b = new Bundle();
-                    b.putInt("serviceId", serviceId);
-                    redirect.putExtras(b);
-                    redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    mContext.startActivity(redirect);
-                }
-            });
+                    View superView = (View) v.getParent();
+                    TextView tvCustomerRequestId = (TextView)superView.findViewById(R.id.tvCustomerRequestId);
+                    TextView tvProjectStatus = (TextView)superView.findViewById(R.id.tvProjectStatus);
+
+                    int customerRequestId = Integer.parseInt(tvCustomerRequestId.getText().toString());
+                    final String projectStatus = tvProjectStatus.getText().toString().trim();
+
+                    CustomerRequestServerRequests serverRequest = new CustomerRequestServerRequests(getContext());
+                    String url =  mContext.getString(R.string.server_uri) + ((Globals)mContext.getApplicationContext()).getCustomerRequestGetByID();
+                    serverRequest.getCustomerRequestByID(customerRequestId, url, new GetCustomerRequestCallback() {
+                        @Override
+                        public void done(final CustomerRequest returnedCustomerRequest) {
+                            Intent redirect;
+                            ((Globals) mContext.getApplicationContext()).setCustomerRequest(returnedCustomerRequest);
+
+                            if(projectStatus.equals(ProjectStatus.New.toString()) || projectStatus.equals(ProjectStatus.Match.toString())) {
+                                redirect = new Intent(mContext, ServiceProviderListByServiceID.class);
+                                Bundle b = new Bundle();
+                                b.putInt("serviceId", serviceId);
+                                redirect.putExtras(b);
+                                redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            }else if(projectStatus.equals(ProjectStatus.Pick.toString())) {
+                                redirect = new Intent(mContext, CustomerRequestPickServiceProvider.class);
+                            }else{
+                                redirect = new Intent(mContext, MainActivity.class);
+                            }
+                            mContext.startActivity(redirect);
+                        }
+                    });
+
+                    }
+                });
         }
 
         return v;

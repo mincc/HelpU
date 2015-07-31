@@ -158,14 +158,18 @@ public class ServiceProviderServerRequests {
 
                     int serviceProviderId = jObject.getInt("serviceProviderId");
                     int userId = jObject.getInt("userId");
+                    String userName = jObject.getString("userName");
                     int serviceId = jObject.getInt("serviceId");
+                    String serviceName = jObject.getString("serviceName");
                     String phone = jObject.getString("phone");
                     String email = jObject.getString("email");
 
                     returnedServiceProvider = new ServiceProvider(
                             serviceProviderId,
                             userId,
+                            userName,
                             serviceId,
+                            serviceName,
                             phone,
                             email);
                 }

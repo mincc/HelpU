@@ -25,7 +25,7 @@ public class ApplicationList extends ListActivity implements FetchDataListener {
         // show progress dialog
         dialog = ProgressDialog.show(this, "", "Loading...");
 
-        String url = getString(R.string.server_uri) + "app.php";
+        String url = getString(R.string.server_uri) + ((Globals)getApplication()).getApp();
         FetchDataTask task = new FetchDataTask(this);
         task.execute(url);
     }

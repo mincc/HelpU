@@ -109,7 +109,7 @@ public class MainActivity extends ActionBarActivity implements FetchServiceProvi
     private void retrieveWorkCount(String userId) {
         // show progress dialog
         dialog = ProgressDialog.show(this, "", "Loading...");
-        String url = getString(R.string.server_uri) + "ServiceProviderGetCount.php";
+        String url = getString(R.string.server_uri) + ((Globals)getApplication()).getServiceProviderGetCount();
         FetchServiceProviderCountTask task = new FetchServiceProviderCountTask(this);
         task.execute(url, userId);
     }
@@ -117,7 +117,7 @@ public class MainActivity extends ActionBarActivity implements FetchServiceProvi
     private void retrieveHireCount(String userId) {
         // show progress dialog
         dialogCustomerRequest = ProgressDialog.show(this, "", "Loading...");
-        String url = getString(R.string.server_uri) + "CustomerRequestGetCount.php";
+        String url = getString(R.string.server_uri) + ((Globals)getApplication()).getCustomerRequestGetCount();
         CustomerRequestCountTask task = new CustomerRequestCountTask(this);
         task.execute(url, userId);
     }

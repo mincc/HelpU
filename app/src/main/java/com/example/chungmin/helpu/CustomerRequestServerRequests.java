@@ -45,6 +45,11 @@ public class CustomerRequestServerRequests {
         new CustomerRequestByID(customerRequestId, customerRequestCallBack).execute(url);
     }
 
+    public void getCustomerRequestUpdate(CustomerRequest customerRequest, String url, GetCustomerRequestCallback customerRequestCallBack) {
+        progressDialog.show();
+        new CustomerRequestUpdate(customerRequest, customerRequestCallBack).execute(url);
+    }
+
     /**
      * parameter sent to task upon execution progress published during
      * background computation result of the background computation
@@ -155,15 +160,20 @@ public class CustomerRequestServerRequests {
                     int projectStatusId = jObject.getInt("projectStatusId");
                     String userName = jObject.getString("userName");
                     String serviceName = jObject.getString("serviceName");
+                    int serviceProviderId = jObject.getInt("serviceProviderId");
+                    double quotation = jObject.getDouble("quotation");
 
                     returnedCustomerRequest = new CustomerRequest(
                             customerRequestId,
                             serviceId,
+                            serviceName,
                             userId,
                             description,
                             ProjectStatus.values()[projectStatusId],
                             userName,
-                            serviceName);
+                            serviceName,
+                            serviceProviderId,
+                            quotation);
                 }
 
             } catch (Exception e) {
@@ -178,6 +188,62 @@ public class CustomerRequestServerRequests {
             super.onPostExecute(returnedCustomerRequest);
             progressDialog.dismiss();
             customerRequestCallBack.done(returnedCustomerRequest);
+        }
+    }
+
+    public class CustomerRequestUpdate extends AsyncTask<String, Void, Void> {
+        CustomerRequest customerRequest;
+        GetCustomerRequestCallback customerRequestCallBack;
+
+        public CustomerRequestUpdate(CustomerRequest customerRequest, GetCustomerRequestCallback customerRequestCallBack) {
+            this.customerRequest=customerRequest;
+            this.customerRequestCallBack = customerRequestCallBack;
+        }
+
+        @Override
+        protected Void doInBackground(String... params) {
+            if(params == null)
+                return null;
+
+            // get url from params
+            String url = params[0];
+
+            ArrayList<NameValuePair> dataToSend = new ArrayList<>();
+            dataToSend.add(new BasicNameValuePair("customerRequestId", this.customerRequest.getCustomerRequestId() + ""));
+            dataToSend.add(new BasicNameValuePair("serviceId", this.customerRequest.getServiceId() + ""));
+            dataToSend.add(new BasicNameValuePair("userId", this.customerRequest.getUserId() + ""));
+            dataToSend.add(new BasicNameValuePair("description", this.customerRequest.getDescription()));
+            dataToSend.add(new BasicNameValuePair("projectStatusId", this.customerRequest.getProjectStatusId() + ""));
+            dataToSend.add(new BasicNameValuePair("serviceProviderId", this.customerRequest.getServiceProviderId() + ""));
+            dataToSend.add(new BasicNameValuePair("quotation", this.customerRequest.getQuotation() + ""));
+
+            HttpParams httpRequestParams = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(httpRequestParams,
+                    CONNECTION_TIMEOUT);
+            HttpConnectionParams.setSoTimeout(httpRequestParams,
+                    CONNECTION_TIMEOUT);
+
+            HttpClient client = new DefaultHttpClient(httpRequestParams);
+            HttpPost post = new HttpPost(url);
+
+            CustomerRequest returnedCustomerRequest = null;
+
+            try {
+                post.setEntity(new UrlEncodedFormEntity(dataToSend));
+                HttpResponse httpResponse = client.execute(post);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            progressDialog.dismiss();
+            customerRequestCallBack.done(null);
         }
     }
 }

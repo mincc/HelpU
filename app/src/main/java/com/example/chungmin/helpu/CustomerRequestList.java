@@ -61,7 +61,7 @@ public class CustomerRequestList extends ListActivity implements CustomerRequest
         // show progress dialog
         dialog = ProgressDialog.show(this, "", "Loading...");
 
-        String url = getString(R.string.server_uri) + "CustomerRequestGetByUserID.php";
+        String url = getString(R.string.server_uri) + ((Globals)getApplication()).getCustomerRequestGetByUserID();
 
         UserLocalStore userLocalStore = new UserLocalStore(this);
         User user = userLocalStore.getLoggedInUser();
