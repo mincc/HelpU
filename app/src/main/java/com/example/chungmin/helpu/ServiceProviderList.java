@@ -72,7 +72,7 @@ public class ServiceProviderList extends ListActivity implements FetchServicePro
     }
 
     @Override
-    public void onFetchComplete(List<ServiceProvider> data) {
+    public void Complete(List<ServiceProvider> data) {
         // dismiss the progress dialog
         if (dialog != null) dialog.dismiss();
         // create new adapter
@@ -82,7 +82,7 @@ public class ServiceProviderList extends ListActivity implements FetchServicePro
     }
 
     @Override
-    public void onFetchFailure(String msg) {
+    public void Failure(String msg) {
         // dismiss the progress dialog
         if (dialog != null) dialog.dismiss();
         // show failure message

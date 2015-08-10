@@ -1,6 +1,8 @@
 package fragments;
 
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -8,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.chungmin.helpu.GetServiceProviderCallback;
 import com.example.chungmin.helpu.Globals;
@@ -64,7 +67,7 @@ public class ServiceProviderFragment extends Fragment {
         ServiceProviderServerRequests serverRequest = new ServiceProviderServerRequests(getActivity());
         serverRequest.getServiceProviderByID(mServiceProviderId, url, new GetServiceProviderCallback() {
             @Override
-            public void done(ServiceProvider returnedServiceProvider) {
+            public void done(final ServiceProvider returnedServiceProvider) {
                 if (returnedServiceProvider == null) {
                     showErrorMessage();
                 } else {
@@ -73,9 +76,35 @@ public class ServiceProviderFragment extends Fragment {
                     tvService.setText(returnedServiceProvider.getServiceName());
                     tvPhone.setText(returnedServiceProvider.getPhone());
                     tvEmail.setText(returnedServiceProvider.getEmail() + "");
+
+                    tvEmail.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent i = new Intent(Intent.ACTION_SEND);
+                            i.setType("message/rfc822");
+                            i.putExtra(Intent.EXTRA_EMAIL, new String[]{returnedServiceProvider.getEmail()});
+                            i.putExtra(Intent.EXTRA_SUBJECT, "subject of email");
+                            i.putExtra(Intent.EXTRA_TEXT, "body of email");
+                            try {
+                                startActivity(Intent.createChooser(i, "Send mail..."));
+                            } catch (android.content.ActivityNotFoundException ex) {
+                                Toast.makeText(v.getContext(), "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+                    tvPhone.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String number = "tel:" + returnedServiceProvider.getPhone().toString().trim();
+                            Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(number));
+                            startActivity(callIntent);
+                        }
+                    });
                 }
             }
         });
+
     }
 
     private void showErrorMessage() {

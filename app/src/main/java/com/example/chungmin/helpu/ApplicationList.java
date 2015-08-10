@@ -31,7 +31,7 @@ public class ApplicationList extends ListActivity implements FetchDataListener {
     }
 
     @Override
-    public void onFetchComplete(List<Application> data) {
+    public void Complete(List<Application> data) {
         // dismiss the progress dialog
         if(dialog != null)  dialog.dismiss();
         // create new adapter
@@ -41,7 +41,7 @@ public class ApplicationList extends ListActivity implements FetchDataListener {
     }
 
     @Override
-    public void onFetchFailure(String msg) {
+    public void Failure(String msg) {
         // dismiss the progress dialog
         if(dialog != null)  dialog.dismiss();
         // show failure message

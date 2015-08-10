@@ -133,13 +133,16 @@ public class Hire extends ActionBarActivity implements AdapterView.OnItemSelecte
         }
     }
 
-    private void registerCustomerRequest(CustomerRequest customerRequest) {
+    private void registerCustomerRequest(final CustomerRequest customerRequest) {
         String url = getString(R.string.server_uri)+ ((Globals)getApplication()).getCustomerRequestInsert();
         CustomerRequestServerRequests customerRequestServerRequest = new CustomerRequestServerRequests(this);
         customerRequestServerRequest.storeCustomerRequestDataInBackground(customerRequest, url, new GetCustomerRequestCallback() {
             @Override
             public void done(CustomerRequest returnedCustomerRequest) {
-                Intent redirect = new Intent(Hire.this, MainActivity.class);
+                Intent redirect = new Intent(Hire.this, ServiceProviderListByServiceID.class);
+                Bundle b = new Bundle();
+                b.putInt("serviceId", customerRequest.getServiceId());
+                redirect.putExtras(b);
                 startActivity(redirect);
             }
         });

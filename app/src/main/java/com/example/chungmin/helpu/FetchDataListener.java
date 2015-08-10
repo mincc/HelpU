@@ -6,7 +6,7 @@ import java.util.List;
  * Created by Chung Min on 7/23/2015.
  */
 public interface FetchDataListener {
-    void onFetchComplete(List<Application> data);
-    void onFetchFailure(String msg);
+    void Complete(List<Application> data);
+    void Failure(String msg);
 
 }

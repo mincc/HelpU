@@ -3,13 +3,14 @@
     package="com.example.chungmin.helpu" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:name=".Globals"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
@@ -73,10 +74,43 @@
             android:name=".CustomerRequestPickServiceProvider"
             android:label="@string/title_activity_customer_request_pick_service_provider" >
         </activity>
-        <!--<activity-->
-            <!--android:name=".Test"-->
-            <!--android:label="@string/title_activity_test" >-->
-        <!--</activity>-->
+        <!-- <activity -->
+        <!-- android:name=".Test" -->
+        <!-- android:label="@string/title_activity_test" > -->
+        <!-- </activity> -->
+
+        <service
+            android:name=".TriggerNotificationService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+
+        <receiver
+            android:name=".AlarmManagerBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true" >
+        </receiver>
+
+        <activity
+            android:name=".ServiceProviderCreateQuotation"
+            android:label="@string/title_activity_service_provider_create_quotation" >
+        </activity>
+        <activity
+            android:name=".CustomerRequestJobList"
+            android:label="@string/title_activity_customer_request_job_list" >
+        </activity>
+        <activity
+            android:name=".ServiceProviderConfirmQuotation"
+            android:label="@string/title_activity_service_provider_confirm_quotation" >
+        </activity>
+        <activity
+            android:name=".CustomerDoDownPayment"
+            android:label="@string/title_activity_customer_do_down_payment" >
+        </activity>
+        <activity
+            android:name=".ProjectMessages"
+            android:label="@string/title_activity_project_messages" >
+        </activity>
     </application>
 
 </manifest>

@@ -15,13 +15,14 @@ import com.example.chungmin.helpu.CustomerRequest;
 import com.example.chungmin.helpu.CustomerRequestServerRequests;
 import com.example.chungmin.helpu.GetCustomerRequestCallback;
 import com.example.chungmin.helpu.Globals;
+import com.example.chungmin.helpu.ProjectStatus;
 import com.example.chungmin.helpu.ProjectStatusFlow;
 import com.example.chungmin.helpu.R;
 
 public class CustomerRequestFragment extends Fragment {
     private static final String TAG = "CustomerRequestFragment";
     private int mCustomerRequestId = 1;
-    private TextView tvCustomerRequestId, tvServiceName, tvDescription, tvProjectStatus;
+    private TextView tvCustomerRequestId, tvServiceName, tvDescription, tvProjectStatus, tvServiceProviderId, tvQuotation, lblServiceProviderId, lblQuotation;
 
     public static CustomerRequestFragment newInstance(int customerRequestId)
     {
@@ -66,6 +67,11 @@ public class CustomerRequestFragment extends Fragment {
         tvDescription = (TextView) view.findViewById(R.id.tvDescription);
         tvProjectStatus = (TextView) view.findViewById(R.id.tvProjectStatus);
 
+        tvServiceProviderId = (TextView) view.findViewById(R.id.tvServiceProviderId);
+        tvQuotation = (TextView) view.findViewById(R.id.tvQuotation);
+        lblServiceProviderId = (TextView) view.findViewById(R.id.lblServiceProviderId);
+        lblQuotation = (TextView) view.findViewById(R.id.lblQuotation);
+
         String url = getString(R.string.server_uri) + ((Globals)getActivity().getApplication()).getCustomerRequestGetByID();
         CustomerRequestServerRequests serverRequest = new CustomerRequestServerRequests(getActivity());
         serverRequest.getCustomerRequestByID(mCustomerRequestId, url, new GetCustomerRequestCallback() {
@@ -77,7 +83,29 @@ public class CustomerRequestFragment extends Fragment {
                     tvCustomerRequestId.setText(returnedCustomerRequest.getCustomerRequestId()+"");
                     tvServiceName.setText(returnedCustomerRequest.getServiceName());
                     tvDescription.setText(returnedCustomerRequest.getDescription());
-                    tvProjectStatus.setText(returnedCustomerRequest.getProjectStatus().toString());
+                    String projectStatus = returnedCustomerRequest.getProjectStatus().toString();
+                    tvProjectStatus.setText(projectStatus);
+
+                    if( projectStatus == ProjectStatus.ComfirmRequest.toString() ||
+                        projectStatus == ProjectStatus.Quotation.toString() ||
+                        projectStatus == ProjectStatus.ConfirmQuotation.toString() ||
+                        projectStatus == ProjectStatus.DoDownPayment.toString() ||
+                        projectStatus == ProjectStatus.WinAwardNotification.toString() ||
+                        projectStatus == ProjectStatus.ReceiveDownPayment.toString() ||
+                        projectStatus == ProjectStatus.ServiceStart.toString() ||
+                        projectStatus == ProjectStatus.ServiceDone.toString() ||
+                        projectStatus == ProjectStatus.CustomerRating.toString() ||
+                        projectStatus == ProjectStatus.ServiceProvRating.toString() ||
+                        projectStatus == ProjectStatus.Done.toString()
+                    ){
+                        tvServiceProviderId.setText(returnedCustomerRequest.getServiceProviderId()+"");
+                        tvQuotation.setText(Double.toString(returnedCustomerRequest.getQuotation()));
+
+                        tvServiceProviderId.setVisibility(View.VISIBLE);
+                        tvQuotation.setVisibility(View.VISIBLE);
+                        lblServiceProviderId.setVisibility(View.VISIBLE);
+                        lblQuotation.setVisibility(View.VISIBLE);
+                    }
                 }
 
                 tvProjectStatus.setOnClickListener(new View.OnClickListener() {

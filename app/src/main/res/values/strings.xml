@@ -35,6 +35,14 @@
     <string name="title_activity_customer_request_pick_service_provider">
         Customer Request Pick Service Provider
     </string>
-
+    <string name="title_activity_notification_job_offer">Notification Job Offer</string>
+    <string name="title_activity_service_provider_create_quotation">Service Provider Create Quotation
+    </string>
+    <string name="title_activity_customer_request_job_list">Customer Request Job List</string>
+    <string name="title_activity_service_provider_confirm_quotation">
+        Service Provider Confirm Quotation
+    </string>
+    <string name="title_activity_customer_do_down_payment">Customer Do Down Payment</string>
+    <string name="title_activity_project_messages">ProjectMessages</string>
 
 </resources>

@@ -8,5 +8,5 @@ public interface GetCustomerRequestCallback {
      * Invoked when background task is completed
      */
 
-    void done(CustomerRequest returnedCustomerRequestServiceProvider);
+    void done(CustomerRequest returnedCustomerRequest);
 }

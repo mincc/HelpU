@@ -7,6 +7,9 @@ import android.app.Application;
 public class Globals extends Application {
     private CustomerRequest customerRequest;
     private ServiceProvider serviceProvider;
+    private Boolean isJobOfferTriggle = false;
+    private Boolean isServerAlreadyResponse = false;
+    private int userId;
 
     public CustomerRequest getCustomerRequest() {
         return customerRequest;
@@ -23,6 +26,33 @@ public class Globals extends Application {
     public void setServiceProvider(ServiceProvider serviceProvider) {
         this.serviceProvider = serviceProvider;
     }
+
+    public Boolean getIsJobOfferTriggle() {
+        return isJobOfferTriggle;
+    }
+
+    public void setIsJobOfferTriggle(Boolean isJobOfferTriggle) {
+        this.isJobOfferTriggle = isJobOfferTriggle;
+    }
+
+    public Boolean getIsServerAlreadyResponse() {
+        return isServerAlreadyResponse;
+    }
+
+    public void setIsServerAlreadyResponse(Boolean isServerAlreadyResponse) {
+        this.isServerAlreadyResponse = isServerAlreadyResponse;
+    }
+
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+
 
     //Url List for easy management
     //Customer
@@ -45,6 +75,10 @@ public class Globals extends Application {
     public String getCustomerRequestUpdate()
     {
         return "CustomerRequestUpdate.php";
+    }
+    public String getCustomerRequestJobListGetByUserID()
+    {
+        return "CustomerRequestJobListGetByUserID.php";
     }
 
 
@@ -69,6 +103,22 @@ public class Globals extends Application {
     {
         return "ServiceProviderInsert.php";
     }
+    public String getServiceProviderIsNotificationTrigger()
+    {
+        return "ServiceProviderIsNotificationTrigger.php";
+    }
+    public String getServiceProviderJobOffer()
+    {
+        return "ServiceProviderJobOffer.php";
+    }
+    public String getServiceProviderWinAward()
+    {
+        return "ServiceProviderWinAward.php";
+    }
+    public String getServiceProviderTotalJobOffer()
+    {
+        return "ServiceProviderTotalJobOffer.php";
+    }
 
 
     //User
@@ -79,6 +129,10 @@ public class Globals extends Application {
         return "UserInsert.php";
     }
 
+    //Rating
+    public String getRatingInsert() {
+        return "RatingInsert.php";
+    }
 
     //Other
     public String getApp()

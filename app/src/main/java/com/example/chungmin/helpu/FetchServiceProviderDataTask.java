@@ -30,6 +30,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import HelpUGenericUtilities.StringUtils;
+
 public class FetchServiceProviderDataTask extends AsyncTask<String, Void, String>{
     private final FetchServiceProviderDataListener listener;
     private String msg;
@@ -74,7 +76,7 @@ public class FetchServiceProviderDataTask extends AsyncTask<String, Void, String
 
             // get response content and convert it to json string
             InputStream is = entity.getContent();
-            return streamToString(is);
+            return StringUtils.streamToString(is);
         }
         catch(IOException e){
             msg = "No Network Connection";
@@ -86,7 +88,7 @@ public class FetchServiceProviderDataTask extends AsyncTask<String, Void, String
     @Override
     protected void onPostExecute(String sJson) {
         if(sJson == null) {
-            if(listener != null) listener.onFetchFailure(msg);
+            if(listener != null) listener.Failure(msg);
             return;
         }
 
@@ -112,42 +114,13 @@ public class FetchServiceProviderDataTask extends AsyncTask<String, Void, String
             }
 
             //notify the activity that fetch data has been complete
-            if(listener != null) listener.onFetchComplete(serviceProviders);
+            if(listener != null) listener.Complete(serviceProviders);
         } catch (JSONException e) {
             msg = "Invalid response";
-            if(listener != null) listener.onFetchFailure(msg);
+            if(listener != null) listener.Failure(msg);
             return;
         }
     }
 
-    /**
-     * This function will convert response stream into json string
-     * @param is respons string
-     * @return json string
-     * @throws IOException
-     */
-    public String streamToString(final InputStream is) throws IOException{
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder sb = new StringBuilder();
-        String line = null;
 
-        try {
-            while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-        }
-        catch (IOException e) {
-            throw e;
-        }
-        finally {
-            try {
-                is.close();
-            }
-            catch (IOException e) {
-                throw e;
-            }
-        }
-
-        return sb.toString();
-    }
 }

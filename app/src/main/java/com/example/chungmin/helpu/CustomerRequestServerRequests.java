@@ -46,13 +46,13 @@ public class CustomerRequestServerRequests {
     }
 
     public void getCustomerRequestUpdate(CustomerRequest customerRequest, String url, GetCustomerRequestCallback customerRequestCallBack) {
-        progressDialog.show();
+        //progressDialog.show();
         new CustomerRequestUpdate(customerRequest, customerRequestCallBack).execute(url);
     }
 
     /**
      * parameter sent to task upon execution progress published during
-     * background computation result of the background computation
+     * background computation activity_notification_job_offer of the background computation
      */
 
     public class StoreCustomerRequestDataAsyncTask extends AsyncTask<String, Void, Void> {

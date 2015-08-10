@@ -72,7 +72,7 @@ public class CustomerRequestList extends ListActivity implements CustomerRequest
     }
 
     @Override
-    public void onFetchComplete(List<CustomerRequest> data) {
+    public void Complete(List<CustomerRequest> data) {
         // dismiss the progress dialog
         if (dialog != null) dialog.dismiss();
         // create new adapter
@@ -82,7 +82,7 @@ public class CustomerRequestList extends ListActivity implements CustomerRequest
     }
 
     @Override
-    public void onFetchFailure(String msg) {
+    public void Failure(String msg) {
         // dismiss the progress dialog
         if (dialog != null)
             dialog.dismiss();

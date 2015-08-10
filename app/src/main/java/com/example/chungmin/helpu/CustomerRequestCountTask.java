@@ -20,18 +20,18 @@ import org.apache.http.params.HttpParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import HelpUGenericUtilities.StringUtils;
+
 public class CustomerRequestCountTask extends AsyncTask<String, Void, String>{
-    private final CustomerRequestCountListener listener;
+    private final CountListener listener;
     private String msg;
     public static final int CONNECTION_TIMEOUT = 1000 * 15;
 
-    public CustomerRequestCountTask(CustomerRequestCountListener listener) {
+    public CustomerRequestCountTask(CountListener listener) {
         this.listener = listener;
     }
 
@@ -70,7 +70,7 @@ public class CustomerRequestCountTask extends AsyncTask<String, Void, String>{
 
             // get response content and convert it to json string
             InputStream is = entity.getContent();
-            return streamToString(is);
+            return StringUtils.streamToString(is);
         }
         catch(IOException e){
             msg = "No Network Connection";
@@ -82,7 +82,7 @@ public class CustomerRequestCountTask extends AsyncTask<String, Void, String>{
     @Override
     protected void onPostExecute(String sJson) {
         if(sJson == null) {
-            if(listener != null) listener.onFetchCustomerRequestCountFailure(msg);
+            if(listener != null) listener.CountFailure(msg);
             return;
         }
 
@@ -95,43 +95,14 @@ public class CustomerRequestCountTask extends AsyncTask<String, Void, String>{
 
             //notify the activity that fetch data has been complete
             if(listener != null)
-                listener.onFetchCustomerRequestCountComplete(count);
+                listener.CountComplete(count);
 
         } catch (JSONException e) {
             msg = "Invalid response";
-            if(listener != null) listener.onFetchCustomerRequestCountFailure(msg);
+            if(listener != null) listener.CountFailure(msg);
             return;
         }
     }
 
-    /**
-     * This function will convert response stream into json string
-     * @param is respons string
-     * @return json string
-     * @throws IOException
-     */
-    public String streamToString(final InputStream is) throws IOException{
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder sb = new StringBuilder();
-        String line = null;
 
-        try {
-            while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-        }
-        catch (IOException e) {
-            throw e;
-        }
-        finally {
-            try {
-                is.close();
-            }
-            catch (IOException e) {
-                throw e;
-            }
-        }
-
-        return sb.toString();
-    }
 }

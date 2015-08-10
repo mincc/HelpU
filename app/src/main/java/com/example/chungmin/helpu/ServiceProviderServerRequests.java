@@ -18,10 +18,15 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import HelpUGenericUtilities.StringUtils;
 
 /**
  * Created by Chung Min on 7/19/2015.
@@ -48,14 +53,35 @@ public class ServiceProviderServerRequests {
         new ServiceProviderByID(serviceProviderId, serviceProviderCallBack).execute(url);
     }
 
-    public void getServiceProviderByServiceID(int serviceId, String url, GetServiceProviderListCallback serviceProviderListCallBack) {
+    public void getServiceProviderByServiceID(int serviceId, int userId, String url, GetServiceProviderListCallback serviceProviderListCallBack) {
         progressDialog.show();
-        new ServiceProviderByServiceID(serviceId, serviceProviderListCallBack).execute(url);
+        new ServiceProviderByServiceID(serviceId, userId, serviceProviderListCallBack).execute(url);
     }
+
+    public void getServiceProviderIsNotificationTrigger(int userId, String url, GetBooleanCallback booleanCallBack) {
+        //progressDialog.show();
+        new ServiceProviderIsNotificationTrigger(userId, booleanCallBack).execute(url);
+    }
+
+    public void getServiceProviderJobOffer(int userId, String url, GetCustomerRequestCallback customerRequestCallback) {
+        //progressDialog.show();
+        new ServiceProviderJobOffer(userId, customerRequestCallback).execute(url);
+    }
+
+    public void getServiceProviderWinAward(int userId, String url, GetCustomerRequestCallback customerRequestCallback) {
+        //progressDialog.show();
+        new ServiceProviderWinAward(userId, customerRequestCallback).execute(url);
+    }
+
+    public void getServiceProviderTotalJobOffer(int userId, String url,  CountListener listener) {
+        //progressDialog.show();
+        new ServiceProviderTotalJobOffer(userId, listener).execute(url);
+    }
+
 
     /**
      * parameter sent to task upon execution progress published during
-     * background computation result of the background computation
+     * background computation activity_notification_job_offer of the background computation
      */
 
     public class StoreServiceProviderDataAsyncTask extends AsyncTask<String, Void, Void> {
@@ -191,10 +217,12 @@ public class ServiceProviderServerRequests {
 
     public class ServiceProviderByServiceID extends AsyncTask<String, Void, List<ServiceProvider>> {
         int serviceId;
+        int userId;
         GetServiceProviderListCallback serviceProviderListCallBack;
 
-        public ServiceProviderByServiceID(int serviceId, GetServiceProviderListCallback serviceProviderListCallBack) {
+        public ServiceProviderByServiceID(int serviceId, int userId, GetServiceProviderListCallback serviceProviderListCallBack) {
             this.serviceId = serviceId;
+            this.userId = userId;
             this.serviceProviderListCallBack = serviceProviderListCallBack;
         }
 
@@ -211,6 +239,7 @@ public class ServiceProviderServerRequests {
 
             ArrayList<NameValuePair> dataToSend = new ArrayList<>();
             dataToSend.add(new BasicNameValuePair("serviceId", this.serviceId + ""));
+            dataToSend.add(new BasicNameValuePair("userId", this.userId + ""));
 
             HttpParams httpRequestParams = new BasicHttpParams();
             HttpConnectionParams.setConnectionTimeout(httpRequestParams,
@@ -258,6 +287,309 @@ public class ServiceProviderServerRequests {
             super.onPostExecute(returnedServiceProviderList);
             progressDialog.dismiss();
             serviceProviderListCallBack.done(returnedServiceProviderList);
+        }
+    }
+
+    public class ServiceProviderIsNotificationTrigger extends AsyncTask<String, Void, Boolean> {
+        int userId;
+        GetBooleanCallback booleanCallBack;
+
+        public ServiceProviderIsNotificationTrigger(int userId, GetBooleanCallback booleanCallBack) {
+            this.userId = userId;
+            this.booleanCallBack = booleanCallBack;
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            boolean isTrigger = false;
+            if(params == null)
+                return false;
+
+            // get url from params
+            String url = params[0];
+
+            ArrayList<NameValuePair> dataToSend = new ArrayList<>();
+            dataToSend.add(new BasicNameValuePair("userId", this.userId + ""));
+
+            HttpParams httpRequestParams = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(httpRequestParams,
+                    CONNECTION_TIMEOUT);
+            HttpConnectionParams.setSoTimeout(httpRequestParams,
+                    CONNECTION_TIMEOUT);
+
+            HttpClient client = new DefaultHttpClient(httpRequestParams);
+            HttpPost post = new HttpPost(url);
+
+            try {
+                post.setEntity(new UrlEncodedFormEntity(dataToSend));
+                HttpResponse httpResponse = client.execute(post);
+
+                HttpEntity entity = httpResponse.getEntity();
+                String result = EntityUtils.toString(entity);
+
+                JSONObject jObject = new JSONObject(result);
+
+                if (jObject.length() != 0){
+                    Log.v("happened", "Service Provider Is Notification Job Offer Trigger");
+
+                    return isTrigger = jObject.getBoolean("result");
+
+                }
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return isTrigger;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean isTrigger) {
+            super.onPostExecute(isTrigger);
+            progressDialog.dismiss();
+            booleanCallBack.done(isTrigger);
+        }
+    }
+
+    public class ServiceProviderJobOffer extends AsyncTask<String, Void, CustomerRequest> {
+        int userId;
+        GetCustomerRequestCallback consumerRequestCallBack;
+
+        public ServiceProviderJobOffer(int userId, GetCustomerRequestCallback consumerRequestCallBack) {
+            this.userId = userId;
+            this.consumerRequestCallBack = consumerRequestCallBack;
+        }
+
+        @Override
+        protected CustomerRequest doInBackground(String... params) {
+            boolean isTrigger = false;
+            if(params == null)
+                return null;
+
+            // get url from params
+            String url = params[0];
+
+            ArrayList<NameValuePair> dataToSend = new ArrayList<>();
+            dataToSend.add(new BasicNameValuePair("userId", this.userId + ""));
+
+            HttpParams httpRequestParams = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(httpRequestParams,
+                    CONNECTION_TIMEOUT);
+            HttpConnectionParams.setSoTimeout(httpRequestParams,
+                    CONNECTION_TIMEOUT);
+
+            HttpClient client = new DefaultHttpClient(httpRequestParams);
+            HttpPost post = new HttpPost(url);
+
+            CustomerRequest returnedCustomerRequest = null;
+            try {
+                post.setEntity(new UrlEncodedFormEntity(dataToSend));
+                HttpResponse httpResponse = client.execute(post);
+
+                HttpEntity entity = httpResponse.getEntity();
+                String result = EntityUtils.toString(entity);
+
+                JSONObject jObject = new JSONObject(result);
+
+                if (jObject.length() != 0){
+                    Log.v("happened", "Service Provider Job Offer");
+
+                    int customerRequestId = jObject.getInt("customerRequestId");
+                    int serviceId = jObject.getInt("serviceId");
+                    int userId = jObject.getInt("userId");
+                    String description = jObject.getString("description");
+                    int projectStatusId = jObject.getInt("projectStatusId");
+                    String userName = jObject.getString("userName");
+                    String serviceName = jObject.getString("serviceName");
+                    int serviceProviderId = jObject.getInt("serviceProviderId");
+                    double quotation = jObject.getDouble("quotation");
+
+                    returnedCustomerRequest = new CustomerRequest(
+                            customerRequestId,
+                            serviceId,
+                            serviceName,
+                            userId,
+                            description,
+                            ProjectStatus.values()[projectStatusId],
+                            userName,
+                            serviceName,
+                            serviceProviderId,
+                            quotation);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return returnedCustomerRequest;
+        }
+
+        @Override
+        protected void onPostExecute(CustomerRequest returnedCustomerRequest) {
+            super.onPostExecute(returnedCustomerRequest);
+            progressDialog.dismiss();
+            consumerRequestCallBack.done(returnedCustomerRequest);
+        }
+    }
+
+    public class ServiceProviderWinAward extends AsyncTask<String, Void, CustomerRequest> {
+        int userId;
+        GetCustomerRequestCallback consumerRequestCallBack;
+
+        public ServiceProviderWinAward(int userId, GetCustomerRequestCallback consumerRequestCallBack) {
+            this.userId = userId;
+            this.consumerRequestCallBack = consumerRequestCallBack;
+        }
+
+        @Override
+        protected CustomerRequest doInBackground(String... params) {
+            boolean isTrigger = false;
+            if(params == null)
+                return null;
+
+            // get url from params
+            String url = params[0];
+
+            ArrayList<NameValuePair> dataToSend = new ArrayList<>();
+            dataToSend.add(new BasicNameValuePair("userId", this.userId + ""));
+
+            HttpParams httpRequestParams = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(httpRequestParams,
+                    CONNECTION_TIMEOUT);
+            HttpConnectionParams.setSoTimeout(httpRequestParams,
+                    CONNECTION_TIMEOUT);
+
+            HttpClient client = new DefaultHttpClient(httpRequestParams);
+            HttpPost post = new HttpPost(url);
+
+            CustomerRequest returnedCustomerRequest = null;
+            try {
+                post.setEntity(new UrlEncodedFormEntity(dataToSend));
+                HttpResponse httpResponse = client.execute(post);
+
+                HttpEntity entity = httpResponse.getEntity();
+                String result = EntityUtils.toString(entity);
+
+                JSONObject jObject = new JSONObject(result);
+
+                if (jObject.length() != 0){
+                    Log.v("happened", "Service Provider Job Offer");
+
+                    int customerRequestId = jObject.getInt("customerRequestId");
+                    int serviceId = jObject.getInt("serviceId");
+                    int userId = jObject.getInt("userId");
+                    String description = jObject.getString("description");
+                    int projectStatusId = jObject.getInt("projectStatusId");
+                    String userName = jObject.getString("userName");
+                    String serviceName = jObject.getString("serviceName");
+                    int serviceProviderId = jObject.getInt("serviceProviderId");
+                    double quotation = jObject.getDouble("quotation");
+
+                    returnedCustomerRequest = new CustomerRequest(
+                            customerRequestId,
+                            serviceId,
+                            serviceName,
+                            userId,
+                            description,
+                            ProjectStatus.values()[projectStatusId],
+                            userName,
+                            serviceName,
+                            serviceProviderId,
+                            quotation);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return returnedCustomerRequest;
+        }
+
+        @Override
+        protected void onPostExecute(CustomerRequest returnedCustomerRequest) {
+            super.onPostExecute(returnedCustomerRequest);
+            progressDialog.dismiss();
+            consumerRequestCallBack.done(returnedCustomerRequest);
+        }
+    }
+
+    public class ServiceProviderTotalJobOffer extends AsyncTask<String, Void, String> {
+        private CountListener listener;
+        int userId;
+        private String msg;
+        public static final int CONNECTION_TIMEOUT = 1000 * 15;
+
+        public ServiceProviderTotalJobOffer(int userId, CountListener listener) {
+            this.userId = userId;
+            this.listener = listener;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            if(params == null) return null;
+
+            // get url from params
+            String url = params[0];
+
+            ArrayList<NameValuePair> dataToSend = new ArrayList<>();
+            dataToSend.add(new BasicNameValuePair("userId", Integer.toString(userId)));
+
+            try {
+                HttpParams httpRequestParams = new BasicHttpParams();
+                HttpConnectionParams.setConnectionTimeout(httpRequestParams,
+                        CONNECTION_TIMEOUT);
+                HttpConnectionParams.setSoTimeout(httpRequestParams,
+                        CONNECTION_TIMEOUT);
+
+                // create http connection
+                HttpClient client = new DefaultHttpClient(httpRequestParams);
+                HttpPost post = new HttpPost(url);
+
+                // connect
+                post.setEntity(new UrlEncodedFormEntity(dataToSend));
+                HttpResponse response = client.execute(post);
+
+                // get response
+                HttpEntity entity = response.getEntity();
+
+                if(entity == null) {
+                    msg = "No response from server";
+                    return null;
+                }
+
+                // get response content and convert it to json string
+                InputStream is = entity.getContent();
+                return StringUtils.streamToString(is);
+            }
+            catch(IOException e){
+                msg = "No Network Connection";
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String sJson) {
+            if(sJson == null) {
+                if(listener != null) listener.CountFailure((msg));
+                return;
+            }
+
+            try {
+                // convert json string to json array
+                JSONObject jsonObj = new JSONObject(sJson);
+                int count = 0;
+
+                count = Integer.parseInt(jsonObj.get("Total").toString());
+
+                //notify the activity that fetch data has been complete
+                if(listener != null)
+                    listener.CountComplete(count);
+
+            } catch (JSONException e) {
+                msg = "Invalid response";
+                if(listener != null) listener.CountFailure(msg);
+                return;
+            }
         }
     }
 }

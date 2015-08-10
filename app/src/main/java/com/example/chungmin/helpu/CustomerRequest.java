@@ -1,9 +1,10 @@
 package com.example.chungmin.helpu;
 
+
 /**
  * Created by Chung Min on 7/24/2015.
  */
-public class CustomerRequest {
+public class CustomerRequest{
     private int customerRequestId;
     private int serviceId;
     private String serviceName;
@@ -26,7 +27,7 @@ public class CustomerRequest {
         this.description = description;
         this.projectStatus = projectStatus;
         this.serviceProviderId = -1;
-        this.quotation = 0;
+        this.quotation = 0.00;
     }
 
     public CustomerRequest(int customerRequestId, int serviceId, String serviceName, int userId, String description,
@@ -90,7 +91,7 @@ public class CustomerRequest {
     public double getQuotation() {
         return quotation;
     }
-    public void setQuotation(int quotation) {
+    public void setQuotation(double quotation) {
         this.quotation = quotation;
     }
 

@@ -39,7 +39,7 @@ public class ServiceProviderListByServiceID extends ListActivity implements Fetc
                 TextView tvServiceProviderId = (TextView) view.findViewById(R.id.tvServiceProviderId);
                 int serviceProviderId = Integer.parseInt((String) tvServiceProviderId.getText());
                 int projectStatusId = ProjectStatus.Pick.getId();
-                CustomerRequest customerRequest = ((Globals)getApplication()).getCustomerRequest();
+                final CustomerRequest customerRequest = ((Globals)getApplication()).getCustomerRequest();
                 customerRequest.setServiceProviderId(serviceProviderId);
                 customerRequest.setProjectStatusId(projectStatusId);
                 String url = getString(R.string.server_uri) + ((Globals)getApplication()).getCustomerRequestUpdate();
@@ -47,11 +47,12 @@ public class ServiceProviderListByServiceID extends ListActivity implements Fetc
                 serverRequest.getCustomerRequestUpdate(customerRequest, url, new GetCustomerRequestCallback() {
                     @Override
                     public void done(CustomerRequest returnedCustomerRequest) {
-                        Intent i = new Intent(ServiceProviderListByServiceID.this, CustomerRequestPickServiceProvider.class);
-//                        Bundle b = new Bundle();
-//                        b.putInt("serviceProviderId", serviceProviderId);
-//                        i.putExtras(b);
-                        startActivity(i);
+                        Intent redirect = new Intent(ServiceProviderListByServiceID.this, ProjectMessages.class);
+                        Bundle b = new Bundle();
+                        b.putInt("projectStatusId", customerRequest.getProjectStatusId());
+                        redirect.putExtras(b);
+                        redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(redirect);
                     }
                 });
             }
@@ -63,10 +64,11 @@ public class ServiceProviderListByServiceID extends ListActivity implements Fetc
         //get from bundle
         Bundle b = getIntent().getExtras();
         int serviceId =b.getInt("serviceId", 0);
+        int userId = ((Globals)getApplication()).getUserId();
 
         String url = getString(R.string.server_uri) + ((Globals)getApplication()).getServiceProviderGetByServiceID();
         ServiceProviderServerRequests serverRequest = new ServiceProviderServerRequests(this);
-        serverRequest.getServiceProviderByServiceID(serviceId, url, new GetServiceProviderListCallback() {
+        serverRequest.getServiceProviderByServiceID(serviceId, userId, url, new GetServiceProviderListCallback() {
             @Override
             public void done(List<ServiceProvider> returnedServiceProviderList) {
                 if (returnedServiceProviderList == null) {
@@ -89,7 +91,7 @@ public class ServiceProviderListByServiceID extends ListActivity implements Fetc
     }
 
     @Override
-    public void onFetchComplete(List<ServiceProvider> data) {
+    public void Complete(List<ServiceProvider> data) {
         // dismiss the progress dialog
         if (dialog != null) dialog.dismiss();
         // create new adapter
@@ -99,7 +101,7 @@ public class ServiceProviderListByServiceID extends ListActivity implements Fetc
     }
 
     @Override
-    public void onFetchFailure(String msg) {
+    public void Failure(String msg) {
         // dismiss the progress dialog
         if (dialog != null) dialog.dismiss();
         // show failure message

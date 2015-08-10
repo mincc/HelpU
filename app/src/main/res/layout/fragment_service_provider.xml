@@ -54,16 +54,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="012-555 7777"
-        android:layout_alignParentEnd="true"
+        style="@style/selectorLink"
         android:layout_below="@+id/tvEmail"
-        android:layout_alignParentRight="true" />
+        android:layout_alignLeft="@+id/tvEmail"
+        android:layout_alignStart="@+id/tvEmail" />
 
     <TextView
         android:id="@+id/tvEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="aaa@gmail.com"
-        android:layout_below="@+id/title"
+        style="@style/selectorLink"
+        android:layout_below="@+id/textView15"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 

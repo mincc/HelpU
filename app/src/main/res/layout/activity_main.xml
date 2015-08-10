@@ -41,7 +41,8 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginTop="50dp"
-        android:layout_weight="0.27">
+        android:layout_weight="0.27"
+        android:id="@+id/llButton">
 
         <Button
             android:layout_width="147dp"
@@ -87,24 +88,33 @@
         android:layout_height="wrap_content"
         android:text="0"
         android:id="@+id/tvTotalCountHire"
-        android:textStyle="bold"
-        android:textColor="@color/selector_link"
+        style="@style/selectorLink"
         android:layout_above="@+id/textView5"
         android:layout_toRightOf="@+id/textView5"
         android:layout_toEndOf="@+id/textView5"
         android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:textSize="20sp" />
+        android:layout_marginStart="16dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="0"
         android:id="@+id/tvTotalCountWork"
-        android:textStyle="bold"
-        android:textColor="@color/selector_link"
-        android:textSize="20sp"
+        style="@style/selectorLink"
         android:layout_alignTop="@+id/textView5"
         android:layout_alignLeft="@+id/tvTotalCountHire"
         android:layout_alignStart="@+id/tvTotalCountHire" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/llJobOffer"
+        android:orientation="vertical"
+        android:layout_alignRight="@+id/llButton"
+        android:layout_alignEnd="@+id/llButton"
+        android:layout_toRightOf="@+id/txUsername"
+        android:layout_toEndOf="@+id/txUsername"
+        android:layout_below="@+id/llButton">
+    </LinearLayout>
+
 </RelativeLayout>

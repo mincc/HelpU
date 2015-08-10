@@ -18,6 +18,8 @@ import android.widget.TextView;
 import java.util.List;
 
 public class CustomerRequestAdapter extends ArrayAdapter<CustomerRequest>{
+    TextView tvCustomerRequestId, tvService, tvDescription, tvProjectStatus, tvServiceProviderId, tvQuotation;
+    TextView lblServiceProviderId, lblQuotation;
     private List<CustomerRequest> items;
     private Context mContext;
 
@@ -44,11 +46,14 @@ public class CustomerRequestAdapter extends ArrayAdapter<CustomerRequest>{
         CustomerRequest customerRequest = items.get(position);
 
         if(customerRequest != null) {
-            TextView tvCustomerRequestId = (TextView)v.findViewById(R.id.tvCustomerRequestId);
-            TextView tvService = (TextView)v.findViewById(R.id.tvService);
-            TextView tvDescription = (TextView)v.findViewById(R.id.tvDescription);
-            TextView tvProjectStatus = (TextView)v.findViewById(R.id.tvProjectStatus);
-
+            tvCustomerRequestId = (TextView)v.findViewById(R.id.tvCustomerRequestId);
+            tvService = (TextView)v.findViewById(R.id.tvService);
+            tvDescription = (TextView)v.findViewById(R.id.tvDescription);
+            tvProjectStatus = (TextView)v.findViewById(R.id.tvProjectStatus);
+            tvServiceProviderId = (TextView)v.findViewById(R.id.tvServiceProviderId);
+            tvQuotation = (TextView)v.findViewById(R.id.tvQuotation);
+            lblServiceProviderId = (TextView)v.findViewById(R.id.lblServiceProviderId);
+            lblQuotation = (TextView)v.findViewById(R.id.lblQuotation);
 
             if (tvCustomerRequestId != null) {
                 tvCustomerRequestId.setText(Integer.toString((customerRequest.getCustomerRequestId())));
@@ -66,6 +71,37 @@ public class CustomerRequestAdapter extends ArrayAdapter<CustomerRequest>{
 
             if(tvProjectStatus != null) {
                 tvProjectStatus.setText(customerRequest.getProjectStatus().toString());
+            }
+
+            String projectStatus = customerRequest.getProjectStatus().toString();
+            if( projectStatus == ProjectStatus.ComfirmRequest.toString() ||
+                    projectStatus == ProjectStatus.Quotation.toString() ||
+                    projectStatus == ProjectStatus.ConfirmQuotation.toString() ||
+                    projectStatus == ProjectStatus.DoDownPayment.toString() ||
+                    projectStatus == ProjectStatus.WinAwardNotification.toString() ||
+                    projectStatus == ProjectStatus.ReceiveDownPayment.toString() ||
+                    projectStatus == ProjectStatus.ServiceStart.toString() ||
+                    projectStatus == ProjectStatus.ServiceDone.toString() ||
+                    projectStatus == ProjectStatus.CustomerRating.toString() ||
+                    projectStatus == ProjectStatus.ServiceProvRating.toString() ||
+                    projectStatus == ProjectStatus.Done.toString()
+                    ){
+                tvServiceProviderId.setText(customerRequest.getServiceProviderId()+"");
+                tvQuotation.setText(Double.toString(customerRequest.getQuotation()));
+
+                tvServiceProviderId.setVisibility(View.VISIBLE);
+                tvQuotation.setVisibility(View.VISIBLE);
+                lblServiceProviderId.setVisibility(View.VISIBLE);
+                lblQuotation.setVisibility(View.VISIBLE);
+            }else
+            {
+                tvServiceProviderId.setText("No");
+                tvQuotation.setText("0.00");
+
+                tvServiceProviderId.setVisibility(View.GONE);
+                tvQuotation.setVisibility(View.GONE);
+                lblServiceProviderId.setVisibility(View.GONE);
+                lblQuotation.setVisibility(View.GONE);
             }
 
             final int serviceId = customerRequest.getServiceId();
@@ -88,18 +124,51 @@ public class CustomerRequestAdapter extends ArrayAdapter<CustomerRequest>{
                             Intent redirect;
                             ((Globals) mContext.getApplicationContext()).setCustomerRequest(returnedCustomerRequest);
 
-                            if(projectStatus.equals(ProjectStatus.New.toString()) || projectStatus.equals(ProjectStatus.Match.toString())) {
-                                redirect = new Intent(mContext, ServiceProviderListByServiceID.class);
-                                Bundle b = new Bundle();
-                                b.putInt("serviceId", serviceId);
-                                redirect.putExtras(b);
-                                redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            }else if(projectStatus.equals(ProjectStatus.Pick.toString())) {
-                                redirect = new Intent(mContext, CustomerRequestPickServiceProvider.class);
-                            }else{
-                                redirect = new Intent(mContext, MainActivity.class);
+                            int userId = ((Globals)getContext().getApplicationContext()).getUserId();
+                            Bundle b = new Bundle();
+                            switch(returnedCustomerRequest.getProjectStatus()){
+                                case New:
+                                case Match:
+                                    redirect = new Intent(mContext, ServiceProviderListByServiceID.class);
+                                    b.putInt("serviceId", serviceId);
+
+                                    break;
+                                case Pick:
+                                    redirect = new Intent(mContext, ProjectMessages.class);
+                                    b.putInt("projectStatusId", returnedCustomerRequest.getProjectStatusId());
+                                    break;
+                                case DoDownPayment:
+                                    if(userId != returnedCustomerRequest.getUserId()){
+
+                                        redirect = new Intent(mContext, MainActivity.class);
+                                    }
+                                    else{
+                                        redirect = new Intent(mContext, ProjectMessages.class);
+                                        b.putInt("projectStatusId", returnedCustomerRequest.getProjectStatusId());
+                                    }
+                                    break;
+                                case ComfirmRequest:
+                                case Quotation:
+                                case ConfirmQuotation:
+                                case CandidateNotification:
+                                case WinAwardNotification:
+                                case ReceiveDownPayment:
+                                case ServiceStart:
+                                case ServiceDone:
+                                case CustomerRating:
+                                case ServiceProvRating:
+                                case Done:
+                                    redirect = new Intent(mContext, ProjectMessages.class);
+                                    b.putInt("projectStatusId", returnedCustomerRequest.getProjectStatusId());
+                                    break;
+                                default:
+                                    redirect = new Intent(mContext, MainActivity.class);
+                                    break;
                             }
+                            redirect.putExtras(b);
+                            redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             mContext.startActivity(redirect);
+
                         }
                     });
 

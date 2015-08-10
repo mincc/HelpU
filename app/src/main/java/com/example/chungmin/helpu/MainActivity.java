@@ -1,5 +1,8 @@
 package com.example.chungmin.helpu;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,13 +12,16 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import fragments.JobOfferFragment;
 
-public class MainActivity extends ActionBarActivity implements FetchServiceProviderCountListener, View.OnClickListener, CustomerRequestCountListener {
+
+public class MainActivity extends ActionBarActivity implements FetchServiceProviderCountListener, View.OnClickListener, CountListener {
     private ProgressDialog dialog;
     private ProgressDialog dialogCustomerRequest;
     UserLocalStore userLocalStore;
     TextView txUsername,tvTotalCountHire,tvTotalCountWork;
     Button bLogout, bHire, bWork;
+    private AlarmManagerBroadcastReceiver alarm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,14 +66,31 @@ public class MainActivity extends ActionBarActivity implements FetchServiceProvi
             String userId = String.valueOf(user.userId);
             retrieveWorkCount(userId);
             retrieveHireCount(userId);
+
+            ((Globals)this.getApplication()).setUserId(user.userId);
+            alarm = new AlarmManagerBroadcastReceiver();
+            alarm.SetAlarm(this);
+
+
+            if (savedInstanceState == null) {
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                Fragment frag = new JobOfferFragment().newInstance(user.userId);
+                ft.add(R.id.llJobOffer, frag);
+                ft.commit();
+            }
+
         }
+
     }
+
 
     @Override
     public void onClick(View v) {
         Intent redirect;
         switch(v.getId()){
             case R.id.bLogout:
+                alarm.CancelAlarm(this);
                 userLocalStore.clearUserData();
                 userLocalStore.setUserLoggedIn(false);
                 Intent loginIntent = new Intent(this, Login.class);
@@ -123,7 +146,7 @@ public class MainActivity extends ActionBarActivity implements FetchServiceProvi
     }
 
     @Override
-    public void onFetchComplete(int data) {
+    public void Complete(int data) {
         // dismiss the progress dialog
         if (dialog != null)
             dialog.dismiss();
@@ -132,7 +155,7 @@ public class MainActivity extends ActionBarActivity implements FetchServiceProvi
     }
 
     @Override
-    public void onFetchFailure(String msg) {
+    public void Failure(String msg) {
         // dismiss the progress dialog
         if (dialog != null)
             dialog.dismiss();
@@ -141,7 +164,7 @@ public class MainActivity extends ActionBarActivity implements FetchServiceProvi
     }
 
     @Override
-    public void onFetchCustomerRequestCountComplete(int data) {
+    public void CountComplete(int data) {
         // dismiss the progress dialog
         if (dialogCustomerRequest != null) {
             dialogCustomerRequest.dismiss();
@@ -151,7 +174,7 @@ public class MainActivity extends ActionBarActivity implements FetchServiceProvi
     }
 
     @Override
-    public void onFetchCustomerRequestCountFailure(String msg) {
+    public void CountFailure(String msg) {
         // dismiss the progress dialog
         if (dialogCustomerRequest != null)
             dialogCustomerRequest.dismiss();

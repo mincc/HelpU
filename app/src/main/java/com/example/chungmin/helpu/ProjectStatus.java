@@ -17,8 +17,8 @@ public enum ProjectStatus {
     ReceiveDownPayment("Receive Down payment", 10),
     ServiceStart("Service Start", 11),
     ServiceDone("Service Done", 12),
-    CustomerRating("Customer Rating", 13),
-    ServiceProvRating("Service Provider Rating", 14),
+    CustomerRating("Customer Rating", 13),              //Customer give service provider rating
+    ServiceProvRating("Service Provider Rating", 14),   //Provider service give customer rating
     Done("Done", 15);
 
     private String stringValue;

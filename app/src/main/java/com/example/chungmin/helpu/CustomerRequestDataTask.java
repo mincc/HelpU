@@ -21,12 +21,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+
+import HelpUGenericUtilities.StringUtils;
 
 public class CustomerRequestDataTask extends AsyncTask<String, Void, String>{
     private final CustomerRequestDataListener listener;
@@ -46,7 +46,7 @@ public class CustomerRequestDataTask extends AsyncTask<String, Void, String>{
         String url = params[0];
 
         ArrayList<NameValuePair> dataToSend = new ArrayList<>();
-        dataToSend.add(new BasicNameValuePair("userId", params[1]));
+        dataToSend.add(new BasicNameValuePair("userId", params[1] + ""));
 
         try {
             HttpParams httpRequestParams = new BasicHttpParams();
@@ -73,7 +73,7 @@ public class CustomerRequestDataTask extends AsyncTask<String, Void, String>{
 
             // get response content and convert it to json string
             InputStream is = entity.getContent();
-            return streamToString(is);
+            return StringUtils.streamToString(is);
         }
         catch(IOException e){
             msg = "No Network Connection";
@@ -85,7 +85,7 @@ public class CustomerRequestDataTask extends AsyncTask<String, Void, String>{
     @Override
     protected void onPostExecute(String sJson) {
         if(sJson == null) {
-            if(listener != null) listener.onFetchFailure(msg);
+            if(listener != null) listener.Failure(msg);
             return;
         }
 
@@ -100,10 +100,11 @@ public class CustomerRequestDataTask extends AsyncTask<String, Void, String>{
                 CustomerRequest customerRequest = new CustomerRequest();
                 customerRequest.setCustomerRequestId(Integer.parseInt(json.getString("customerRequestId")));
                 customerRequest.setServiceId(Integer.parseInt(json.getString("serviceId")));
-                customerRequest.setUserId(Integer.parseInt(json.getString("userId")));
                 customerRequest.setDescription(json.getString("description"));
+                customerRequest.setUserId(Integer.parseInt(json.getString("userId")));
                 customerRequest.setProjectStatusId(json.getInt("projectStatusId"));
-
+                customerRequest.setServiceProviderId(Integer.parseInt(json.getString("serviceProviderId")));
+                customerRequest.setQuotation(Double.parseDouble(json.getString("quotation")));
                 customerRequest.setUserName(json.getString("userName"));
                 customerRequest.setServiceName(json.getString("serviceName"));
                 customerRequest.setProjectStatusName(json.getString("projectStatusName"));
@@ -113,42 +114,12 @@ public class CustomerRequestDataTask extends AsyncTask<String, Void, String>{
             }
 
             //notify the activity that fetch data has been complete
-            if(listener != null) listener.onFetchComplete(customerRequests);
+            if(listener != null) listener.Complete(customerRequests);
         } catch (JSONException e) {
             msg = "Invalid response";
-            if(listener != null) listener.onFetchFailure(msg);
+            if(listener != null) listener.Failure(msg);
             return;
         }
     }
 
-    /**
-     * This function will convert response stream into json string
-     * @param is respons string
-     * @return json string
-     * @throws IOException
-     */
-    public String streamToString(final InputStream is) throws IOException{
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder sb = new StringBuilder();
-        String line = null;
-
-        try {
-            while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-        }
-        catch (IOException e) {
-            throw e;
-        }
-        finally {
-            try {
-                is.close();
-            }
-            catch (IOException e) {
-                throw e;
-            }
-        }
-
-        return sb.toString();
-    }
 }
