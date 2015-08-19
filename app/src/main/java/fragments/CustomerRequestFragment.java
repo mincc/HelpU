@@ -23,6 +23,7 @@ public class CustomerRequestFragment extends Fragment {
     private static final String TAG = "CustomerRequestFragment";
     private int mCustomerRequestId = 1;
     private TextView tvCustomerRequestId, tvServiceName, tvDescription, tvProjectStatus, tvServiceProviderId, tvQuotation, lblServiceProviderId, lblQuotation;
+    private TextView tvFragTitle;
 
     public static CustomerRequestFragment newInstance(int customerRequestId)
     {
@@ -62,6 +63,7 @@ public class CustomerRequestFragment extends Fragment {
 
     private void getCustomerRequestDetails(View view) {
 
+        tvFragTitle = (TextView) view.findViewById(R.id.tvFragTitle);
         tvCustomerRequestId = (TextView) view.findViewById(R.id.tvCustomerRequestId);
         tvServiceName = (TextView) view.findViewById(R.id.tvServiceName);
         tvDescription = (TextView) view.findViewById(R.id.tvDescription);
@@ -80,13 +82,14 @@ public class CustomerRequestFragment extends Fragment {
                 if (returnedCustomerRequest == null) {
                     showErrorMessage();
                 } else {
+                    tvFragTitle.setText("Customer ( " + returnedCustomerRequest.getUserName() + " ) ");
                     tvCustomerRequestId.setText(returnedCustomerRequest.getCustomerRequestId()+"");
                     tvServiceName.setText(returnedCustomerRequest.getServiceName());
                     tvDescription.setText(returnedCustomerRequest.getDescription());
                     String projectStatus = returnedCustomerRequest.getProjectStatus().toString();
                     tvProjectStatus.setText(projectStatus);
 
-                    if( projectStatus == ProjectStatus.ComfirmRequest.toString() ||
+                    if (projectStatus == ProjectStatus.ConfirmRequest.toString() ||
                         projectStatus == ProjectStatus.Quotation.toString() ||
                         projectStatus == ProjectStatus.ConfirmQuotation.toString() ||
                         projectStatus == ProjectStatus.DoDownPayment.toString() ||
@@ -116,6 +119,7 @@ public class CustomerRequestFragment extends Fragment {
                         b.putInt("projectStatusId", returnedCustomerRequest.getProjectStatus().getId());
                         intent.putExtras(b);
                         startActivity(intent);
+                        getActivity().finish();
                     }
                 });
             }

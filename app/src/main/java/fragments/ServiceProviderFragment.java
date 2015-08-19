@@ -21,7 +21,8 @@ import com.example.chungmin.helpu.ServiceProviderServerRequests;
 public class ServiceProviderFragment extends Fragment {
     private static final String TAG = "ServiceProviderFragment";
     private int mServiceProviderId = 1;
-    private TextView tvUserName, tvServiceProviderId, tvService, tvPhone, tvEmail;
+    private TextView tvServiceProviderId, tvService, tvPhone, tvEmail;
+    private TextView tvFragTitle;
 
     public static ServiceProviderFragment newInstance(int serviceProviderId) {
         Log.d(TAG, "ServiceProviderFragment newInstance");
@@ -57,7 +58,7 @@ public class ServiceProviderFragment extends Fragment {
 
     private void getServiceProviderDetails(View view) {
 
-        tvUserName = (TextView) view.findViewById(R.id.tvUserName);
+        tvFragTitle = (TextView) view.findViewById(R.id.tvFragTitle);
         tvServiceProviderId = (TextView) view.findViewById(R.id.tvServiceProviderId);
         tvService = (TextView) view.findViewById(R.id.tvService);
         tvPhone = (TextView) view.findViewById(R.id.tvPhone);
@@ -71,7 +72,7 @@ public class ServiceProviderFragment extends Fragment {
                 if (returnedServiceProvider == null) {
                     showErrorMessage();
                 } else {
-                    tvUserName.setText(returnedServiceProvider.getUserName());
+                    tvFragTitle.setText("Service Provider ( " + returnedServiceProvider.getUserName() + " ) ");
                     tvServiceProviderId.setText(returnedServiceProvider.getServiceProviderId() + "");
                     tvService.setText(returnedServiceProvider.getServiceName());
                     tvPhone.setText(returnedServiceProvider.getPhone());

@@ -37,6 +37,7 @@ public class ServiceProviderList extends ListActivity implements FetchServicePro
                 Intent redirect = new Intent(v.getContext(), MainActivity.class);
                 redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(redirect);
+                finish();
             }
         });
 
@@ -52,6 +53,7 @@ public class ServiceProviderList extends ListActivity implements FetchServicePro
                 b.putInt("serviceProviderId", serviceProviderId);
                 i.putExtras(b);
                 startActivity(i);
+                finish();
             }
         });
 
@@ -65,7 +67,7 @@ public class ServiceProviderList extends ListActivity implements FetchServicePro
 
         UserLocalStore userLocalStore = new UserLocalStore(this);
         User user = userLocalStore.getLoggedInUser();
-        String userId = String.valueOf(user.userId);
+        String userId = String.valueOf(user.getUserId());
 
         FetchServiceProviderDataTask task = new FetchServiceProviderDataTask(this);
         task.execute(url, userId);
@@ -76,7 +78,7 @@ public class ServiceProviderList extends ListActivity implements FetchServicePro
         // dismiss the progress dialog
         if (dialog != null) dialog.dismiss();
         // create new adapter
-        ServiceProviderAdapter adapter = new ServiceProviderAdapter(this, data);
+        ServiceProviderAdapter adapter = new ServiceProviderAdapter(this, data, true);
         // set the adapter to list
         setListAdapter(adapter);
     }

@@ -48,6 +48,7 @@ public class Login extends ActionBarActivity implements View.OnClickListener{
             case R.id.tvRegisterLink:
                 Intent registerIntent = new Intent(Login.this, Register.class);
                 startActivity(registerIntent);
+                finish();
                 break;
         }
     }
@@ -78,5 +79,6 @@ public class Login extends ActionBarActivity implements View.OnClickListener{
         userLocalStore.storeUserData(returnedUser);
         userLocalStore.setUserLoggedIn(true);
         startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 }

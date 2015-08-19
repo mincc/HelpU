@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Provider : "
-        android:id="@+id/textView13"
+        android:id="@+id/lblService"
         android:layout_below="@+id/textView9"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="000000"
-        android:layout_alignTop="@+id/textView13"
+        android:layout_alignTop="@+id/lblService"
         android:layout_toRightOf="@+id/textView9"
         android:layout_toEndOf="@+id/textView9" />
 
@@ -62,7 +62,7 @@
         android:layout_height="wrap_content"
         android:text="Service : "
         android:id="@+id/textView15"
-        android:layout_below="@+id/textView13"
+        android:layout_below="@+id/lblService"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -74,4 +74,48 @@
         android:layout_below="@+id/tvUserName"
         android:layout_alignLeft="@+id/tvUserName"
         android:layout_alignStart="@+id/tvUserName" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rating : "
+        android:id="@+id/lblRating"
+        android:layout_below="@+id/textView15"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <RatingBar
+        android:id="@+id/rbAvgRatedValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:stepSize="0.1"
+        android:rating="2.5"
+        android:layout_gravity="center_horizontal"
+        style="@style/CustomRatingBar"
+        android:isIndicator="true"
+        android:layout_below="@+id/tvService"
+        android:layout_alignLeft="@+id/tvService"
+        android:layout_alignStart="@+id/tvService"
+        android:layout_marginTop="2dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(2.50)"
+        android:id="@+id/tvAvgRatedValue"
+        android:layout_below="@+id/tvService"
+        android:layout_toRightOf="@+id/rbAvgRatedValue"
+        android:layout_toEndOf="@+id/rbAvgRatedValue" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        android:id="@+id/btnDelete"
+        android:layout_gravity="center"
+        android:visibility="visible"
+        android:layout_below="@+id/tvService"
+        android:layout_alignRight="@+id/tvEmail"
+        android:layout_alignEnd="@+id/tvEmail" />
 </RelativeLayout>

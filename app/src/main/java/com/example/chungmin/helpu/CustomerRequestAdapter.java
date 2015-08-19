@@ -4,10 +4,10 @@ package com.example.chungmin.helpu;
  * Created by Chung Min on 7/23/2015.
  */
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +20,7 @@ import java.util.List;
 public class CustomerRequestAdapter extends ArrayAdapter<CustomerRequest>{
     TextView tvCustomerRequestId, tvService, tvDescription, tvProjectStatus, tvServiceProviderId, tvQuotation;
     TextView lblServiceProviderId, lblQuotation;
+    Button btnChangeState, btnRemoveFromView;
     private List<CustomerRequest> items;
     private Context mContext;
 
@@ -54,6 +55,8 @@ public class CustomerRequestAdapter extends ArrayAdapter<CustomerRequest>{
             tvQuotation = (TextView)v.findViewById(R.id.tvQuotation);
             lblServiceProviderId = (TextView)v.findViewById(R.id.lblServiceProviderId);
             lblQuotation = (TextView)v.findViewById(R.id.lblQuotation);
+            btnChangeState = (Button) v.findViewById(R.id.btnChangeState);
+            btnRemoveFromView = (Button) v.findViewById(R.id.btnRemoveFromView);
 
             if (tvCustomerRequestId != null) {
                 tvCustomerRequestId.setText(Integer.toString((customerRequest.getCustomerRequestId())));
@@ -74,7 +77,7 @@ public class CustomerRequestAdapter extends ArrayAdapter<CustomerRequest>{
             }
 
             String projectStatus = customerRequest.getProjectStatus().toString();
-            if( projectStatus == ProjectStatus.ComfirmRequest.toString() ||
+            if (projectStatus == ProjectStatus.ConfirmRequest.toString() ||
                     projectStatus == ProjectStatus.Quotation.toString() ||
                     projectStatus == ProjectStatus.ConfirmQuotation.toString() ||
                     projectStatus == ProjectStatus.DoDownPayment.toString() ||
@@ -104,12 +107,47 @@ public class CustomerRequestAdapter extends ArrayAdapter<CustomerRequest>{
                 lblQuotation.setVisibility(View.GONE);
             }
 
-            final int serviceId = customerRequest.getServiceId();
+            if (projectStatus == ProjectStatus.Done.toString()) {
+                btnRemoveFromView.setVisibility(View.VISIBLE);
+            } else {
+                btnRemoveFromView.setVisibility(View.GONE);
+            }
 
-            Button btnChangeState= (Button) v.findViewById(R.id.btnChangeState);
+            btnRemoveFromView.setOnClickListener(new Button.OnClickListener() {
+                public void onClick(final View v) {
+                    final View superView = (View) v.getParent();
+                    TextView tvCustomerRequestId = (TextView) superView.findViewById(R.id.tvCustomerRequestId);
+
+                    int customerRequestId = Integer.parseInt(tvCustomerRequestId.getText().toString());
+                    CustomerRequestServerRequests serverRequest = new CustomerRequestServerRequests(getContext());
+                    String url = mContext.getString(R.string.server_uri) + ((Globals) mContext.getApplicationContext()).getCustomerRequestGetByID();
+                    serverRequest.getCustomerRequestByID(customerRequestId, url, new GetCustomerRequestCallback() {
+                        @Override
+                        public void done(final CustomerRequest returnedCustomerRequest) {
+                            final CustomerRequest customerRequest = returnedCustomerRequest;
+                            customerRequest.setProjectStatusId(ProjectStatus.RemoveFromView.getId());
+                            String url = mContext.getString(R.string.server_uri) + ((Globals) mContext.getApplicationContext()).getCustomerRequestUpdate();
+                            CustomerRequestServerRequests serverRequest = new CustomerRequestServerRequests(getContext());
+                            serverRequest.getCustomerRequestUpdate(customerRequest, url, new GetCustomerRequestCallback() {
+                                @Override
+                                public void done(CustomerRequest returnedCustomerRequest) {
+                                    Intent redirect = new Intent(mContext, CustomerRequestList.class);
+                                    redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    mContext.startActivity(redirect);
+                                    ((Activity) mContext).finish();
+                                }
+                            });
+
+                        }
+                    });
+                }
+            });
+        }
+
+        final int serviceId = customerRequest.getServiceId();
             btnChangeState.setOnClickListener(new Button.OnClickListener() {
-                public void onClick(View v) {
-                    View superView = (View) v.getParent();
+                public void onClick(final View v) {
+                    final View superView = (View) v.getParent();
                     TextView tvCustomerRequestId = (TextView)superView.findViewById(R.id.tvCustomerRequestId);
                     TextView tvProjectStatus = (TextView)superView.findViewById(R.id.tvProjectStatus);
 
@@ -147,7 +185,7 @@ public class CustomerRequestAdapter extends ArrayAdapter<CustomerRequest>{
                                         b.putInt("projectStatusId", returnedCustomerRequest.getProjectStatusId());
                                     }
                                     break;
-                                case ComfirmRequest:
+                                case ConfirmRequest:
                                 case Quotation:
                                 case ConfirmQuotation:
                                 case CandidateNotification:
@@ -168,14 +206,14 @@ public class CustomerRequestAdapter extends ArrayAdapter<CustomerRequest>{
                             redirect.putExtras(b);
                             redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             mContext.startActivity(redirect);
-
+                            ((Activity) mContext).finish();
                         }
                     });
 
                     }
                 });
-        }
 
         return v;
     }
+
 }

@@ -1,9 +1,11 @@
 package com.example.chungmin.helpu;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -12,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import fragments.JobDoneFragment;
 import fragments.JobOfferFragment;
 
 
@@ -63,11 +66,11 @@ public class MainActivity extends ActionBarActivity implements FetchServiceProvi
         userLocalStore = new UserLocalStore(this);
         User user = userLocalStore.getLoggedInUser();
         if(user != null) {
-            String userId = String.valueOf(user.userId);
+            String userId = String.valueOf(user.getUserId());
             retrieveWorkCount(userId);
             retrieveHireCount(userId);
 
-            ((Globals)this.getApplication()).setUserId(user.userId);
+            ((Globals) this.getApplication()).setUserId(user.getUserId());
             alarm = new AlarmManagerBroadcastReceiver();
             alarm.SetAlarm(this);
 
@@ -75,8 +78,10 @@ public class MainActivity extends ActionBarActivity implements FetchServiceProvi
             if (savedInstanceState == null) {
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
-                Fragment frag = new JobOfferFragment().newInstance(user.userId);
+                Fragment frag = new JobOfferFragment().newInstance(user.getUserId());
                 ft.add(R.id.llJobOffer, frag);
+                frag = new JobDoneFragment().newInstance(user.getUserId());
+                ft.add(R.id.llJobDone, frag);
                 ft.commit();
             }
 
@@ -87,24 +92,22 @@ public class MainActivity extends ActionBarActivity implements FetchServiceProvi
 
     @Override
     public void onClick(View v) {
-        Intent redirect;
+        Intent redirect = null;
         switch(v.getId()){
             case R.id.bLogout:
                 alarm.CancelAlarm(this);
                 userLocalStore.clearUserData();
                 userLocalStore.setUserLoggedIn(false);
-                Intent loginIntent = new Intent(this, Login.class);
-                startActivity(loginIntent);
+                redirect = new Intent(this, Login.class);
                 break;
             case R.id.bHire:
                 redirect = new Intent(this, Hire.class);
-                startActivity(redirect);
                 break;
             case R.id.bWork:
                 redirect = new Intent(this, Work.class);
-                startActivity(redirect);
                 break;
         }
+        startActivity(redirect);
     }
 
     @Override
@@ -119,6 +122,7 @@ public class MainActivity extends ActionBarActivity implements FetchServiceProvi
         if (userLocalStore.getLoggedInUser() == null) {
             Intent intent = new Intent(this, Login.class);
             startActivity(intent);
+            finish();
             return false;
         }
         return true;
@@ -126,7 +130,7 @@ public class MainActivity extends ActionBarActivity implements FetchServiceProvi
 
     private void displayUserDetails() {
         User user = userLocalStore.getLoggedInUser();
-        txUsername.setText(user.username);
+        txUsername.setText(user.getUsername());
     }
 
     private void retrieveWorkCount(String userId) {
@@ -180,5 +184,20 @@ public class MainActivity extends ActionBarActivity implements FetchServiceProvi
             dialogCustomerRequest.dismiss();
         // show failure message
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle("Really Exit?")
+                .setMessage("Are you sure you want to exit?")
+                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        MainActivity.super.onBackPressed();
+                        finish();
+                    }
+                }).create().show();
     }
 }

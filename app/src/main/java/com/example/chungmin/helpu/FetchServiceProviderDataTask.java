@@ -106,6 +106,7 @@ public class FetchServiceProviderDataTask extends AsyncTask<String, Void, String
                 serviceProvider.setServiceId(Integer.parseInt(json.getString("serviceId")));
                 serviceProvider.setPhone(json.getString("phone"));
                 serviceProvider.setEmail(json.getString("email"));
+                serviceProvider.setAvgRatedValue(json.getDouble("avgRatedValue"));
                 serviceProvider.setUserName(json.getString("userName"));
                 serviceProvider.setServiceName(json.getString("serviceName"));
 

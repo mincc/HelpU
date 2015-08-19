@@ -68,6 +68,7 @@ public class ServiceProviderCreateQuotation extends ActionBarActivity {
                     public void done(CustomerRequest returnedCustomerRequest) {
                         Intent i = new Intent(ServiceProviderCreateQuotation.this, ServiceProviderConfirmQuotation.class);
                         startActivity(i);
+                        finish();
                     }
                 });
             }

@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -23,7 +22,7 @@ public class CustomerRequestList extends ListActivity implements CustomerRequest
         setContentView(R.layout.activity_customer_request_list);
         initView();
 
-        // Getting listview from xml
+        // Getting list view from xml
         ListView lv = getListView();
 
         // Creating a button - Load More
@@ -34,6 +33,7 @@ public class CustomerRequestList extends ListActivity implements CustomerRequest
                 Intent redirect = new Intent(v.getContext(), MainActivity.class);
                 redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(redirect);
+                finish();
             }
         });
 
@@ -65,7 +65,7 @@ public class CustomerRequestList extends ListActivity implements CustomerRequest
 
         UserLocalStore userLocalStore = new UserLocalStore(this);
         User user = userLocalStore.getLoggedInUser();
-        String userId = String.valueOf(user.userId);
+        String userId = String.valueOf(user.getUserId());
 
         CustomerRequestDataTask task = new CustomerRequestDataTask(this);
         task.execute(url, userId);

@@ -95,6 +95,7 @@ public class RatingFragment extends Fragment {
                 Intent redirect = new Intent(getActivity(), MainActivity.class);
                 redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(redirect);
+                getActivity().finish();
             }
 
         });

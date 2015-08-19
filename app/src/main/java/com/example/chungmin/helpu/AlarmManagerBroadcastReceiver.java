@@ -52,7 +52,7 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
                         String url = context.getString(R.string.server_uri) + ((Globals) context.getApplicationContext()).getServiceProviderWinAward();
                         ServiceProviderServerRequests serverRequest = new ServiceProviderServerRequests(context);
                         int userId = ((Globals) context.getApplicationContext()).getUserId();
-                        serverRequest.getServiceProviderJobOffer(userId, url, new GetCustomerRequestCallback() {
+                        serverRequest.getServiceProviderWinAward(userId, url, new GetCustomerRequestCallback() {
                             @Override
                             public void done(CustomerRequest returnedCustomerRequestServiceProvider) {
                                 if(returnedCustomerRequestServiceProvider != null) {

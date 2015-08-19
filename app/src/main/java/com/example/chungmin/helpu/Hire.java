@@ -99,12 +99,12 @@ public class Hire extends ActionBarActivity implements AdapterView.OnItemSelecte
                 int serviceId = 0;
                 String description = "";
 
-                if(user.userId == 0) {
+                if (user.getUserId() == 0) {
                     Toast.makeText(this, "User ID is null ", Toast.LENGTH_SHORT).show();
                     break;
                 }
                 else {
-                    userId = user.userId;
+                    userId = user.getUserId();
                 }
 
                 if(selectedService == null){
@@ -125,10 +125,12 @@ public class Hire extends ActionBarActivity implements AdapterView.OnItemSelecte
                 CustomerRequest customerRequest = new CustomerRequest(serviceId, userId, description, ProjectStatus.New);
                 registerCustomerRequest(customerRequest);
 
+
                 break;
             case R.id.bCancel:
                 redirect = new Intent(this, MainActivity.class);
                 startActivity(redirect);
+                finish();
                 break;
         }
     }
@@ -139,11 +141,13 @@ public class Hire extends ActionBarActivity implements AdapterView.OnItemSelecte
         customerRequestServerRequest.storeCustomerRequestDataInBackground(customerRequest, url, new GetCustomerRequestCallback() {
             @Override
             public void done(CustomerRequest returnedCustomerRequest) {
+                ((Globals) getApplication()).setCustomerRequest(returnedCustomerRequest);
                 Intent redirect = new Intent(Hire.this, ServiceProviderListByServiceID.class);
                 Bundle b = new Bundle();
                 b.putInt("serviceId", customerRequest.getServiceId());
                 redirect.putExtras(b);
                 startActivity(redirect);
+                finish();
             }
         });
     }

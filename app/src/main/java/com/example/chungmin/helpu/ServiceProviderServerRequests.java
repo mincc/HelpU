@@ -34,7 +34,6 @@ import HelpUGenericUtilities.StringUtils;
 public class ServiceProviderServerRequests {
     ProgressDialog progressDialog;
     public static final int CONNECTION_TIMEOUT = 1000 * 15;
-    //public static final String SERVER_ADDRESS = "http://helpu.hostei.com/";
 
     public ServiceProviderServerRequests(Context context) {
         progressDialog = new ProgressDialog(context);
@@ -78,10 +77,14 @@ public class ServiceProviderServerRequests {
         new ServiceProviderTotalJobOffer(userId, listener).execute(url);
     }
 
+    public void serviceProviderDelete(int serviceProviderId, String url, GetServiceProviderCallback serviceProviderCallback) {
+        progressDialog.show();
+        new ServiceProviderDelete(serviceProviderId, serviceProviderCallback).execute(url);
+    }
 
     /**
      * parameter sent to task upon execution progress published during
-     * background computation activity_notification_job_offer of the background computation
+     * background computation
      */
 
     public class StoreServiceProviderDataAsyncTask extends AsyncTask<String, Void, Void> {
@@ -189,6 +192,7 @@ public class ServiceProviderServerRequests {
                     String serviceName = jObject.getString("serviceName");
                     String phone = jObject.getString("phone");
                     String email = jObject.getString("email");
+                    double avgRatedValue = jObject.getDouble("avgRatedValue");
 
                     returnedServiceProvider = new ServiceProvider(
                             serviceProviderId,
@@ -197,7 +201,8 @@ public class ServiceProviderServerRequests {
                             serviceId,
                             serviceName,
                             phone,
-                            email);
+                            email,
+                            avgRatedValue);
                 }
 
             } catch (Exception e) {
@@ -268,6 +273,7 @@ public class ServiceProviderServerRequests {
                     serviceProvider.setServiceId(Integer.parseInt(json.getString("serviceId")));
                     serviceProvider.setPhone(json.getString("phone"));
                     serviceProvider.setEmail(json.getString("email"));
+                    serviceProvider.setAvgRatedValue(json.getDouble("avgRatedValue"));
                     serviceProvider.setUserName(json.getString("userName"));
                     serviceProvider.setServiceName(json.getString("serviceName"));
 
@@ -592,4 +598,58 @@ public class ServiceProviderServerRequests {
             }
         }
     }
+
+    public class ServiceProviderDelete extends AsyncTask<String, Void, Void> {
+        int serviceProviderId;
+        GetServiceProviderCallback serviceProviderCallBack;
+
+        public ServiceProviderDelete(int serviceProviderId, GetServiceProviderCallback serviceProviderCallBack) {
+            this.serviceProviderId = serviceProviderId;
+            this.serviceProviderCallBack = serviceProviderCallBack;
+        }
+
+        @Override
+        protected Void doInBackground(String... params) {
+            if (params == null)
+                return null;
+
+            // get url from params
+            String url = params[0];
+
+            ArrayList<NameValuePair> dataToSend = new ArrayList<>();
+            dataToSend.add(new BasicNameValuePair("serviceProviderId", serviceProviderId + ""));
+
+            HttpParams httpRequestParams = getHttpRequestParams();
+
+            HttpClient client = new DefaultHttpClient(httpRequestParams);
+            HttpPost post = new HttpPost(url);
+
+            try {
+                post.setEntity(new UrlEncodedFormEntity(dataToSend));
+                client.execute(post);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        private HttpParams getHttpRequestParams() {
+            HttpParams httpRequestParams = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(httpRequestParams,
+                    CONNECTION_TIMEOUT);
+            HttpConnectionParams.setSoTimeout(httpRequestParams,
+                    CONNECTION_TIMEOUT);
+            return httpRequestParams;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            progressDialog.dismiss();
+            serviceProviderCallBack.done(null);
+        }
+
+    }
+
 }

@@ -53,6 +53,7 @@ public class CustomerRequestByID extends ActionBarActivity {
                         b.putInt("projectStatusId", returnedCustomerRequest.getProjectStatus().getId());
                         intent.putExtras(b);
                         startActivity(intent);
+                        finish();
                     }
                 });
             }

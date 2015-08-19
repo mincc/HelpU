@@ -89,6 +89,7 @@ public class CreateQuotationFragment extends Fragment {
                         redirect.putExtras(b);
                         redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(redirect);
+                        getActivity().finish();
                     }
                 });
             }

@@ -52,10 +52,10 @@ public class CustomerRequestServerRequests {
 
     /**
      * parameter sent to task upon execution progress published during
-     * background computation activity_notification_job_offer of the background computation
+     * background computation
      */
 
-    public class StoreCustomerRequestDataAsyncTask extends AsyncTask<String, Void, Void> {
+    public class StoreCustomerRequestDataAsyncTask extends AsyncTask<String, Void, CustomerRequest> {
         CustomerRequest customerRequest;
         GetCustomerRequestCallback customerRequestCallBack;
 
@@ -65,7 +65,7 @@ public class CustomerRequestServerRequests {
         }
 
         @Override
-        protected Void doInBackground(String... params) {
+        protected CustomerRequest doInBackground(String... params) {
             if(params == null)
                 return null;
 
@@ -83,14 +83,47 @@ public class CustomerRequestServerRequests {
             HttpClient client = new DefaultHttpClient(httpRequestParams);
             HttpPost post = new HttpPost(url);
 
+            CustomerRequest returnedCustomerRequest = null;
+
             try {
                 post.setEntity(new UrlEncodedFormEntity(dataToSend));
-                client.execute(post);
+                HttpResponse httpResponse = client.execute(post);
+
+                HttpEntity entity = httpResponse.getEntity();
+                String result = EntityUtils.toString(entity);
+                JSONObject jObject = new JSONObject(result);
+
+                if (jObject.length() != 0) {
+                    Log.v("happened", "Store Customer Request Data");
+
+                    int customerRequestId = jObject.getInt("customerRequestId");
+                    int serviceId = jObject.getInt("serviceId");
+                    int userId = jObject.getInt("userId");
+                    String description = jObject.getString("description");
+                    int projectStatusId = jObject.getInt("projectStatusId");
+                    String userName = jObject.getString("userName");
+                    String serviceName = jObject.getString("serviceName");
+                    int serviceProviderId = jObject.getInt("serviceProviderId");
+                    double quotation = jObject.getDouble("quotation");
+
+                    returnedCustomerRequest = new CustomerRequest(
+                            customerRequestId,
+                            serviceId,
+                            serviceName,
+                            userId,
+                            description,
+                            ProjectStatus.values()[projectStatusId],
+                            userName,
+                            serviceName,
+                            serviceProviderId,
+                            quotation);
+                }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            return null;
+            return returnedCustomerRequest;
         }
 
         private HttpParams getHttpRequestParams() {
@@ -103,10 +136,10 @@ public class CustomerRequestServerRequests {
         }
 
         @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
+        protected void onPostExecute(CustomerRequest returnedCustomerRequest) {
+            super.onPostExecute(returnedCustomerRequest);
             progressDialog.dismiss();
-            customerRequestCallBack.done(null);
+            customerRequestCallBack.done(returnedCustomerRequest);
         }
 
     }
@@ -225,8 +258,6 @@ public class CustomerRequestServerRequests {
 
             HttpClient client = new DefaultHttpClient(httpRequestParams);
             HttpPost post = new HttpPost(url);
-
-            CustomerRequest returnedCustomerRequest = null;
 
             try {
                 post.setEntity(new UrlEncodedFormEntity(dataToSend));

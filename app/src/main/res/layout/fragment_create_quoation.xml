@@ -15,7 +15,8 @@
             android:layout_below="@+id/lblQuotation"
             android:layout_toRightOf="@+id/lblQuotation"
             android:layout_toEndOf="@+id/lblQuotation"
-            android:layout_marginTop="35dp" />
+            android:layout_marginTop="35dp"
+            style="@style/btnStyleBeige" />
 
         <EditText
             android:layout_width="wrap_content"

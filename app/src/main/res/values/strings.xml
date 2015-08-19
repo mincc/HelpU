@@ -28,6 +28,7 @@
     <string name="title_activity_user_profile_setting">User Profile Setting</string>
     <string name="server_uri">http://192.168.1.8/HelpU/</string>
     <!--<string name="server_uri">http://helpu.hostei.com/</string>-->
+    <!--<string name="server_uri">http://helpu.comuf.com/</string>-->
     <string name="title_activity_customer_request_list">Customer Request List</string>
     <string name="title_activity_customer_request_by_id">Customer Request By ID</string>
     <string name="title_activity_service_provider_by_id">Service Provider By ID</string>
@@ -44,5 +45,39 @@
     </string>
     <string name="title_activity_customer_do_down_payment">Customer Do Down Payment</string>
     <string name="title_activity_project_messages">ProjectMessages</string>
+    <string name="title_activity_ipay88_sample">IPay88SampleActivity</string>
+
+
+    <!--//IPay88-->
+    <string name="ProdDesc">Product Description</string>
+    <!--<string name="app_name">v2 IPAY88 Android Payment</string>-->
+    <string name="Amount">Amount (RM)</string>
+    <string name="UserName">Customer Name</string>
+    <string name="UserContact">Phone Number</string>
+    <string name="UserEmail">Email</string>
+    <string name="Result">Result</string>
+    <string name="btnPrint">Print Receipt</string>
+    <string name="btnHome">Home</string>
+    <string name="strPaymentId">PaymentId</string>
+    <string name="strRefNo">RefNo</string>
+    <string name="strAmount">Amount</string>
+    <string name="strRemark">Remark</string>
+    <string name="strTransId">TransId</string>
+    <string name="strAuthCode">AuthCode</string>
+    <string name="strStatus">Status</string>
+    <string name="strErrDesc">ErrDesc</string>
+    <string name="strSignature">Signature</string>
+    <string name="strREFID">Reference ID</string>
+    <string name="imgDesc">ipay demo logo</string>
+    <string name="strPay">Pay Now</string>
+    <string name="strCancel">Cancel</string>
+    <string name="strMerchantKey">Merchant Key</string>
+    <string name="strMerchantCode">Merchant Code</string>
+    <string name="strPaymentID">Payment ID</string>
+    <string name="strCurrency">Currency</string>
+    <string name="strLang">Language</string>
+    <string name="strCountry">Country</string>
+    <string name="strBackendPost">Backend Post URL</string>
+    <string name="strRequery">Requery</string>
 
 </resources>

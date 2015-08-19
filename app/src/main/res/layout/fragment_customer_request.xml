@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Customer"
-        android:id="@+id/title"
+        android:id="@+id/tvFragTitle"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Customer Request ID : "
-        android:layout_below="@+id/title"/>
+        android:layout_below="@+id/tvFragTitle" />
 
     <TextView
         android:id="@+id/tvCustomerRequestId"
@@ -36,7 +36,7 @@
         android:id="@+id/TextView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Service Type : "
+        android:text="Service Needed : "
         android:layout_below="@+id/TextView1" />
 
     <TextView

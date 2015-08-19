@@ -18,11 +18,16 @@ import java.util.List;
 
 public class CustomerRequestJobList extends ListActivity implements CustomerRequestDataListener,View.OnClickListener  {
     private ProgressDialog dialog;
+    private String mTypeList = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_request_list);
+
+        Intent intent = getIntent();
+        mTypeList = intent.getStringExtra("ListType"); //JobOfferList or JobDoneList
+
         initView();
 
         // Getting listview from xml
@@ -36,6 +41,7 @@ public class CustomerRequestJobList extends ListActivity implements CustomerRequ
                 Intent redirect = new Intent(v.getContext(), MainActivity.class);
                 redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(redirect);
+                finish();
             }
         });
 
@@ -63,11 +69,16 @@ public class CustomerRequestJobList extends ListActivity implements CustomerRequ
         // show progress dialog
         dialog = ProgressDialog.show(this, "", "Loading...");
 
-        String url = getString(R.string.server_uri) + ((Globals)getApplication()).getCustomerRequestJobListGetByUserID();
+        String url = "";
+        if (mTypeList.equals("JobOfferList")) {
+            url = getString(R.string.server_uri) + ((Globals) getApplication()).getCustomerRequestJobListGetByUserID();
+        } else if (mTypeList.equals("JobDoneList")) {
+            url = getString(R.string.server_uri) + ((Globals) getApplication()).getCustomerRequestJobDoneListGetByUserID();
+        }
 
         UserLocalStore userLocalStore = new UserLocalStore(this);
         User user = userLocalStore.getLoggedInUser();
-        String userId = String.valueOf(user.userId);
+        String userId = String.valueOf(user.getUserId());
 
         CustomerRequestDataTask task = new CustomerRequestDataTask(this);
         task.execute(url, userId);

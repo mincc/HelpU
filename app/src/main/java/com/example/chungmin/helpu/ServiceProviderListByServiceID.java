@@ -53,6 +53,7 @@ public class ServiceProviderListByServiceID extends ListActivity implements Fetc
                         redirect.putExtras(b);
                         redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(redirect);
+                        finish();
                     }
                 });
             }
@@ -75,7 +76,7 @@ public class ServiceProviderListByServiceID extends ListActivity implements Fetc
                     showErrorMessage();
                 } else {
                     // create new adapter
-                    ServiceProviderAdapter adapter = new ServiceProviderAdapter(context, returnedServiceProviderList);
+                    ServiceProviderAdapter adapter = new ServiceProviderAdapter(context, returnedServiceProviderList, false);
                     // set the adapter to list
                     setListAdapter(adapter);
                 }
@@ -95,7 +96,7 @@ public class ServiceProviderListByServiceID extends ListActivity implements Fetc
         // dismiss the progress dialog
         if (dialog != null) dialog.dismiss();
         // create new adapter
-        ServiceProviderAdapter adapter = new ServiceProviderAdapter(this, data);
+        ServiceProviderAdapter adapter = new ServiceProviderAdapter(this, data, false);
         // set the adapter to list
         setListAdapter(adapter);
     }

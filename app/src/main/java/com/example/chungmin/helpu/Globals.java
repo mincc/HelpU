@@ -8,13 +8,11 @@ public class Globals extends Application {
     private CustomerRequest customerRequest;
     private ServiceProvider serviceProvider;
     private Boolean isJobOfferTriggle = false;
-    private Boolean isServerAlreadyResponse = false;
     private int userId;
 
     public CustomerRequest getCustomerRequest() {
         return customerRequest;
     }
-
     public void setCustomerRequest(CustomerRequest customerRequest) {
         this.customerRequest = customerRequest;
     }
@@ -22,7 +20,6 @@ public class Globals extends Application {
     public ServiceProvider getServiceProvider() {
         return serviceProvider;
     }
-
     public void setServiceProvider(ServiceProvider serviceProvider) {
         this.serviceProvider = serviceProvider;
     }
@@ -30,24 +27,13 @@ public class Globals extends Application {
     public Boolean getIsJobOfferTriggle() {
         return isJobOfferTriggle;
     }
-
     public void setIsJobOfferTriggle(Boolean isJobOfferTriggle) {
         this.isJobOfferTriggle = isJobOfferTriggle;
     }
 
-    public Boolean getIsServerAlreadyResponse() {
-        return isServerAlreadyResponse;
-    }
-
-    public void setIsServerAlreadyResponse(Boolean isServerAlreadyResponse) {
-        this.isServerAlreadyResponse = isServerAlreadyResponse;
-    }
-
-
     public int getUserId() {
         return userId;
     }
-
     public void setUserId(int userId) {
         this.userId = userId;
     }
@@ -55,7 +41,7 @@ public class Globals extends Application {
 
 
     //Url List for easy management
-    //Customer
+    //region Customer
     public String getCustomerRequestGetByUserID()
     {
         return "CustomerRequestGetByUserID.php";
@@ -81,8 +67,12 @@ public class Globals extends Application {
         return "CustomerRequestJobListGetByUserID.php";
     }
 
+    public String getCustomerRequestJobDoneListGetByUserID() {
+        return "CustomerRequestJobDoneListGetByUserID.php";
+    }
+    //endregion
 
-    //Service Provider
+    //region Service Provider
     public String getServiceProviderGetByID()
     {
         return "ServiceProviderGetByID.php";
@@ -120,8 +110,16 @@ public class Globals extends Application {
         return "ServiceProviderTotalJobOffer.php";
     }
 
+    public String getServiceProviderTotalJobDone() {
+        return "ServiceProviderTotalJobDone.php";
+    }
 
-    //User
+    public String serviceProviderDelete() {
+        return "ServiceProviderDelete.php";
+    }
+    //endregion
+
+    //region User
     public String getUserGetByUsernameAndPassword() {
         return "UserGetByUsernameAndPassword.php";
     }
@@ -129,10 +127,22 @@ public class Globals extends Application {
         return "UserInsert.php";
     }
 
-    //Rating
+    public String getUserUpdate() {
+        return "UserUpdate.php";
+    }
+    //endregion
+
+    //region Rating
     public String getRatingInsert() {
         return "RatingInsert.php";
     }
+    //endregion
+
+    //region Tansaction
+    public String getTransactionInsert() {
+        return "TransactionInsert.php";
+    }
+    //endregion
 
     //Other
     public String getApp()

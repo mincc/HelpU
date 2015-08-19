@@ -49,6 +49,11 @@ public class UserServerRequests {
         new UserByID(userId, userCallBack).execute(url);
     }
 
+    public void getUserUpdate(User user, String url, GetUserCallback userCallBack) {
+        //progressDialog.show();
+        new UserUpdate(user, userCallBack).execute(url);
+    }
+
     /**
      * parameter sent to task upon execution progress published during
      * background computation activity_notification_job_offer of the background computation
@@ -71,11 +76,12 @@ public class UserServerRequests {
             String url = params[0];
 
             ArrayList<NameValuePair> dataToSend = new ArrayList<>();
-            dataToSend.add(new BasicNameValuePair("userId", user.userId + ""));
-            dataToSend.add(new BasicNameValuePair("name", user.name));
-            dataToSend.add(new BasicNameValuePair("username", user.username));
-            dataToSend.add(new BasicNameValuePair("password", user.password));
-            dataToSend.add(new BasicNameValuePair("age", user.age + ""));
+            dataToSend.add(new BasicNameValuePair("userId", user.getUserId() + ""));
+            dataToSend.add(new BasicNameValuePair("name", user.getUserName()));
+            dataToSend.add(new BasicNameValuePair("username", user.getUsername()));
+            dataToSend.add(new BasicNameValuePair("password", user.getPassword()));
+            dataToSend.add(new BasicNameValuePair("userContact", user.getUserContact()));
+            dataToSend.add(new BasicNameValuePair("userEmail", user.getUserEmail()));
 
             HttpParams httpRequestParams = getHttpRequestParams();
 
@@ -127,9 +133,9 @@ public class UserServerRequests {
             String url = params[0];
 
             ArrayList<NameValuePair> dataToSend = new ArrayList<>();
-            dataToSend.add(new BasicNameValuePair("username", user.username));
-            dataToSend.add(new BasicNameValuePair("password", user.password));
-            dataToSend.add(new BasicNameValuePair("userId", Integer.toString(user.userId)));
+            dataToSend.add(new BasicNameValuePair("username", user.getUsername()));
+            dataToSend.add(new BasicNameValuePair("password", user.getPassword()));
+            dataToSend.add(new BasicNameValuePair("userId", Integer.toString(user.getUserId())));
 
             HttpParams httpRequestParams = new BasicHttpParams();
             HttpConnectionParams.setConnectionTimeout(httpRequestParams,
@@ -153,10 +159,11 @@ public class UserServerRequests {
                 if (jObject.length() != 0){
                     Log.v("happened", "2");
                     String name = jObject.getString("name");
-                    int age = jObject.getInt("age");
                     int userId = jObject.getInt("userId");
+                    String userContact = jObject.getString("userContact");
+                    String userEmail = jObject.getString("userEmail");
 
-                    returnedUser = new User(userId, name, age, user.username, "");
+                    returnedUser = new User(userId, name, user.getUsername(), "", userContact, userEmail);
                 }
 
             } catch (Exception e) {
@@ -236,6 +243,58 @@ public class UserServerRequests {
             super.onPostExecute(returnedUser);
             progressDialog.dismiss();
             userCallBack.done(returnedUser);
+        }
+    }
+
+    public class UserUpdate extends AsyncTask<String, Void, Void> {
+        User user;
+        GetUserCallback userCallBack;
+
+        public UserUpdate(User user, GetUserCallback userCallBack) {
+            this.user = user;
+            this.userCallBack = userCallBack;
+        }
+
+        @Override
+        protected Void doInBackground(String... params) {
+            if (params == null)
+                return null;
+
+            // get url from params
+            String url = params[0];
+
+            ArrayList<NameValuePair> dataToSend = new ArrayList<>();
+            dataToSend.add(new BasicNameValuePair("userId", this.user.getUserId() + ""));
+            dataToSend.add(new BasicNameValuePair("name", this.user.getUserName()));
+            dataToSend.add(new BasicNameValuePair("username", this.user.getUsername()));
+            dataToSend.add(new BasicNameValuePair("userContact", this.user.getUserContact()));
+            dataToSend.add(new BasicNameValuePair("userEmail", this.user.getUserEmail()));
+
+            HttpParams httpRequestParams = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(httpRequestParams,
+                    CONNECTION_TIMEOUT);
+            HttpConnectionParams.setSoTimeout(httpRequestParams,
+                    CONNECTION_TIMEOUT);
+
+            HttpClient client = new DefaultHttpClient(httpRequestParams);
+            HttpPost post = new HttpPost(url);
+
+            try {
+                post.setEntity(new UrlEncodedFormEntity(dataToSend));
+                HttpResponse httpResponse = client.execute(post);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            progressDialog.dismiss();
+            userCallBack.done(null);
         }
     }
 }

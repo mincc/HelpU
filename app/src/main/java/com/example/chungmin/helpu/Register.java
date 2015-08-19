@@ -10,7 +10,7 @@ import android.widget.EditText;
 
 public class Register extends ActionBarActivity implements View.OnClickListener{
 
-    EditText etName, etAge, etUsername, etPassword;
+    EditText etName, etUsername, etPassword, etUserContact, etUserEmail;
     Button bRegister;
 
     @Override
@@ -19,9 +19,10 @@ public class Register extends ActionBarActivity implements View.OnClickListener{
         setContentView(R.layout.activity_register);
 
         etName = (EditText) findViewById(R.id.etName);
-        etAge = (EditText) findViewById(R.id.etAge);
         etUsername = (EditText) findViewById(R.id.etUsername);
         etPassword = (EditText) findViewById(R.id.etPassword);
+        etUserContact = (EditText) findViewById(R.id.etUserContact);
+        etUserEmail = (EditText) findViewById(R.id.etUserEmail);
         bRegister = (Button) findViewById(R.id.bRegister);
 
         bRegister.setOnClickListener(this);
@@ -34,9 +35,10 @@ public class Register extends ActionBarActivity implements View.OnClickListener{
                 String name = etName.getText().toString();
                 String username = etUsername.getText().toString();
                 String password = etPassword.getText().toString();
-                int age = Integer.parseInt(etAge.getText().toString());
+                String userContact = etUserContact.getText().toString();
+                String userEmail = etUserEmail.getText().toString();
 
-                User user = new User(-1, name, age, username, password);
+                User user = new User(-1, name, username, password, userContact, userEmail);
                 registerUser(user);
                 break;
         }
@@ -50,6 +52,7 @@ public class Register extends ActionBarActivity implements View.OnClickListener{
             public void done(User returnedUser) {
                 Intent loginIntent = new Intent(Register.this, Login.class);
                 startActivity(loginIntent);
+                finish();
             }
         });
     }

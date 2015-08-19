@@ -24,7 +24,7 @@
         android:id="@+id/lblServiceType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Service Type : "
+        android:text="Service Needed : "
         android:layout_below="@+id/lblCustomerRequestId" />
 
     <TextView

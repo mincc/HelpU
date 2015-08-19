@@ -6,6 +6,7 @@ package com.example.chungmin.helpu;
 public class ServiceProvider {
     String phone, email, userName, serviceName;
     int userId, serviceId, serviceProviderId;
+    double avgRatedValue;
 
     public ServiceProvider() {
 
@@ -17,9 +18,11 @@ public class ServiceProvider {
         this.serviceId = serviceId;
         this.phone = phone;
         this.email = email;
+        this.avgRatedValue = 2.50;
     }
 
-    public ServiceProvider(int serviceProviderId, int userId, String userName, int serviceId, String serviceName, String phone, String email) {
+    public ServiceProvider(int serviceProviderId, int userId, String userName, int serviceId, String serviceName,
+                           String phone, String email, double avgRatedValue) {
         this.serviceProviderId = serviceProviderId;
         this.userId = userId;
         this.userName = userName;
@@ -27,6 +30,7 @@ public class ServiceProvider {
         this.serviceName = serviceName;
         this.phone = phone;
         this.email = email;
+        this.avgRatedValue = avgRatedValue;
     }
 
     public int getUserId() {
@@ -35,29 +39,41 @@ public class ServiceProvider {
     public void setUserId(int userId) {
         this.userId = userId;
     }
+
     public int getServiceId() {
         return serviceId;
     }
     public void setServiceId(int serviceId) {
         this.serviceId = serviceId;
     }
+
     public int getServiceProviderId(){
         return serviceProviderId;
     }
     public void setServiceProviderId(int serviceProviderId) {
         this.serviceProviderId = serviceProviderId;
     }
+
     public String getPhone() {
         return phone;
     }
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
     public String getEmail() {
         return email;
     }
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public double getAvgRatedValue() {
+        return avgRatedValue;
+    }
+
+    public void setAvgRatedValue(double avgRatedValue) {
+        this.avgRatedValue = avgRatedValue;
     }
 
     //User Table

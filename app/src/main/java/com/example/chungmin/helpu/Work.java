@@ -86,12 +86,12 @@ public class Work extends ActionBarActivity implements AdapterView.OnItemSelecte
                 String phone ="";
                 String email = "";
 
-                if(user.userId == 0) {
+                if (user.getUserId() == 0) {
                     Toast.makeText(this, "User ID is null ", Toast.LENGTH_SHORT).show();
                     break;
                 }
                 else {
-                    userId = user.userId;
+                    userId = user.getUserId();
                 }
 
                 if(selectedService == null){
@@ -147,6 +147,7 @@ public class Work extends ActionBarActivity implements AdapterView.OnItemSelecte
             public void done(ServiceProvider returnedServiceProvider) {
                 Intent redirect = new Intent(Work.this, ServiceProviderList.class);
                 startActivity(redirect);
+                finish();
             }
         });
     }

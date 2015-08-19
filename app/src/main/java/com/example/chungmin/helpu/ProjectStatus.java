@@ -9,17 +9,21 @@ public enum ProjectStatus {
     Match("Match", 2),
     Pick("Pick", 3),
     CandidateNotification("Candidate Notification", 4),
-    ComfirmRequest("Comfirm Request", 5),
+    ConfirmRequest("Confirm Request", 5),
     Quotation("Quotation", 6),
     ConfirmQuotation("Confirm Quotation", 7),
-    DoDownPayment("Do down payment", 8),
-    WinAwardNotification("Win award notification", 9),
-    ReceiveDownPayment("Receive Down payment", 10),
+    //    DoDownPayment("Do down payment", 8),
+    DoDownPayment("Deal", 8),                           //will comment out when apply payment
+    WinAwardNotification("Win Award Notification", 9),
+    ReceiveDownPayment("Receive Down Payment", 10),
     ServiceStart("Service Start", 11),
     ServiceDone("Service Done", 12),
     CustomerRating("Customer Rating", 13),              //Customer give service provider rating
     ServiceProvRating("Service Provider Rating", 14),   //Provider service give customer rating
-    Done("Done", 15);
+    Done("Done", 15),
+    RemoveFromView("Remove From View", 16),
+    TotallyRemoved("Totally Removed", 17),
+    Reselect("Reselect", 18);
 
     private String stringValue;
     private int intValue;

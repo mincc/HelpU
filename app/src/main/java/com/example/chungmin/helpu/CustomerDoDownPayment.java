@@ -63,6 +63,7 @@ public class CustomerDoDownPayment extends ActionBarActivity {
                     public void done(CustomerRequest returnedCustomerRequest) {
                         Intent i = new Intent(v.getContext(),ProjectMessages.class);
                         startActivity(i);
+                        finish();
                     }
                 });
             }
