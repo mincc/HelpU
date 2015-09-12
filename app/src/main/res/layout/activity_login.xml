@@ -7,7 +7,7 @@
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="Username"
+        android:text="@string/strUsername"
         android:layout_gravity="center_horizontal" />
 
     <EditText
@@ -20,7 +20,7 @@
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="Password"
+        android:text="@string/strPassword"
         android:layout_gravity="center_horizontal" />
 
     <EditText
@@ -32,11 +32,11 @@
         android:background="@drawable/edit_text_style"/>
 
     <Button
-        android:id="@+id/bLogin"
+        android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_marginBottom="10dp"
         android:layout_height="wrap_content"
-        android:text="Login"
+        android:text="@string/strLogin"
         style="@style/btnStyleBeige"/>
 
     <TextView
@@ -44,6 +44,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Register Here"
+        android:text="@string/strRegister"
         android:textStyle="bold" />
 </LinearLayout>

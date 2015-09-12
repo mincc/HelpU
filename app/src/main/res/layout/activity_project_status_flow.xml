@@ -32,14 +32,14 @@
         android:text="Pick"
         android:id="@+id/tvPick"
         android:layout_below="@+id/tvMatch"
-        android:layout_alignLeft="@+id/tvCandidateNotification"
-        android:layout_alignStart="@+id/tvCandidateNotification" />
+        android:layout_alignLeft="@+id/tvSelectedNotification"
+        android:layout_alignStart="@+id/tvSelectedNotification" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Candidate Notification"
-        android:id="@+id/tvCandidateNotification"
+        android:id="@+id/tvSelectedNotification"
         android:layout_below="@+id/tvPick"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -51,9 +51,9 @@
         android:layout_height="wrap_content"
         android:text="Comfirm Request"
         android:id="@+id/tvConfirmRequest"
-        android:layout_below="@+id/tvCandidateNotification"
-        android:layout_alignLeft="@+id/tvCandidateNotification"
-        android:layout_alignStart="@+id/tvCandidateNotification" />
+        android:layout_below="@+id/tvSelectedNotification"
+        android:layout_alignLeft="@+id/tvSelectedNotification"
+        android:layout_alignStart="@+id/tvSelectedNotification" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -77,7 +77,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Do Down Payment"
-        android:id="@+id/tvDoDownPayment"
+        android:id="@+id/tvDeal"
         android:layout_below="@+id/tvConfirmQuotation"
         android:layout_alignLeft="@+id/tvConfirmQuotation"
         android:layout_alignStart="@+id/tvConfirmQuotation" />
@@ -86,19 +86,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Win Award Notification"
-        android:id="@+id/tvWinAwardNotification"
-        android:layout_below="@+id/tvDoDownPayment"
-        android:layout_alignLeft="@+id/tvDoDownPayment"
-        android:layout_alignStart="@+id/tvDoDownPayment" />
+        android:id="@+id/tvDealNotification"
+        android:layout_below="@+id/tvDeal"
+        android:layout_alignLeft="@+id/tvDeal"
+        android:layout_alignStart="@+id/tvDeal" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Receive Down Payment"
         android:id="@+id/tvReceiveDownPayment"
-        android:layout_below="@+id/tvWinAwardNotification"
-        android:layout_alignLeft="@+id/tvWinAwardNotification"
-        android:layout_alignStart="@+id/tvWinAwardNotification" />
+        android:layout_below="@+id/tvDealNotification"
+        android:layout_alignLeft="@+id/tvDealNotification"
+        android:layout_alignStart="@+id/tvDealNotification" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -191,7 +191,7 @@
         android:layout_height="wrap_content"
         android:text="Customer"
         android:id="@+id/textView38"
-        android:layout_above="@+id/tvCandidateNotification"
+        android:layout_above="@+id/tvSelectedNotification"
         android:layout_alignLeft="@+id/textView37"
         android:layout_alignStart="@+id/textView37" />
 
@@ -200,7 +200,7 @@
         android:layout_height="wrap_content"
         android:text="Server"
         android:id="@+id/textView39"
-        android:layout_alignBottom="@+id/tvCandidateNotification"
+        android:layout_alignBottom="@+id/tvSelectedNotification"
         android:layout_alignLeft="@+id/textView38"
         android:layout_alignStart="@+id/textView38" />
 
@@ -227,7 +227,7 @@
         android:layout_height="wrap_content"
         android:text="Customer"
         android:id="@+id/textView42"
-        android:layout_above="@+id/tvDoDownPayment"
+        android:layout_above="@+id/tvDeal"
         android:layout_alignLeft="@+id/textView41"
         android:layout_alignStart="@+id/textView41" />
 
@@ -236,7 +236,7 @@
         android:layout_height="wrap_content"
         android:text="Customer"
         android:id="@+id/textView43"
-        android:layout_above="@+id/tvWinAwardNotification"
+        android:layout_above="@+id/tvDealNotification"
         android:layout_alignLeft="@+id/textView42"
         android:layout_alignStart="@+id/textView42" />
 

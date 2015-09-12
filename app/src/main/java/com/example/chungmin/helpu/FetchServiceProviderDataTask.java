@@ -88,39 +88,28 @@ public class FetchServiceProviderDataTask extends AsyncTask<String, Void, String
     @Override
     protected void onPostExecute(String sJson) {
         if(sJson == null) {
-            if(listener != null) listener.Failure(msg);
+            if (listener != null)
+                listener.Failure(msg);
             return;
         }
 
+        // create serviceProviders list
+        List<ServiceProvider> serviceProviderList = null;
         try {
-            // convert json string to json array
-            JSONArray aJson = new JSONArray(sJson);
-            // create serviceProviders list
-            List<ServiceProvider> serviceProviders = new ArrayList<ServiceProvider>();
-
-            for(int i=0; i<aJson.length(); i++) {
-                JSONObject json = aJson.getJSONObject(i);
-                ServiceProvider serviceProvider = new ServiceProvider();
-                serviceProvider.setServiceProviderId(Integer.parseInt(json.getString("serviceProviderId")));
-                serviceProvider.setUserId(Integer.parseInt(json.getString("userId")));
-                serviceProvider.setServiceId(Integer.parseInt(json.getString("serviceId")));
-                serviceProvider.setPhone(json.getString("phone"));
-                serviceProvider.setEmail(json.getString("email"));
-                serviceProvider.setAvgRatedValue(json.getDouble("avgRatedValue"));
-                serviceProvider.setUserName(json.getString("userName"));
-                serviceProvider.setServiceName(json.getString("serviceName"));
-
-                // add the serviceProvider to serviceProviders list
-                serviceProviders.add(serviceProvider);
-            }
+            serviceProviderList = ServiceProviderServerRequests.BuildList(sJson);
 
             //notify the activity that fetch data has been complete
-            if(listener != null) listener.Complete(serviceProviders);
+            if (listener != null)
+                listener.Complete(serviceProviderList);
+
         } catch (JSONException e) {
             msg = "Invalid response";
-            if(listener != null) listener.Failure(msg);
+            if (listener != null)
+                listener.Failure(msg);
             return;
         }
+
+
     }
 
 

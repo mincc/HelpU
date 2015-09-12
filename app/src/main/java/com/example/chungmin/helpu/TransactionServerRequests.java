@@ -1,7 +1,5 @@
 package com.example.chungmin.helpu;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -25,14 +23,9 @@ import java.util.ArrayList;
  * Created by Chung Min on 8/14/2015.
  */
 public class TransactionServerRequests {
-    ProgressDialog progressDialog;
     public static final int CONNECTION_TIMEOUT = 1000 * 15;
 
-    public TransactionServerRequests(Context context) {
-        progressDialog = new ProgressDialog(context);
-        progressDialog.setCancelable(false);
-        progressDialog.setTitle("Processing...");
-        progressDialog.setMessage("Please wait...");
+    public TransactionServerRequests() {
     }
 
     public void transactionInsert(Transaction transaction, String url, GetTransactionCallback transactionCallback) {
@@ -125,7 +118,6 @@ public class TransactionServerRequests {
         @Override
         protected void onPostExecute(Transaction returnedTransaction) {
             super.onPostExecute(returnedTransaction);
-            progressDialog.dismiss();
             transactionCallBack.done(returnedTransaction);
         }
 

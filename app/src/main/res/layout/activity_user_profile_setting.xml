@@ -8,7 +8,7 @@
     tools:context="com.example.chungmin.fragment.UserProfileSetting">
 
     <TextView
-        android:text="Username"
+        android:text="@string/strUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -19,7 +19,7 @@
         android:editable="false" />
 
     <TextView
-        android:text="Name"
+        android:text="@string/strName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -29,7 +29,7 @@
         android:layout_height="wrap_content" />
 
     <TextView
-        android:text="Contact"
+        android:text="@string/strContact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -40,7 +40,7 @@
         android:inputType="phone" />
 
     <TextView
-        android:text="Email"
+        android:text="@string/strEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -53,7 +53,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save"
+        android:text="@string/strSave"
         android:id="@+id/btnSave"
         android:layout_gravity="center_horizontal"
         style="@style/btnStyleBeige" />

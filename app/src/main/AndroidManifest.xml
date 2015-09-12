@@ -4,9 +4,13 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <!-- For attachment when send email -->
+    <!-- <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> -->
+    <!-- <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> -->
+    <!-- <uses-permission android:name="android.permission.READ_PHONE_STATE" /> -->
     <application
         android:name=".Globals"
         android:allowBackup="true"
@@ -118,9 +122,17 @@
             android:enabled="true"
             android:exported="true" >
         </receiver>
+        <receiver
+            android:name=".BootComplete"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
         <activity
-            android:name=".ServiceProviderCreateQuotation"
+            android:name=".ExcludeServiceProviderCreateQuotation"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_service_provider_create_quotation"
             android:screenOrientation="portrait">
@@ -132,7 +144,7 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".ServiceProviderConfirmQuotation"
+            android:name=".ExcludeServiceProviderConfirmQuotation"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_service_provider_confirm_quotation"
             android:screenOrientation="portrait">
@@ -155,10 +167,41 @@
         <activity
             android:name="com.ipay.IpayAcitivityR"
             android:configChanges="orientation|screenSize" />
-        <!--<activity-->
-        <!--android:name=".IPay88SampleActivity"-->
-        <!--android:label="@string/title_activity_ipay88_sample" >-->
-        <!--</activity>-->
+        <!-- <activity -->
+        <!-- android:name=".IPay88SampleActivity" -->
+        <!-- android:label="@string/title_activity_ipay88_sample" > -->
+        <!-- </activity> -->
+        <activity
+            android:name=".AboutUs"
+            android:label="@string/title_activity_about_us"></activity>
+        <!-- <activity -->
+        <!-- android:name=".HelpUBaseActivity" -->
+        <!-- android:label="@string/title_activity_help_ubase" > -->
+        <!-- </activity> -->
+        <activity
+            android:name=".ContactUs"
+            android:label="@string/title_activity_contact_us"></activity>
+        <!-- <activity -->
+        <!-- android:name=".LifeCycle" -->
+        <!-- android:label="@string/title_activity_life_cycle" > -->
+        <!-- </activity> -->
+        <service
+            android:name=".AutoStartUp"
+            android:enabled="true"
+            android:exported="true"></service>
+
+        <activity
+            android:name=".ServerInfo"
+            android:label="@string/title_activity_server_info"></activity>
+        <activity
+            android:name=".SendEmail"
+            android:label="@string/title_activity_send_email"></activity>
+        <activity
+            android:name=".AppStatsSummary"
+            android:label="@string/title_activity_app_stats_summary"></activity>
+        <activity
+            android:name=".TestEspressoTestCase"
+            android:label="@string/title_activity_test_espresso_test_case"></activity>
     </application>
 
 </manifest>

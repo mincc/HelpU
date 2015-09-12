@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 
-public class ServiceProviderByID extends ActionBarActivity {
+public class ServiceProviderByID extends HelpUBaseActivity {
     TextView tvUserId, tvServiceProviderId, tvServiceId, tvPhone, tvEmail;
     
     @Override
@@ -32,7 +32,7 @@ public class ServiceProviderByID extends ActionBarActivity {
         int serviceProviderId =b.getInt("serviceProviderId",0);
 
         String url = getString(R.string.server_uri) + ((Globals)getApplication()).getServiceProviderGetByID();
-        ServiceProviderServerRequests serverRequest = new ServiceProviderServerRequests(this);
+        ServiceProviderServerRequests serverRequest = new ServiceProviderServerRequests();
         serverRequest.getServiceProviderByID(serviceProviderId, url, new GetServiceProviderCallback() {
             @Override
             public void done(ServiceProvider returnedServiceProvider) {
@@ -52,7 +52,7 @@ public class ServiceProviderByID extends ActionBarActivity {
     private void showErrorMessage() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(ServiceProviderByID.this);
         dialogBuilder.setMessage("Get Service Provider By ID Fail!!");
-        dialogBuilder.setPositiveButton("Ok", null);
+        dialogBuilder.setPositiveButton(android.R.string.ok, null);
         dialogBuilder.show();
     }
 }

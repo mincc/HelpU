@@ -25,18 +25,12 @@ import java.util.ArrayList;
  * Created by Chung Min on 7/19/2015.
  */
 public class RatingServerRequests {
-    ProgressDialog progressDialog;
     public static final int CONNECTION_TIMEOUT = 1000 * 15;
 
-    public RatingServerRequests(Context context) {
-        progressDialog = new ProgressDialog(context);
-        progressDialog.setCancelable(false);
-        progressDialog.setTitle("Processing...");
-        progressDialog.setMessage("Please wait...");
+    public RatingServerRequests() {
     }
 
     public void setRatingInsert(Rating rating, String url, GetRatingCallback ratingCallback) {
-        progressDialog.show();
         new RatingInsert(rating, ratingCallback).execute(url);
     }
 //
@@ -106,145 +100,7 @@ public class RatingServerRequests {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            progressDialog.dismiss();
             ratingCallBack.done(null);
         }
-
-//    }
-//
-//    public class RatingByID extends AsyncTask<String, Void, Rating> {
-//        int ratingId;
-//        GetRatingCallback ratingCallBack;
-//
-//        public RatingByID(int ratingId, GetRatingCallback ratingCallBack) {
-//            this.ratingId = ratingId;
-//            this.ratingCallBack = ratingCallBack;
-//        }
-//
-//        @Override
-//        protected Rating doInBackground(String... params) {
-//            if(params == null)
-//                return null;
-//
-//            // get url from params
-//            String url = params[0];
-//
-//            ArrayList<NameValuePair> dataToSend = new ArrayList<>();
-//            dataToSend.add(new BasicNameValuePair("ratingId", this.ratingId + ""));
-//
-//            HttpParams httpRequestParams = new BasicHttpParams();
-//            HttpConnectionParams.setConnectionTimeout(httpRequestParams,
-//                    CONNECTION_TIMEOUT);
-//            HttpConnectionParams.setSoTimeout(httpRequestParams,
-//                    CONNECTION_TIMEOUT);
-//
-//            HttpClient client = new DefaultHttpClient(httpRequestParams);
-//            HttpPost post = new HttpPost(url);
-//
-//            Rating returnedRating = null;
-//
-//            try {
-//                post.setEntity(new UrlEncodedFormEntity(dataToSend));
-//                HttpResponse httpResponse = client.execute(post);
-//
-//                HttpEntity entity = httpResponse.getEntity();
-//                String result = EntityUtils.toString(entity);
-//                JSONObject jObject = new JSONObject(result);
-//
-//                if (jObject.length() != 0){
-//                    Log.v("happened", "Get Customer Request By ID");
-//
-//                    int ratingId = jObject.getInt("ratingId");
-//                    int serviceId = jObject.getInt("serviceId");
-//                    int userId = jObject.getInt("userId");
-//                    String description = jObject.getString("description");
-//                    int projectStatusId = jObject.getInt("projectStatusId");
-//                    String userName = jObject.getString("userName");
-//                    String serviceName = jObject.getString("serviceName");
-//                    int serviceProviderId = jObject.getInt("serviceProviderId");
-//                    double quotation = jObject.getDouble("quotation");
-//
-//                    returnedRating = new Rating(
-//                            ratingId,
-//                            serviceId,
-//                            serviceName,
-//                            userId,
-//                            description,
-//                            ProjectStatus.values()[projectStatusId],
-//                            userName,
-//                            serviceName,
-//                            serviceProviderId,
-//                            quotation);
-//                }
-//
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//
-//            return returnedRating;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Rating returnedRating) {
-//            super.onPostExecute(returnedRating);
-//            progressDialog.dismiss();
-//            ratingCallBack.done(returnedRating);
-//        }
-//    }
-//
-//    public class RatingUpdate extends AsyncTask<String, Void, Void> {
-//        Rating rating;
-//        GetRatingCallback ratingCallBack;
-//
-//        public RatingUpdate(Rating rating, GetRatingCallback ratingCallBack) {
-//            this.rating=rating;
-//            this.ratingCallBack = ratingCallBack;
-//        }
-//
-//        @Override
-//        protected Void doInBackground(String... params) {
-//            if(params == null)
-//                return null;
-//
-//            // get url from params
-//            String url = params[0];
-//
-//            ArrayList<NameValuePair> dataToSend = new ArrayList<>();
-//            dataToSend.add(new BasicNameValuePair("ratingId", this.rating.getRatingId() + ""));
-//            dataToSend.add(new BasicNameValuePair("serviceId", this.rating.getServiceId() + ""));
-//            dataToSend.add(new BasicNameValuePair("userId", this.rating.getUserId() + ""));
-//            dataToSend.add(new BasicNameValuePair("description", this.rating.getDescription()));
-//            dataToSend.add(new BasicNameValuePair("projectStatusId", this.rating.getProjectStatusId() + ""));
-//            dataToSend.add(new BasicNameValuePair("serviceProviderId", this.rating.getServiceProviderId() + ""));
-//            dataToSend.add(new BasicNameValuePair("quotation", this.rating.getQuotation() + ""));
-//
-//            HttpParams httpRequestParams = new BasicHttpParams();
-//            HttpConnectionParams.setConnectionTimeout(httpRequestParams,
-//                    CONNECTION_TIMEOUT);
-//            HttpConnectionParams.setSoTimeout(httpRequestParams,
-//                    CONNECTION_TIMEOUT);
-//
-//            HttpClient client = new DefaultHttpClient(httpRequestParams);
-//            HttpPost post = new HttpPost(url);
-//
-//            Rating returnedRating = null;
-//
-//            try {
-//                post.setEntity(new UrlEncodedFormEntity(dataToSend));
-//                HttpResponse httpResponse = client.execute(post);
-//
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Void result) {
-//            super.onPostExecute(result);
-//            progressDialog.dismiss();
-//            ratingCallBack.done(null);
-//        }
     }
 }

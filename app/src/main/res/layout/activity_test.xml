@@ -9,7 +9,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/ipay88"
-        android:layout_gravity="center_horizontal" />
+        android:text="Test"
+        android:id="@+id/btnTest"
+        android:layout_gravity="center_horizontal"
+        android:singleLine="true" />
 </LinearLayout>

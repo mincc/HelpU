@@ -1,8 +1,6 @@
 package fragments;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,34 +8,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RatingBar;
 
 import com.example.chungmin.helpu.CustomerRequest;
 import com.example.chungmin.helpu.CustomerRequestServerRequests;
 import com.example.chungmin.helpu.GetCustomerRequestCallback;
-import com.example.chungmin.helpu.GetRatingCallback;
 import com.example.chungmin.helpu.Globals;
-import com.example.chungmin.helpu.MainActivity;
 import com.example.chungmin.helpu.ProjectMessages;
 import com.example.chungmin.helpu.ProjectStatus;
 import com.example.chungmin.helpu.R;
-import com.example.chungmin.helpu.Rating;
-import com.example.chungmin.helpu.RatingServerRequests;
-import com.example.chungmin.helpu.ServiceProviderConfirmQuotation;
 
 public class CreateQuotationFragment extends Fragment {
 
-    private static final String ARG_PARAM1 = "customerRequestId";
-
-    private int mCustomerRequestId;
+    private static final String ARG_PARAM1 = "customerRequest";
 
     private EditText etQuotation;
     private Button btnDone;
+    private CustomerRequest mCustomerRequest;
 
-    public static CreateQuotationFragment newInstance(int customerRequestId) {
+
+    public static CreateQuotationFragment newInstance(CustomerRequest customerRequest) {
         CreateQuotationFragment fragment = new CreateQuotationFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_PARAM1, customerRequestId);
+        args.putParcelable(ARG_PARAM1, customerRequest);
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,7 +42,7 @@ public class CreateQuotationFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mCustomerRequestId = getArguments().getInt(ARG_PARAM1);
+            mCustomerRequest = getArguments().getParcelable(ARG_PARAM1);
         }
     }
 
@@ -75,17 +67,17 @@ public class CreateQuotationFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                final CustomerRequest customerRequest = ((Globals)getActivity().getApplication()).getCustomerRequest();
-                customerRequest.setProjectStatusId(ProjectStatus.ConfirmQuotation.getId());
-                customerRequest.setQuotation(Double.parseDouble(etQuotation.getText().toString()));
+                mCustomerRequest.setProjectStatusId(ProjectStatus.ConfirmQuotation.getId());
+                mCustomerRequest.setQuotation(Double.parseDouble(etQuotation.getText().toString()));
                 String url = getString(R.string.server_uri) + ((Globals)getActivity().getApplicationContext()).getCustomerRequestUpdate();
-                CustomerRequestServerRequests serverRequest = new CustomerRequestServerRequests(getActivity().getBaseContext());
-                serverRequest.getCustomerRequestUpdate(customerRequest, url, new GetCustomerRequestCallback() {
+                CustomerRequestServerRequests serverRequest = new CustomerRequestServerRequests();
+                serverRequest.getCustomerRequestUpdate(mCustomerRequest, url, new GetCustomerRequestCallback() {
                     @Override
                     public void done(CustomerRequest returnedCustomerRequest) {
                         Intent redirect = new Intent(getActivity(), ProjectMessages.class);
                         Bundle b = new Bundle();
-                        b.putInt("projectStatusId", customerRequest.getProjectStatusId());
+                        b.putInt("projectStatusId", mCustomerRequest.getProjectStatusId());
+                        b.putInt("customerRequestId", mCustomerRequest.getCustomerRequestId());
                         redirect.putExtras(b);
                         redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(redirect);

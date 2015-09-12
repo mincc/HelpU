@@ -1,8 +1,6 @@
 package com.example.chungmin.helpu;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,25 +13,48 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import HelpUGenericUtilities.ValidationUtils;
 
-public class Work extends ActionBarActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener{
+
+public class Work extends HelpUBaseActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener, View.OnFocusChangeListener {
 
     private Spinner spHire;
-    private EditText etPhone, etEmail;
-    private Button bRegister;
-    private Service selectedService;
-
+    private EditText etContact, etEmail;
+    private Button btnRegister;
+    private Service mSelectedService;
+    private TextView lblType;
+    private int mUserId = 0;
+    private boolean mIsFirstOnItemSelected = true;
+    
     private ServiceSpinAdapter adapter;
 
+    String strContactEmpty;
+    String strEmailEmpty;
+    String strEmailInvalid;
+    String strServiceEmpty;
+    String strServiceAlreadyExist;
+
+    boolean mIsServiceValid = false;
+    boolean mIsContactValid = false;
+    boolean mIsEmailValid = false;
+    boolean mIsValid = false;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work);
 
+        strContactEmpty = getString(R.string.strContactEmpty);
+        strEmailEmpty = getString(R.string.strEmailEmpty);
+        strEmailInvalid = getString(R.string.strEmailInvalid);
+        strServiceEmpty = getString(R.string.strServiceEmpty);
+        strServiceAlreadyExist = getString(R.string.strServiceAlreadyExist);
+
+        lblType = (TextView) findViewById(R.id.lblType);
         spHire = (Spinner) findViewById(R.id.spHire);
-        etPhone = (EditText) findViewById(R.id.etPhone);
+        etContact = (EditText) findViewById(R.id.etContact);
         etEmail = (EditText) findViewById(R.id.etEmail);
-        bRegister = (Button) findViewById(R.id.bRegister);
+        btnRegister = (Button) findViewById(R.id.btnRegister);
 
         String[] hireArray = getResources().getStringArray(R.array.hire_list);
         Service[] services = new Service[hireArray.length];
@@ -48,78 +69,54 @@ public class Work extends ActionBarActivity implements AdapterView.OnItemSelecte
         spHire.setOnItemSelectedListener(this);
         spHire.setAdapter(adapter);
 
-        bRegister.setOnClickListener(this);
-    }
+        etContact.setOnFocusChangeListener(this);
+        etEmail.setOnFocusChangeListener(this);
+        btnRegister.setOnClickListener(this);
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_work, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        UserLocalStore userLocalStore = new UserLocalStore(this);
+        User user = userLocalStore.getLoggedInUser();
+        if (user.getUserId() == 0) {
+            Toast.makeText(this, "User ID is null ", Toast.LENGTH_SHORT).show();
+        } else {
+            mUserId = user.getUserId();
         }
 
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onClick(View v) {
-        Intent redirect;
-        switch(v.getId()) {
-            case R.id.bRegister:
 
-                UserLocalStore userLocalStore = new UserLocalStore(this);
-                User user = userLocalStore.getLoggedInUser();
-                int userId = 0;
+        switch(v.getId()) {
+            case R.id.btnRegister:
+
                 int serviceId = 0;
                 String phone ="";
                 String email = "";
 
-                if (user.getUserId() == 0) {
-                    Toast.makeText(this, "User ID is null ", Toast.LENGTH_SHORT).show();
-                    break;
-                }
-                else {
-                    userId = user.getUserId();
-                }
+                validateDdlService();
+                validateContact();
+                validateEmail();
 
-                if(selectedService == null){
-                    Toast.makeText(this, "Service ID is null ", Toast.LENGTH_SHORT).show();
-                    break;
+                if (mSelectedService == null) {
+                    return;
+                }
+                serviceId = mSelectedService.id;
+                phone = etContact.getText().toString();
+                email = etEmail.getText().toString();
+
+
+                if (mIsServiceValid && mIsEmailValid && mIsContactValid) {
+                    mIsValid = true;
                 }else {
-                    serviceId = selectedService.id;
+                    mIsValid = false;
                 }
 
-                if(etPhone.getText().toString().trim().isEmpty())
-                {
-                    Toast.makeText(this, "Phone number not fill ", Toast.LENGTH_SHORT).show();
-                    break;
-                }else{
-                    phone = etPhone.getText().toString();
+                if (mIsValid) {
+                    //to prevent execute multiple time
+                    btnRegister.setEnabled(false);
+                    ServiceProvider serviceProvider = new ServiceProvider(mUserId, serviceId, phone, email);
+                    registerServiceProvider(serviceProvider);
                 }
-
-                if(etEmail.getText().toString().trim().isEmpty())
-                {
-                    Toast.makeText(this, "Email not fill ", Toast.LENGTH_SHORT).show();
-                    break;
-                }else {
-                    email = etEmail.getText().toString();
-                }
-
-
-                ServiceProvider serviceProvider = new ServiceProvider(userId, serviceId, phone, email);
-                registerServiceProvider(serviceProvider);
 
                 break;
         }
@@ -127,21 +124,26 @@ public class Work extends ActionBarActivity implements AdapterView.OnItemSelecte
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if(position >=1) {
-            selectedService = adapter.getItem(position);
+        if (mIsFirstOnItemSelected) {
+            mIsFirstOnItemSelected = false;
+        } else {
+            if (position >= 1) {
+                mSelectedService = adapter.getItem(position);
 
-            Toast.makeText(this, "You Selected " + selectedService.name + " with ID :" + selectedService.id, Toast.LENGTH_SHORT).show();
+                validateDdlService();
+//            Toast.makeText(this, "You Selected " + mSelectedService.name + " with ID :" + mSelectedService.id, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
+        showToast("On Noting Selected");
     }
 
     private void registerServiceProvider(ServiceProvider serviceProvider) {
         String url = getString(R.string.server_uri) + ((Globals)getApplication()).getServiceProviderInsert();
-        ServiceProviderServerRequests serviceProviderServerRequest = new ServiceProviderServerRequests(this);
+        ServiceProviderServerRequests serviceProviderServerRequest = new ServiceProviderServerRequests();
         serviceProviderServerRequest.storeServiceProviderDataInBackground(serviceProvider, url, new GetServiceProviderCallback() {
             @Override
             public void done(ServiceProvider returnedServiceProvider) {
@@ -150,5 +152,80 @@ public class Work extends ActionBarActivity implements AdapterView.OnItemSelecte
                 finish();
             }
         });
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (!hasFocus) {
+            switch (v.getId()) {
+                case R.id.etContact:
+                    validateContact();
+                    break;
+                case R.id.etEmail:
+                    validateEmail();
+                    break;
+                default:
+                    showToast(getString(R.string.strUnknownAction));
+                    break;
+            }
+        }
+    }
+
+    public void validateDdlService() {
+
+        int serviceId = 0;
+
+        if (mSelectedService != null) {
+            serviceId = mSelectedService.id;
+            lblType.setError(null);
+        } else {
+            lblType.setError(strServiceEmpty);
+            mIsServiceValid = false;
+            return;
+        }
+
+        if (serviceId >= 1) {
+            String url = getString(R.string.server_uri) + ((Globals) getApplication()).serviceProviderIsServiceAlreadyExists();
+            ServiceProviderServerRequests serverRequest = new ServiceProviderServerRequests();
+            serverRequest.isServiceProviderAlreadyExists(mUserId, serviceId, url, new GetBooleanCallback() {
+                @Override
+                public void done(Boolean isServiceProviderAlreadyExists) {
+                    if (isServiceProviderAlreadyExists) {
+                        lblType.setError(strServiceAlreadyExist);
+                        mIsServiceValid = false;
+                    } else {
+                        lblType.setError(null);
+                        mIsServiceValid = true;
+                    }
+                }
+            });
+        }
+    }
+
+    public void validateContact() {
+        if (etContact.getText().toString().equals("")) {
+            etContact.setError(strContactEmpty);
+            mIsContactValid = false;
+        } else {
+            mIsContactValid = true;
+        }
+    }
+
+    public void validateEmail() {
+        String email = etEmail.getText().toString();
+        if (email.equals("")) {
+            etEmail.setError(strEmailEmpty);
+            mIsEmailValid = false;
+            return;
+        } else {
+            mIsEmailValid = true;
+        }
+
+        if (!ValidationUtils.isValidEmail(email)) {
+            etEmail.setError(strEmailInvalid);
+            mIsEmailValid = false;
+        } else {
+            mIsEmailValid = true;
+        }
     }
 }

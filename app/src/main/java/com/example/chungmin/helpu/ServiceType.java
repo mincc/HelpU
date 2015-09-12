@@ -4,17 +4,17 @@ package com.example.chungmin.helpu;
  * Created by Chung Min on 7/27/2015.
  */
 public enum ServiceType {
-    Create("Please select...", 0),
-    Contractor("Contractor", 1),
-    Plumber("Plumber", 2),
-    Handyman("Handyman", 3),
-    InteriorDesigner("Interior Designer", 4),
-    CleaningService("Cleaning Service", 5),
-    MoveHouse("Move House", 6),
-    Photographer("Photographer", 7),
-    Videographer("Videographer", 8),
-    HairAndMakeup("Hair and Makeup", 9),
-    WeddingPlanner("Wedding Planner", 10);
+    Create(Globals.getAppContext().getString(R.string.strPlsSlct), 0),
+    Contractor(Globals.getAppContext().getString(R.string.strContractor), 1),
+    Plumber(Globals.getAppContext().getString(R.string.strPlumber), 2),
+    Handyman(Globals.getAppContext().getString(R.string.strHandyman), 3),
+    InteriorDesigner(Globals.getAppContext().getString(R.string.strInteriorDesigner), 4),
+    CleaningService(Globals.getAppContext().getString(R.string.strCleaningService), 5),
+    MoveHouse(Globals.getAppContext().getString(R.string.strMoveHouse), 6),
+    Photographer(Globals.getAppContext().getString(R.string.strPhotographer), 7),
+    Videographer(Globals.getAppContext().getString(R.string.strVideographer), 8),
+    HairAndMakeup(Globals.getAppContext().getString(R.string.strHairAndMakeup), 9),
+    WeddingPlanner(Globals.getAppContext().getString(R.string.strWeddingPlanner), 10);
 
     private String stringValue;
     private int intValue;
@@ -33,7 +33,7 @@ public enum ServiceType {
     }
 
 //    convert From Int To Enum
-//    ProjectStatus.values()[productId];
+//    ServiceType.values()[productId];
 //
 //    convert From
 }

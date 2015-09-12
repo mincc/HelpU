@@ -86,7 +86,7 @@ public class ServiceProviderAdapter extends ArrayAdapter<ServiceProvider>{
             }
 
             if (viewHolder.tvService != null) {
-                viewHolder.tvService.setText(serviceprovider.getServiceName());
+                viewHolder.tvService.setText(ServiceType.values()[serviceprovider.getServiceId()].toString());
             }
 
             if (viewHolder.tvPhone != null) {
@@ -115,7 +115,7 @@ public class ServiceProviderAdapter extends ArrayAdapter<ServiceProvider>{
                     TextView tvServiceProviderId = (TextView) superView.findViewById(R.id.tvServiceProviderId);
                     int serviceProviderId = Integer.parseInt(tvServiceProviderId.getText().toString());
 
-                    ServiceProviderServerRequests serverRequest = new ServiceProviderServerRequests(getContext());
+                    ServiceProviderServerRequests serverRequest = new ServiceProviderServerRequests();
                     String url = mContext.getString(R.string.server_uri) + ((Globals) mContext.getApplicationContext()).serviceProviderDelete();
                     serverRequest.serviceProviderDelete(serviceProviderId, url, new GetServiceProviderCallback() {
                         @Override

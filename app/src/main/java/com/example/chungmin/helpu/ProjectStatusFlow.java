@@ -8,9 +8,9 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 
-public class ProjectStatusFlow extends ActionBarActivity {
-    TextView tvCustomerRequestId, tvProjectStatus, tvNew, tvMatch, tvPick, tvCandidateNotification, tvConfirmRequest, tvQuotation;
-    TextView tvConfirmQuotation, tvDoDownPayment, tvWinAwardNotification, tvReceiveDownPayment, tvServiceStart, tvServiceDone;
+public class ProjectStatusFlow extends HelpUBaseActivity {
+    TextView tvCustomerRequestId, tvProjectStatus, tvNew, tvMatch, tvPick, tvSelectedNotification, tvConfirmRequest, tvQuotation;
+    TextView tvConfirmQuotation, tvDeal, tvDealNotification, tvReceiveDownPayment, tvServiceStart, tvServiceDone;
     TextView tvCustomerRating, tvServiceProvRating, tvDone;
 
     @Override
@@ -24,12 +24,12 @@ public class ProjectStatusFlow extends ActionBarActivity {
         tvNew = (TextView) findViewById(R.id.tvNew);
         tvMatch = (TextView) findViewById(R.id.tvMatch);
         tvPick = (TextView) findViewById(R.id.tvPick);
-        tvCandidateNotification = (TextView) findViewById(R.id.tvCandidateNotification);
+        tvSelectedNotification = (TextView) findViewById(R.id.tvSelectedNotification);
         tvConfirmRequest = (TextView) findViewById(R.id.tvConfirmRequest);
         tvQuotation = (TextView) findViewById(R.id.tvQuotation);
         tvConfirmQuotation = (TextView) findViewById(R.id.tvConfirmQuotation);
-        tvDoDownPayment = (TextView) findViewById(R.id.tvDoDownPayment);
-        tvWinAwardNotification = (TextView) findViewById(R.id.tvWinAwardNotification);
+        tvDeal = (TextView) findViewById(R.id.tvDeal);
+        tvDealNotification = (TextView) findViewById(R.id.tvDealNotification);
         tvReceiveDownPayment = (TextView) findViewById(R.id.tvReceiveDownPayment);
         tvServiceStart = (TextView) findViewById(R.id.tvServiceStart);
         tvServiceDone = (TextView) findViewById(R.id.tvServiceDone);
@@ -39,12 +39,13 @@ public class ProjectStatusFlow extends ActionBarActivity {
 
         //get from bundle
         Bundle b = getIntent().getExtras();
-        int customerRequestId =b.getInt("customerRequestId", 0);
-        int projectStatusId =b.getInt("projectStatusId",0);
+//        int customerRequestId =b.getInt("customerRequestId", 0);
+//        int projectStatusId =b.getInt("projectStatusId",0);
 
-        tvCustomerRequestId.setText(customerRequestId+"");
-        String currentProjectStatus = ProjectStatus.values()[projectStatusId]+"";
-        tvProjectStatus.setText(currentProjectStatus);
+//        tvCustomerRequestId.setText(customerRequestId+"");
+//            String currentProjectStatus = ProjectStatus.values()[projectStatusId]+"";
+//        tvProjectStatus.setText(currentProjectStatus);
+        String currentProjectStatus = ProjectStatus.New.toString();
 
         //Set the color
         boolean isCorrect = true;
@@ -72,12 +73,12 @@ public class ProjectStatusFlow extends ActionBarActivity {
             isCorrect = false;
         }
 
-        if(isCorrect && tvCandidateNotification.getText().equals(currentProjectStatus))
+        if (isCorrect && tvSelectedNotification.getText().equals(currentProjectStatus))
         {
-            tvCandidateNotification.setTextColor(Color.parseColor("#FF0B2EFF"));
+            tvSelectedNotification.setTextColor(Color.parseColor("#FF0B2EFF"));
             isCorrect = true;
         }else {
-            tvCandidateNotification.setTextColor(Color.parseColor("#FFFF030E"));
+            tvSelectedNotification.setTextColor(Color.parseColor("#FFFF030E"));
             isCorrect = false;
         }
 
@@ -108,21 +109,21 @@ public class ProjectStatusFlow extends ActionBarActivity {
             isCorrect = false;
         }
 
-        if(isCorrect && tvDoDownPayment.getText().equals(currentProjectStatus))
+        if (isCorrect && tvDeal.getText().equals(currentProjectStatus))
         {
-            tvDoDownPayment.setTextColor(Color.parseColor("#FF0B2EFF"));
+            tvDeal.setTextColor(Color.parseColor("#FF0B2EFF"));
             isCorrect = true;
         }else {
-            tvDoDownPayment.setTextColor(Color.parseColor("#FFFF030E"));
+            tvDeal.setTextColor(Color.parseColor("#FFFF030E"));
             isCorrect = false;
         }
 
-        if(isCorrect && tvWinAwardNotification.getText().equals(currentProjectStatus))
+        if (isCorrect && tvDealNotification.getText().equals(currentProjectStatus))
         {
-            tvWinAwardNotification.setTextColor(Color.parseColor("#FF0B2EFF"));
+            tvDealNotification.setTextColor(Color.parseColor("#FF0B2EFF"));
             isCorrect = true;
         }else {
-            tvWinAwardNotification.setTextColor(Color.parseColor("#FFFF030E"));
+            tvDealNotification.setTextColor(Color.parseColor("#FFFF030E"));
             isCorrect = false;
         }
 
@@ -181,25 +182,4 @@ public class ProjectStatusFlow extends ActionBarActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_help, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

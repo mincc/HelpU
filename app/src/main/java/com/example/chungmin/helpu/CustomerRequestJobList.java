@@ -1,14 +1,13 @@
 package com.example.chungmin.helpu;
 
-import android.app.ListActivity;
-import android.app.ProgressDialog;
+import android.app.FragmentManager;
+import android.app.ListFragment;
+import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -16,9 +15,9 @@ import android.widget.Toast;
 import java.util.List;
 
 
-public class CustomerRequestJobList extends ListActivity implements CustomerRequestDataListener,View.OnClickListener  {
-    private ProgressDialog dialog;
-    private String mTypeList = "";
+public class CustomerRequestJobList extends HelpUBaseActivity {
+
+    private static String mTypeList = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,84 +27,89 @@ public class CustomerRequestJobList extends ListActivity implements CustomerRequ
         Intent intent = getIntent();
         mTypeList = intent.getStringExtra("ListType"); //JobOfferList or JobDoneList
 
-        initView();
-
-        // Getting listview from xml
-        ListView lv = getListView();
-
-        // Creating a button - Load More
-        Button btnDone = new Button(this);
-        btnDone.setText("Done");
-        btnDone.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-                Intent redirect = new Intent(v.getContext(), MainActivity.class);
-                redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(redirect);
-                finish();
-            }
-        });
-
-        // Adding button to listview at footer
-        lv.addFooterView(btnDone);
-
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent,View view,int position,long id){
-                /* Display Customer Request Item
-                TextView tvCustomerRequestId = (TextView) view.findViewById(R.id.tvCustomerRequestId);
-                int customerRequestId = Integer.parseInt((String) tvCustomerRequestId.getText());
-
-                Intent i=new Intent(CustomerRequestList.this,CustomerRequestByID.class);
-                Bundle b = new Bundle();
-                b.putInt("customerRequestId", customerRequestId);
-                i.putExtras(b);
-                startActivity(i);
-                */
-
-            }
-        });
-    }
-
-    private void initView() {
-        // show progress dialog
-        dialog = ProgressDialog.show(this, "", "Loading...");
-
-        String url = "";
         if (mTypeList.equals("JobOfferList")) {
-            url = getString(R.string.server_uri) + ((Globals) getApplication()).getCustomerRequestJobListGetByUserID();
-        } else if (mTypeList.equals("JobDoneList")) {
-            url = getString(R.string.server_uri) + ((Globals) getApplication()).getCustomerRequestJobDoneListGetByUserID();
+            setTitle(R.string.strJobOfferList);
+        } else {
+            setTitle(R.string.strJobDoneList);
         }
 
-        UserLocalStore userLocalStore = new UserLocalStore(this);
-        User user = userLocalStore.getLoggedInUser();
-        String userId = String.valueOf(user.getUserId());
+        FragmentManager fm = getFragmentManager();
+        if (fm.findFragmentById(android.R.id.content) == null) {
+            GetCustomerRequestJobStatusListFragment list = new GetCustomerRequestJobStatusListFragment();
+            fm.beginTransaction().add(android.R.id.content, list).commit();
+        }
 
-        CustomerRequestDataTask task = new CustomerRequestDataTask(this);
-        task.execute(url, userId);
+        isAllowMenuProgressBar = false;
     }
 
-    @Override
-    public void Complete(List<CustomerRequest> data) {
-        // dismiss the progress dialog
-        if (dialog != null) dialog.dismiss();
-        // create new adapter
-        CustomerRequestAdapter adapter = new CustomerRequestAdapter(this, data);
-        // set the adapter to list
-        setListAdapter(adapter);
-    }
+    public static class GetCustomerRequestJobStatusListFragment extends ListFragment implements GetCustomerRequestListCallback {
+        private Context mContext;
 
-    @Override
-    public void Failure(String msg) {
-        // dismiss the progress dialog
-        if (dialog != null)
-            dialog.dismiss();
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
 
-        // show failure message
-        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
-    }
+            mContext = getActivity();
+            initView();
 
-    @Override
-    public void onClick(View v) {
+            return super.onCreateView(inflater, container, savedInstanceState);
+        }
+
+        public void onActivityCreated(Bundle savedInstanceState) {
+            super.onActivityCreated(savedInstanceState);
+
+            // Getting list view from xml
+            ListView lv = getListView();
+
+            // Creating a button - Load More
+            Button btnDone = new Button(mContext);
+            btnDone.setText(R.string.strDone);
+            btnDone.setBackgroundResource(R.drawable.custom_btn_beige);
+            btnDone.setOnClickListener(new Button.OnClickListener() {
+                public void onClick(View v) {
+                    Intent redirect = new Intent(v.getContext(), MainActivity.class);
+                    redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(redirect);
+                    getActivity().finish();
+                }
+            });
+
+            // Adding button to list view at footer
+            lv.addFooterView(btnDone);
+
+        }
+
+        private void initView() {
+
+            String url = "";
+            if (mTypeList.equals("JobOfferList")) {
+                url = getString(R.string.server_uri) + ((Globals) mContext.getApplicationContext()).getCustomerRequestJobListGetByUserID();
+            } else if (mTypeList.equals("JobDoneList")) {
+                url = getString(R.string.server_uri) + ((Globals) mContext.getApplicationContext()).getCustomerRequestJobDoneListGetByUserID();
+            }
+
+            UserLocalStore userLocalStore = new UserLocalStore(mContext);
+            User user = userLocalStore.getLoggedInUser();
+            String userId = String.valueOf(user.getUserId());
+
+            CustomerRequestDataTask task = new CustomerRequestDataTask(this);
+            task.execute(url, userId);
+        }
+
+        @Override
+        public void Complete(List<CustomerRequest> data) {
+
+            // create new adapter
+            CustomerRequestAdapter adapter = new CustomerRequestAdapter(mContext, data);
+            // set the adapter to list
+            setListAdapter(adapter);
+        }
+
+        @Override
+        public void Failure(String msg) {
+            // show failure message
+            Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();
+        }
 
     }
 }

@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 
-public class CustomerRequestByID extends ActionBarActivity {
+public class CustomerRequestByID extends HelpUBaseActivity {
     TextView tvCustomerRequestId, tvServiceName, tvDescription, tvUserId, tvProjectStatus;
 
     @Override
@@ -31,7 +31,7 @@ public class CustomerRequestByID extends ActionBarActivity {
         int customerRequestId =b.getInt("customerRequestId",0);
 
         String url = getString(R.string.server_uri) + ((Globals)getApplication()).getCustomerRequestGetByID();
-        CustomerRequestServerRequests serverRequest = new CustomerRequestServerRequests(this);
+        CustomerRequestServerRequests serverRequest = new CustomerRequestServerRequests();
         serverRequest.getCustomerRequestByID(customerRequestId, url, new GetCustomerRequestCallback() {
             @Override
             public void done(final CustomerRequest returnedCustomerRequest) {
@@ -63,7 +63,7 @@ public class CustomerRequestByID extends ActionBarActivity {
     private void showErrorMessage() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(CustomerRequestByID.this);
         dialogBuilder.setMessage("Get Customer Request Fail!!");
-        dialogBuilder.setPositiveButton("Ok", null);
+        dialogBuilder.setPositiveButton(android.R.string.ok, null);
         dialogBuilder.show();
     }
 }

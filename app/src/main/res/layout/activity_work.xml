@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:text="More Information About You For Contact Purpose"
+        android:text="@string/strWorkSubTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"/>
@@ -14,39 +14,32 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Types : "
-        android:id="@+id/textView2"
-        android:layout_alignBottom="@+id/spHire"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/spHire"
-        android:layout_toLeftOf="@+id/spHire"
-        android:layout_toStartOf="@+id/spHire" />
+        android:text="@string/strType"
+        android:id="@+id/lblType"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
 
     <Spinner
-        android:layout_width="wrap_content"
+        android:layout_width="317dp"
         android:layout_height="wrap_content"
         android:id="@+id/spHire"
-        android:layout_below="@+id/textView"
-        android:layout_marginTop="10dp"
-        android:layout_toRightOf="@+id/tvMoreDescription"
-        android:layout_toEndOf="@+id/tvMoreDescription" />
+        android:layout_marginTop="10dp" />
 
     <TextView
-        android:text="Tel"
+        android:text="@string/strContact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="30dp"/>
 
     <EditText
-        android:id="@+id/etPhone"
+        android:id="@+id/etContact"
         android:layout_width="match_parent"
         android:layout_marginBottom="10dp"
         android:layout_height="wrap_content"
         android:inputType="phone"/>
 
     <TextView
-        android:text="Email"
+        android:text="@string/strEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -58,9 +51,10 @@
         android:inputType="textEmailAddress"/>
 
     <Button
-        android:id="@+id/bRegister"
+        android:id="@+id/btnRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Register As Service Provider" />
+        android:text="@string/strRegisterAsSrvPdr"
+        style="@style/btnStyleBeige" />
 
 </LinearLayout>

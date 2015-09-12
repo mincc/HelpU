@@ -2,6 +2,7 @@ package com.example.chungmin.helpu;
 
 /**
  * Created by Chung Min on 7/23/2015.
+ * 09 Sep 2015 cm.choong : add customerRatingValue, serviceProviderRatingValue, alreadyReadNotification;
  */
 
 import android.os.AsyncTask;
@@ -29,14 +30,13 @@ import java.util.List;
 import HelpUGenericUtilities.StringUtils;
 
 public class CustomerRequestDataTask extends AsyncTask<String, Void, String>{
-    private final CustomerRequestDataListener listener;
+    private final GetCustomerRequestListCallback listener;
     private String msg;
     public static final int CONNECTION_TIMEOUT = 1000 * 15;
 
-    public CustomerRequestDataTask(CustomerRequestDataListener listener) {
+    public CustomerRequestDataTask(GetCustomerRequestListCallback listener) {
         this.listener = listener;
     }
-
 
     @Override
     protected String doInBackground(String... params) {
@@ -85,41 +85,26 @@ public class CustomerRequestDataTask extends AsyncTask<String, Void, String>{
     @Override
     protected void onPostExecute(String sJson) {
         if(sJson == null) {
-            if(listener != null) listener.Failure(msg);
+            if (listener != null)
+                listener.Failure(msg);
             return;
         }
 
+        // create customerRequests list
+        List<CustomerRequest> customerRequests = null;
         try {
-            // convert json string to json array
-            JSONArray aJson = new JSONArray(sJson);
-            // create customerRequests list
-            List<CustomerRequest> customerRequests = new ArrayList<CustomerRequest>();
-
-            for(int i=0; i<aJson.length(); i++) {
-                JSONObject json = aJson.getJSONObject(i);
-                CustomerRequest customerRequest = new CustomerRequest();
-                customerRequest.setCustomerRequestId(Integer.parseInt(json.getString("customerRequestId")));
-                customerRequest.setServiceId(Integer.parseInt(json.getString("serviceId")));
-                customerRequest.setDescription(json.getString("description"));
-                customerRequest.setUserId(Integer.parseInt(json.getString("userId")));
-                customerRequest.setProjectStatusId(json.getInt("projectStatusId"));
-                customerRequest.setServiceProviderId(Integer.parseInt(json.getString("serviceProviderId")));
-                customerRequest.setQuotation(Double.parseDouble(json.getString("quotation")));
-                customerRequest.setUserName(json.getString("userName"));
-                customerRequest.setServiceName(json.getString("serviceName"));
-                customerRequest.setProjectStatusName(json.getString("projectStatusName"));
-
-                // add the customerRequest to customerRequests list
-                customerRequests.add(customerRequest);
-            }
+            customerRequests = CustomerRequestServerRequests.BuildList(sJson);
 
             //notify the activity that fetch data has been complete
-            if(listener != null) listener.Complete(customerRequests);
-        } catch (JSONException e) {
+            if (listener != null)
+                listener.Complete(customerRequests);
+        } catch (Exception e) {
             msg = "Invalid response";
             if(listener != null) listener.Failure(msg);
             return;
         }
+
+
     }
 
 }

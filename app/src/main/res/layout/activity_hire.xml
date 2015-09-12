@@ -7,7 +7,7 @@
     tools:context="com.example.chungmin.fragment.Hire">
 
     <TextView
-        android:text="Hire Or Find Professionals For These Services"
+        android:text="@string/strHireSubTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView" />
@@ -24,7 +24,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="More Description :"
+        android:text="@string/strMoreDescription"
         android:id="@+id/tvMoreDescription"
         android:layout_below="@+id/spHire"
         android:layout_alignParentLeft="true"
@@ -48,7 +48,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Types : "
+        android:text="@string/strType"
         android:id="@+id/textView2"
         android:layout_alignBottom="@+id/spHire"
         android:layout_alignParentLeft="true"
@@ -57,25 +57,41 @@
         android:layout_toLeftOf="@+id/spHire"
         android:layout_toStartOf="@+id/spHire" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Cancel"
-        android:id="@+id/bCancel"
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/RLSection"
         android:layout_below="@+id/etDescription"
-        android:layout_alignRight="@+id/textView"
-        android:layout_alignEnd="@+id/textView"
-        android:layout_marginTop="60dp" />
+        android:layout_alignParentBottom="true">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="OK"
-        android:id="@+id/bOk"
-        android:layout_alignTop="@+id/bCancel"
-        android:layout_toLeftOf="@+id/bCancel"
-        android:layout_toStartOf="@+id/bCancel"
-        android:layout_marginRight="45dp"
-        android:layout_marginEnd="45dp" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/strOk"
+            android:id="@+id/btnOk"
+            style="@style/btnStyleBeige"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="56dp"
+            android:layout_marginEnd="56dp"
+            android:layout_alignTop="@+id/btnCancel"
+            android:layout_toLeftOf="@+id/btnCancel"
+            android:layout_toStartOf="@+id/btnCancel" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/strCancel"
+            android:id="@+id/btnCancel"
+            style="@style/btnStyleBeige"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="60dp"
+            android:layout_marginEnd="60dp"
+            android:layout_marginTop="25dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
 
 </RelativeLayout>

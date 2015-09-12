@@ -7,18 +7,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class Hire extends ActionBarActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener{
+public class Hire extends HelpUBaseActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     private Spinner spHire;
-    private Button bOk, bCancel;
+    private Button btnOk, btnCancel;
     private ServiceSpinAdapter adapter;
     private Service selectedService;
     private EditText etDescription;
@@ -30,8 +28,8 @@ public class Hire extends ActionBarActivity implements AdapterView.OnItemSelecte
 
         spHire = (Spinner) findViewById(R.id.spHire);
         etDescription = (EditText) findViewById(R.id.etDescription);
-        bOk = (Button) findViewById(R.id.bOk);
-        bCancel = (Button) findViewById(R.id.bCancel);
+        btnOk = (Button) findViewById(R.id.btnOk);
+        btnCancel = (Button) findViewById(R.id.btnCancel);
 
         String[] hireArray = getResources().getStringArray(R.array.hire_list);
         Service[] services = new Service[hireArray.length];
@@ -46,31 +44,9 @@ public class Hire extends ActionBarActivity implements AdapterView.OnItemSelecte
         spHire.setOnItemSelectedListener(this);
         spHire.setAdapter(adapter);
 
-        bOk.setOnClickListener(this);
-        bCancel.setOnClickListener(this);
+        btnOk.setOnClickListener(this);
+        btnCancel.setOnClickListener(this);
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_hire, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -78,7 +54,7 @@ public class Hire extends ActionBarActivity implements AdapterView.OnItemSelecte
         if(position >=1) {
             selectedService = adapter.getItem(position);
 
-            Toast.makeText(this, "You Selected " + selectedService.name + " with ID :" + selectedService.id, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "You Selected " + selectedService.name + " with ID :" + selectedService.id, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -92,7 +68,7 @@ public class Hire extends ActionBarActivity implements AdapterView.OnItemSelecte
     public void onClick(View v) {
         Intent redirect;
         switch(v.getId()) {
-            case R.id.bOk:
+            case R.id.btnOk:
                 UserLocalStore userLocalStore = new UserLocalStore(this);
                 User user = userLocalStore.getLoggedInUser();
                 int userId = 0;
@@ -116,18 +92,19 @@ public class Hire extends ActionBarActivity implements AdapterView.OnItemSelecte
 
                 if(etDescription.getText().toString().trim().isEmpty())
                 {
-                    Toast.makeText(this, "Phone number not fill ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Description not fill ", Toast.LENGTH_SHORT).show();
                     break;
                 }else{
                     description = etDescription.getText().toString();
                 }
 
+                btnOk.setEnabled(false);
                 CustomerRequest customerRequest = new CustomerRequest(serviceId, userId, description, ProjectStatus.New);
                 registerCustomerRequest(customerRequest);
 
 
                 break;
-            case R.id.bCancel:
+            case R.id.btnCancel:
                 redirect = new Intent(this, MainActivity.class);
                 startActivity(redirect);
                 finish();
@@ -136,8 +113,8 @@ public class Hire extends ActionBarActivity implements AdapterView.OnItemSelecte
     }
 
     private void registerCustomerRequest(final CustomerRequest customerRequest) {
-        String url = getString(R.string.server_uri)+ ((Globals)getApplication()).getCustomerRequestInsert();
-        CustomerRequestServerRequests customerRequestServerRequest = new CustomerRequestServerRequests(this);
+        String url = getString(R.string.server_uri) + ((Globals) getApplication()).getCustomerRequestInsert();
+        CustomerRequestServerRequests customerRequestServerRequest = new CustomerRequestServerRequests();
         customerRequestServerRequest.storeCustomerRequestDataInBackground(customerRequest, url, new GetCustomerRequestCallback() {
             @Override
             public void done(CustomerRequest returnedCustomerRequest) {

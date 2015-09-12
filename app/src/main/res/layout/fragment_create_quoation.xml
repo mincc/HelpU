@@ -10,7 +10,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Done"
+            android:text="@string/strDone"
             android:id="@+id/btnDone"
             android:layout_below="@+id/lblQuotation"
             android:layout_toRightOf="@+id/lblQuotation"
@@ -32,7 +32,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Quotation (RM) :"
+            android:text="@string/strQuotationRM"
             android:id="@+id/lblQuotation"
             android:layout_alignBaseline="@+id/etQuotation"
             android:layout_alignParentLeft="true"

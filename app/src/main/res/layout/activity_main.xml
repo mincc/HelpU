@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:padding="10dp"
@@ -7,129 +7,179 @@
     android:weightSum="1"
     android:screenOrientation="portrait">
 
+    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/tlInfo"
+        android:layout_width="fill_parent"
+        android:layout_height="498dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Welcome "
-        android:id="@+id/textView3"
-        android:layout_gravity="start"
-        android:textSize="16sp" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Username"
-        android:id="@+id/txUsername"
-        android:layout_toRightOf="@id/textView3"
-        android:textStyle="bold"
-        android:textColor="@color/selector_link"
-        android:textSize="16sp" />
+            <LinearLayout
+                android:id="@+id/llUserInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="left"
+                android:layout_span="2">
+
+            </LinearLayout>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/lblTotalRequestHire"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/strTotalRequestHire"
+                android:paddingRight="15dp"
+                android:paddingTop="15dp"
+                android:layout_marginTop="35dp"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tvTotalCountHire"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="20sp"
+                style="@style/selectorLink"
+                android:paddingRight="15dp"
+                android:paddingTop="15dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="35dp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/lblTotalServiceProviderWork"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/strTotalServiceProviderWork"
+                android:textSize="20sp"
+                android:layout_marginTop="35dp"
+                android:layout_column="0" />
+
+            <TextView
+                android:id="@+id/tvTotalCountWork"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                style="@style/selectorLink"
+                android:layout_column="1"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="35dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/llButton"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:layout_weight="0.27"
+                android:layout_span="2"
+                android:layout_marginBottom="40dp">
+
+                <Button
+                    android:id="@+id/btnHire"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/strHire"
+                    android:textSize="30sp"
+                    android:layout_margin="10dp"
+                    style="@style/btnStyleSeagull" />
+
+                <Button
+                    android:id="@+id/btnWork"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/strWork"
+                    android:textSize="30sp"
+                    android:layout_margin="10dp"
+                    style="@style/btnStyleSeagull" />
+            </LinearLayout>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/lbJobOffer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/strJobOffer"
+                android:textSize="20sp"
+                android:paddingRight="15dp"
+                android:paddingTop="15dp"
+                android:layout_column="0" />
+
+            <TextView
+                android:id="@+id/tvTotalCountJobOffer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="20sp"
+                style="@style/selectorLink"
+                android:paddingRight="15dp"
+                android:paddingTop="15dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_column="1" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/lbJobOfferDone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/strJobOfferDone"
+                android:textSize="20sp"
+                android:layout_marginTop="35dp"
+                android:layout_column="0" />
+
+            <TextView
+                android:id="@+id/tvTotalCountJobDone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="20sp"
+                style="@style/selectorLink"
+                android:layout_marginTop="35dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_column="1" />
+
+        </TableRow>
+    </TableLayout>
 
     <Button
-        android:id="@+id/bLogout"
-        android:text="Logout"
+        android:id="@+id/btnLogout"
+        android:text="@string/strLogout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        style="@style/btnStyleBeige" />
+        android:layout_gravity="center_horizontal"
+        style="@style/btnStyleBeige"
+        android:layout_span="2" />
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginTop="50dp"
-        android:layout_weight="0.27"
-        android:id="@+id/llButton">
-
-        <Button
-            android:layout_width="147dp"
-            android:layout_height="wrap_content"
-            android:text="Hire"
-            android:id="@+id/bHire"
-            android:textSize="30sp"
-            android:layout_margin="10dp"
-            style="@style/btnStyleSeagull" />
-
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Work"
-            android:id="@+id/bWork"
-            android:textSize="30sp"
-            android:layout_margin="10dp"
-            style="@style/btnStyleSeagull" />
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Total Request [Hire]               :"
-        android:id="@+id/textView4"
-        android:layout_below="@+id/textView3"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="42dp"
-        android:textSize="20sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Total Service Provide [Work]:"
-        android:id="@+id/textView5"
-        android:textSize="20sp"
-        android:layout_below="@+id/textView4"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="36dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0"
-        android:id="@+id/tvTotalCountHire"
-        style="@style/selectorLink"
-        android:layout_above="@+id/textView5"
-        android:layout_toRightOf="@+id/textView5"
-        android:layout_toEndOf="@+id/textView5"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0"
-        android:id="@+id/tvTotalCountWork"
-        style="@style/selectorLink"
-        android:layout_alignTop="@+id/textView5"
-        android:layout_alignLeft="@+id/tvTotalCountHire"
-        android:layout_alignStart="@+id/tvTotalCountHire" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_above="@+id/bLogout"
-        android:layout_below="@+id/llButton"
-        android:weightSum="1"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/llJobOffer"
-            android:orientation="vertical"
-            android:layout_gravity="center"></LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/llJobDone"
-            android:orientation="vertical"
-            android:layout_gravity="center"></LinearLayout>
-    </LinearLayout>
-</RelativeLayout>
+</LinearLayout>

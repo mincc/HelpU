@@ -14,7 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class IPay88SampleActivity extends ActionBarActivity implements OnClickListener {
+public class IPay88SampleActivity extends HelpUBaseActivity implements OnClickListener {
 
     String MerchantKey = "HQgUUZLVzg";
     String MerchantCode = "M01235";

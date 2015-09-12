@@ -1,7 +1,11 @@
 package com.example.chungmin.helpu;
 
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -12,7 +16,7 @@ import android.widget.TextView;
 
 public class Login extends ActionBarActivity implements View.OnClickListener{
 
-    Button bLogin;
+    Button btnLogin;
     TextView registerLink;
     EditText etUsername, etPassword;
 
@@ -23,12 +27,12 @@ public class Login extends ActionBarActivity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        bLogin = (Button) findViewById(R.id.bLogin);
+        btnLogin = (Button) findViewById(R.id.btnLogin);
         etUsername = (EditText) findViewById(R.id.etUsername);
         etPassword = (EditText) findViewById(R.id.etPassword);
         registerLink = (TextView) findViewById(R.id.tvRegisterLink);
 
-        bLogin.setOnClickListener(this);
+        btnLogin.setOnClickListener(this);
         registerLink.setOnClickListener(this);
 
         userLocalStore = new UserLocalStore(this);
@@ -37,7 +41,7 @@ public class Login extends ActionBarActivity implements View.OnClickListener{
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.bLogin:
+            case R.id.btnLogin:
                 String username = etUsername.getText().toString();
                 String password = etPassword.getText().toString();
 
@@ -60,18 +64,20 @@ public class Login extends ActionBarActivity implements View.OnClickListener{
             @Override
             public void done(User returnedUser) {
                 if (returnedUser == null) {
+
                     showErrorMessage();
                 } else {
                     logUserIn(returnedUser);
                 }
             }
         });
+
     }
 
     private void showErrorMessage() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(Login.this);
-        dialogBuilder.setMessage("Incorrect user details");
-        dialogBuilder.setPositiveButton("Ok", null);
+        dialogBuilder.setMessage(R.string.strIncorrectUserDetails);
+        dialogBuilder.setPositiveButton(android.R.string.ok, null);
         dialogBuilder.show();
     }
 
@@ -81,4 +87,5 @@ public class Login extends ActionBarActivity implements View.OnClickListener{
         startActivity(new Intent(this, MainActivity.class));
         finish();
     }
+
 }

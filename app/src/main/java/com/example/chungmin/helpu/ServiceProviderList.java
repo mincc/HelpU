@@ -1,10 +1,13 @@
 package com.example.chungmin.helpu;
 
-import android.app.ListActivity;
-import android.app.ProgressDialog;
+import android.app.FragmentManager;
+import android.app.ListFragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -14,85 +17,102 @@ import android.widget.Toast;
 import java.util.List;
 
 
-public class ServiceProviderList extends ListActivity implements FetchServiceProviderDataListener,View.OnClickListener {
-    private ProgressDialog dialog;
+public class ServiceProviderList extends HelpUBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_provider_list);
-        initView();
 
-        TextView tvTitle = (TextView) this.findViewById(R.id.tvTitle);
-        tvTitle.setText("Service Provided");
+        setTitle(R.string.strServiceProvided);
+//        TextView tvTitle = (TextView) this.findViewById(R.id.tvTitle);
+//        tvTitle.setText("Service Provided");
 
-        // Getting listview from xml
-        ListView lv = getListView();
+        FragmentManager fm = getFragmentManager();
+        if (fm.findFragmentById(android.R.id.content) == null) {
+            ServiceProviderListFragment list = new ServiceProviderListFragment();
+            fm.beginTransaction().add(android.R.id.content, list).commit();
+        }
 
-        // Creating a button - Load More
-        Button btnDone = new Button(this);
-        btnDone.setText("Done");
-        btnDone.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-                Intent redirect = new Intent(v.getContext(), MainActivity.class);
-                redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(redirect);
-                finish();
-            }
-        });
-
-        // Adding button to listview at footer
-        lv.addFooterView(btnDone);
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TextView tvServiceProviderId = (TextView) view.findViewById(R.id.tvServiceProviderId);
-                int serviceProviderId = Integer.parseInt((String) tvServiceProviderId.getText());
-
-                Intent i = new Intent(ServiceProviderList.this, ServiceProviderByID.class);
-                Bundle b = new Bundle();
-                b.putInt("serviceProviderId", serviceProviderId);
-                i.putExtras(b);
-                startActivity(i);
-                finish();
-            }
-        });
-
+        isAllowMenuProgressBar = false;
     }
 
-    private void initView() {
-        // show progress dialog
-        dialog = ProgressDialog.show(this, "", "Loading...");
+    public static class ServiceProviderListFragment extends ListFragment implements FetchServiceProviderDataListener {
+        private Context mContext;
 
-        String url = getString(R.string.server_uri) + ((Globals)getApplication()).getServiceProviderGetByUserID();
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
 
-        UserLocalStore userLocalStore = new UserLocalStore(this);
-        User user = userLocalStore.getLoggedInUser();
-        String userId = String.valueOf(user.getUserId());
+            mContext = getActivity();
+            initView();
 
-        FetchServiceProviderDataTask task = new FetchServiceProviderDataTask(this);
-        task.execute(url, userId);
-    }
+            return super.onCreateView(inflater, container, savedInstanceState);
+        }
 
-    @Override
-    public void Complete(List<ServiceProvider> data) {
-        // dismiss the progress dialog
-        if (dialog != null) dialog.dismiss();
-        // create new adapter
-        ServiceProviderAdapter adapter = new ServiceProviderAdapter(this, data, true);
-        // set the adapter to list
-        setListAdapter(adapter);
-    }
+        public void onActivityCreated(Bundle savedInstanceState) {
+            super.onActivityCreated(savedInstanceState);
 
-    @Override
-    public void Failure(String msg) {
-        // dismiss the progress dialog
-        if (dialog != null) dialog.dismiss();
-        // show failure message
-        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
-    }
+            // Getting listview from xml
+            ListView lv = getListView();
 
-    @Override
-    public void onClick(View v) {
+            // Creating a button - Load More
+            Button btnDone = new Button(mContext);
+            btnDone.setText(R.string.strDone);
+            btnDone.setBackgroundResource(R.drawable.custom_btn_beige);
+            btnDone.setOnClickListener(new Button.OnClickListener() {
+                public void onClick(View v) {
+                    Intent redirect = new Intent(v.getContext(), MainActivity.class);
+                    redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(redirect);
+                    getActivity().finish();
+                }
+            });
 
+            // Adding button to listview at footer
+            lv.addFooterView(btnDone);
+            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    TextView tvServiceProviderId = (TextView) view.findViewById(R.id.tvServiceProviderId);
+                    int serviceProviderId = Integer.parseInt((String) tvServiceProviderId.getText());
+
+                    Intent i = new Intent(mContext, ServiceProviderByID.class);
+                    Bundle b = new Bundle();
+                    b.putInt("serviceProviderId", serviceProviderId);
+                    i.putExtras(b);
+                    startActivity(i);
+                    getActivity().finish();
+                }
+            });
+
+        }
+
+        private void initView() {
+
+            String url = getString(R.string.server_uri) + ((Globals) getActivity().getApplication()).getServiceProviderGetByUserID();
+
+            UserLocalStore userLocalStore = new UserLocalStore(mContext);
+            User user = userLocalStore.getLoggedInUser();
+            String userId = String.valueOf(user.getUserId());
+
+            FetchServiceProviderDataTask task = new FetchServiceProviderDataTask(this);
+            task.execute(url, userId);
+        }
+
+
+        @Override
+        public void Complete(List<ServiceProvider> data) {
+            // create new adapter
+            ServiceProviderAdapter adapter = new ServiceProviderAdapter(mContext, data, true);
+            // set the adapter to list
+            setListAdapter(adapter);
+        }
+
+        @Override
+        public void Failure(String msg) {
+
+            // show failure message
+            Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();
+        }
     }
 }

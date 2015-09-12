@@ -15,7 +15,7 @@ import fragments.CustomerRequestFragment;
 import fragments.ServiceProviderFragment;
 
 
-public class CustomerDoDownPayment extends ActionBarActivity {
+public class CustomerDoDownPayment extends HelpUBaseActivity {
     private CustomerRequest mCustomerRequest = null;
     Button btnDoPayment;
 
@@ -29,8 +29,8 @@ public class CustomerDoDownPayment extends ActionBarActivity {
             final FragmentTransaction ft = fm.beginTransaction();
             mCustomerRequest = ((Globals) getApplication()).getCustomerRequest();
             if (mCustomerRequest == null) {
-                String url = this.getString(R.string.server_uri) + ((Globals)getApplicationContext()).getServiceProviderJobOffer();
-                ServiceProviderServerRequests serverRequest = new ServiceProviderServerRequests(this);
+                String url = getString(R.string.server_uri) + ((Globals) getApplicationContext()).getServiceProviderJobOffer();
+                ServiceProviderServerRequests serverRequest = new ServiceProviderServerRequests();
                 int userId = ((Globals)this.getApplicationContext()).getUserId();
                 serverRequest.getServiceProviderJobOffer(userId, url, new GetCustomerRequestCallback() {
                     @Override
@@ -44,7 +44,7 @@ public class CustomerDoDownPayment extends ActionBarActivity {
             mCustomerRequest = ((Globals) getApplication()).getCustomerRequest();
             Fragment frag = new CustomerRequestFragment().newInstance(mCustomerRequest.getCustomerRequestId());
             ft.add(R.id.llCustomerRequest, frag);
-            frag = new ServiceProviderFragment().newInstance(mCustomerRequest.getServiceProviderId());
+            frag = new ServiceProviderFragment().newInstance(mCustomerRequest);
             ft.add(R.id.llServiceProvider, frag);
             ft.commit();
 
@@ -55,9 +55,9 @@ public class CustomerDoDownPayment extends ActionBarActivity {
             @Override
             public void onClick(final View v) {
                 CustomerRequest customerRequest = ((Globals)getApplication()).getCustomerRequest();
-                customerRequest.setProjectStatusId(ProjectStatus.DoDownPayment.getId());
+                customerRequest.setProjectStatusId(ProjectStatus.Deal.getId());
                 String url = getString(R.string.server_uri) + ((Globals)getApplicationContext()).getCustomerRequestUpdate();
-                CustomerRequestServerRequests serverRequest = new CustomerRequestServerRequests(getBaseContext());
+                CustomerRequestServerRequests serverRequest = new CustomerRequestServerRequests();
                 serverRequest.getCustomerRequestUpdate(customerRequest, url, new GetCustomerRequestCallback() {
                     @Override
                     public void done(CustomerRequest returnedCustomerRequest) {

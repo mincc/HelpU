@@ -9,13 +9,12 @@
         android:id="@+id/lblCustomerRequestId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Customer Request ID : " />
+        android:text="@string/strCustomerRequestID" />
 
     <TextView
         android:id="@+id/tvCustomerRequestId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="123456"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@id/lblCustomerRequestId"
         android:layout_toEndOf="@id/lblCustomerRequestId" />
@@ -24,14 +23,13 @@
         android:id="@+id/lblServiceType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Service Needed : "
+        android:text="@string/strServiceNeeded"
         android:layout_below="@+id/lblCustomerRequestId" />
 
     <TextView
         android:id="@+id/tvService"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Handyman"
         android:layout_below="@id/lblCustomerRequestId"
         android:layout_toRightOf="@id/lblCustomerRequestId"
         android:layout_toEndOf="@id/lblCustomerRequestId" />
@@ -40,13 +38,12 @@
         android:id="@+id/lblProjectStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Project Status : "
+        android:text="@string/strProjectStatus"
         android:layout_below="@+id/lblServiceType" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="000000"
         android:id="@+id/tvProjectStatus"
         android:layout_below="@id/lblServiceType"
         android:layout_toRightOf="@id/lblCustomerRequestId"
@@ -56,14 +53,13 @@
         android:id="@+id/lblDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Description : "
+        android:text="@string/strDescription"
         android:layout_below="@id/lblProjectStatus" />
 
     <TextView
         android:id="@+id/tvDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Some description about request!!!"
         android:layout_below="@id/lblDescription" />
 
     <RelativeLayout
@@ -77,13 +73,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Service Provider ID : "
+            android:text="@string/strServiceProviderID"
             android:id="@+id/lblServiceProviderId" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No"
             android:id="@+id/tvServiceProviderId"
             android:layout_gravity="center_horizontal"
             android:layout_alignBaseline="@+id/lblServiceProviderId"
@@ -96,7 +91,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Quoation (RM) : "
+            android:text="@string/strQuotationRM"
             android:id="@+id/lblQuotation"
             android:layout_below="@+id/lblServiceProviderId"
             android:layout_alignParentLeft="true"

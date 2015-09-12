@@ -10,17 +10,34 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import HelpUGenericUtilities.ValidationUtils;
 
-public class UserProfileSetting extends ActionBarActivity implements View.OnClickListener {
+
+public class UserProfileSetting extends HelpUBaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
     UserLocalStore userLocalStore;
     User mUser = null;
     EditText etName, etUsername, etUserContact, etUserEmail;
     Button btnSave;
 
+    String strNameEmpty = "Name can not empty";
+    String strUserContactEmpty = "Contact can not empty";
+    String strUserEmailEmpty = "Email can not empty";
+    String strUserEmailInvalid = "Invalid Email";
+
+    boolean mIsNameValid = true;
+    boolean mIsUserContactValid = true;
+    boolean mIsUserEmailValid = true;
+    boolean mIsValid = true;    //all the info is true until user start change
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile_setting);
+
+        strNameEmpty = getString(R.string.strNameEmpty);
+        strUserContactEmpty = getString(R.string.strUserContactEmpty);
+        strUserEmailEmpty = getString(R.string.strUserEmailEmpty);
+        strUserEmailInvalid = getString(R.string.strUserEmailInvalid);
 
         etUsername = (EditText) findViewById(R.id.etUsername);
         etName = (EditText) findViewById(R.id.etName);
@@ -28,32 +45,15 @@ public class UserProfileSetting extends ActionBarActivity implements View.OnClic
         etUserEmail = (EditText) findViewById(R.id.etUserEmail);
         btnSave = (Button) findViewById(R.id.btnSave);
 
+        etName.setOnFocusChangeListener(this);
+        etUsername.setOnFocusChangeListener(this);
+        etUserContact.setOnFocusChangeListener(this);
+        etUserEmail.setOnFocusChangeListener(this);
+
         userLocalStore = new UserLocalStore(this);
         displayUserDetails();
 
         btnSave.setOnClickListener(this);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_user_profile_setting, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     private void displayUserDetails() {
@@ -68,30 +68,23 @@ public class UserProfileSetting extends ActionBarActivity implements View.OnClic
     public void onClick(View v) {
         if (v == btnSave) {
 
-            if (!etName.getText().toString().equals("")) {
+            //Validation
+            validateName();
+            validateUserContact();
+            validateUserEmail();
+
+            if (mIsNameValid && mIsUserEmailValid && mIsUserContactValid) {
+                mIsValid = true;
+            } else {
+                mIsValid = false;
+            }
+
+            if (mIsValid) {
                 mUser.setUserName(etName.getText().toString());
-            } else {
-                Toast.makeText(this, "User Name Can Not Empty!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            if (!etUserContact.getText().toString().equals("")) {
                 mUser.setUserContact(etUserContact.getText().toString());
-            } else {
-                Toast.makeText(this, "User Contact Can Not Empty!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-
-            if (!etUserEmail.getText().toString().equals("")) {
                 mUser.setUserEmail(etUserEmail.getText().toString());
-            } else {
-                Toast.makeText(this, "User Email Can Not Empty!", Toast.LENGTH_SHORT).show();
-                return;
+                updateUser(mUser);
             }
-
-
-            updateUser(mUser);
         }
     }
 
@@ -108,5 +101,65 @@ public class UserProfileSetting extends ActionBarActivity implements View.OnClic
                 finish();
             }
         });
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (!hasFocus) {
+            switch (v.getId()) {
+                case R.id.etUsername:
+                    //not allow user to change the username
+                    break;
+                case R.id.etName:
+                    validateName();
+                    break;
+                case R.id.etUserContact:
+                    validateUserContact();
+                    break;
+                case R.id.etUserEmail:
+                    validateUserEmail();
+                    break;
+                default:
+                    String message = "Still not define yet";
+                    showToast(message);
+                    break;
+            }
+        }
+    }
+
+    public void validateName() {
+        if (etName.getText().toString().equals("")) {
+            etName.setError(strNameEmpty);
+            mIsNameValid = false;
+        } else {
+            mIsNameValid = true;
+        }
+    }
+
+    public void validateUserContact() {
+        if (etUserContact.getText().toString().equals("")) {
+            etUserContact.setError(strUserContactEmpty);
+            mIsUserContactValid = false;
+        } else {
+            mIsUserContactValid = true;
+        }
+    }
+
+    public void validateUserEmail() {
+        String email = etUserEmail.getText().toString();
+        if (email.equals("")) {
+            etUserEmail.setError(strUserEmailEmpty);
+            mIsUserEmailValid = false;
+            return;
+        } else {
+            mIsUserEmailValid = true;
+        }
+
+        if (!ValidationUtils.isValidEmail(email)) {
+            etUserEmail.setError(strUserEmailInvalid);
+            mIsUserEmailValid = false;
+        } else {
+            mIsUserEmailValid = true;
+        }
     }
 }

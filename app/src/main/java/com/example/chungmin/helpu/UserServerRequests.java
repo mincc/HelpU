@@ -30,8 +30,8 @@ public class UserServerRequests {
     public UserServerRequests(Context context) {
         progressDialog = new ProgressDialog(context);
         progressDialog.setCancelable(false);
-        progressDialog.setTitle("Processing...");
-        progressDialog.setMessage("Please wait...");
+        progressDialog.setTitle(context.getString(R.string.strProcessing));
+        progressDialog.setMessage(context.getString(R.string.strPlsWait));
     }
 
     public void storeUserDataInBackground(User user, String url, GetUserCallback userCallBack) {
@@ -45,13 +45,15 @@ public class UserServerRequests {
     }
 
     public void getUserByID(int userId, String url, GetUserCallback userCallBack) {
-        progressDialog.show();
         new UserByID(userId, userCallBack).execute(url);
     }
 
     public void getUserUpdate(User user, String url, GetUserCallback userCallBack) {
-        //progressDialog.show();
         new UserUpdate(user, userCallBack).execute(url);
+    }
+
+    public void isUsernameExists(String username, String url, GetBooleanCallback booleanCallback) {
+        new IsUsernameExists(username, booleanCallback).execute(url);
     }
 
     /**
@@ -157,7 +159,7 @@ public class UserServerRequests {
                 JSONObject jObject = new JSONObject(result);
 
                 if (jObject.length() != 0){
-                    Log.v("happened", "2");
+                    Log.v("happened", "fetchUserDataAsyncTask");
                     String name = jObject.getString("name");
                     int userId = jObject.getInt("userId");
                     String userContact = jObject.getString("userContact");
@@ -297,4 +299,66 @@ public class UserServerRequests {
             userCallBack.done(null);
         }
     }
+
+    public class IsUsernameExists extends AsyncTask<String, Void, Boolean> {
+        String username;
+        GetBooleanCallback booleanCallBack;
+
+        public IsUsernameExists(String username, GetBooleanCallback booleanCallBack) {
+            this.username = username;
+            this.booleanCallBack = booleanCallBack;
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            boolean isUsernameExists = false;
+            if (params == null)
+                return false;
+
+            // get url from params
+            String url = params[0];
+
+            ArrayList<NameValuePair> dataToSend = new ArrayList<>();
+            dataToSend.add(new BasicNameValuePair("username", this.username));
+
+            HttpParams httpRequestParams = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(httpRequestParams,
+                    CONNECTION_TIMEOUT);
+            HttpConnectionParams.setSoTimeout(httpRequestParams,
+                    CONNECTION_TIMEOUT);
+
+            HttpClient client = new DefaultHttpClient(httpRequestParams);
+            HttpPost post = new HttpPost(url);
+
+            try {
+                post.setEntity(new UrlEncodedFormEntity(dataToSend));
+                HttpResponse httpResponse = client.execute(post);
+
+                HttpEntity entity = httpResponse.getEntity();
+                String result = EntityUtils.toString(entity);
+
+                JSONObject jObject = new JSONObject(result);
+
+                if (jObject.length() != 0) {
+                    Log.v("happened", "Function IsUsernameExists Call");
+
+                    return isUsernameExists = jObject.getBoolean("result");
+
+                }
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return isUsernameExists;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean isUsernameExists) {
+            super.onPostExecute(isUsernameExists);
+            booleanCallBack.done(isUsernameExists);
+        }
+    }
+
 }

@@ -9,26 +9,34 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.chungmin.helpu.CustomerRequest;
 import com.example.chungmin.helpu.GetServiceProviderCallback;
 import com.example.chungmin.helpu.Globals;
+import com.example.chungmin.helpu.HelpUBaseActivity;
+import com.example.chungmin.helpu.ProjectStatus;
 import com.example.chungmin.helpu.R;
 import com.example.chungmin.helpu.ServiceProvider;
 import com.example.chungmin.helpu.ServiceProviderServerRequests;
+import com.example.chungmin.helpu.ServiceType;
 
 public class ServiceProviderFragment extends Fragment {
     private static final String TAG = "ServiceProviderFragment";
-    private int mServiceProviderId = 1;
-    private TextView tvServiceProviderId, tvService, tvPhone, tvEmail;
+    private CustomerRequest mCustomerRequest = null;
+    private TextView tvServiceProviderId, tvService, lblRatedValue;
     private TextView tvFragTitle;
+    private RatingBar rbRatedValue;
+    private ImageView imgvEmail, imgvPhone;
 
-    public static ServiceProviderFragment newInstance(int serviceProviderId) {
+    public static ServiceProviderFragment newInstance(CustomerRequest customerRequest) {
         Log.d(TAG, "ServiceProviderFragment newInstance");
         ServiceProviderFragment fragment = new ServiceProviderFragment();
         Bundle args = new Bundle();
-        args.putInt("serviceProviderId", serviceProviderId);
+        args.putParcelable("customerRequest", customerRequest);
         fragment.setArguments(args);
         return fragment;
     }
@@ -41,7 +49,7 @@ public class ServiceProviderFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mServiceProviderId = getArguments().getInt("serviceProviderId", mServiceProviderId);
+            mCustomerRequest = getArguments().getParcelable("customerRequest");
         }
     }
 
@@ -61,47 +69,68 @@ public class ServiceProviderFragment extends Fragment {
         tvFragTitle = (TextView) view.findViewById(R.id.tvFragTitle);
         tvServiceProviderId = (TextView) view.findViewById(R.id.tvServiceProviderId);
         tvService = (TextView) view.findViewById(R.id.tvService);
-        tvPhone = (TextView) view.findViewById(R.id.tvPhone);
-        tvEmail = (TextView) view.findViewById(R.id.tvEmail);
+        lblRatedValue = (TextView) view.findViewById(R.id.lblRatedValue);
+        rbRatedValue = (RatingBar) view.findViewById(R.id.rbRatedValue);
+        imgvEmail = (ImageView) view.findViewById(R.id.imgvEmail);
+        imgvPhone = (ImageView) view.findViewById(R.id.imgvPhone);
 
         String url = getString(R.string.server_uri) + ((Globals)getActivity().getApplication()).getServiceProviderGetByID();
-        ServiceProviderServerRequests serverRequest = new ServiceProviderServerRequests(getActivity());
-        serverRequest.getServiceProviderByID(mServiceProviderId, url, new GetServiceProviderCallback() {
+        ServiceProviderServerRequests serverRequest = new ServiceProviderServerRequests();
+        serverRequest.getServiceProviderByID(mCustomerRequest.getServiceProviderId(), url, new GetServiceProviderCallback() {
             @Override
             public void done(final ServiceProvider returnedServiceProvider) {
                 if (returnedServiceProvider == null) {
                     showErrorMessage();
                 } else {
-                    tvFragTitle.setText("Service Provider ( " + returnedServiceProvider.getUserName() + " ) ");
-                    tvServiceProviderId.setText(returnedServiceProvider.getServiceProviderId() + "");
-                    tvService.setText(returnedServiceProvider.getServiceName());
-                    tvPhone.setText(returnedServiceProvider.getPhone());
-                    tvEmail.setText(returnedServiceProvider.getEmail() + "");
+                    if (getActivity() != null) {
+                        tvFragTitle.setText(getString(R.string.strSPdr) + " ( " + returnedServiceProvider.getUserName() + " ) ");
+                        tvServiceProviderId.setText(returnedServiceProvider.getServiceProviderId() + "");
+                        tvService.setText(ServiceType.values()[returnedServiceProvider.getServiceId()].toString());
 
-                    tvEmail.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent i = new Intent(Intent.ACTION_SEND);
-                            i.setType("message/rfc822");
-                            i.putExtra(Intent.EXTRA_EMAIL, new String[]{returnedServiceProvider.getEmail()});
-                            i.putExtra(Intent.EXTRA_SUBJECT, "subject of email");
-                            i.putExtra(Intent.EXTRA_TEXT, "body of email");
-                            try {
-                                startActivity(Intent.createChooser(i, "Send mail..."));
-                            } catch (android.content.ActivityNotFoundException ex) {
-                                Toast.makeText(v.getContext(), "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                        imgvEmail.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent i = new Intent(Intent.ACTION_SEND);
+                                i.setType("message/rfc822");
+                                i.putExtra(Intent.EXTRA_EMAIL, new String[]{returnedServiceProvider.getEmail()});
+                                i.putExtra(Intent.EXTRA_SUBJECT, "subject of email");
+                                i.putExtra(Intent.EXTRA_TEXT, "body of email");
+                                try {
+                                    startActivity(Intent.createChooser(i, "Send mail..."));
+                                } catch (android.content.ActivityNotFoundException ex) {
+                                    Toast.makeText(v.getContext(), "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+                        imgvPhone.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                String number = "tel:" + returnedServiceProvider.getPhone().toString().trim();
+                                Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(number));
+                                startActivity(callIntent);
+                            }
+                        });
+
+                        ProjectStatus projectStatus = mCustomerRequest.getProjectStatus();
+                        if (projectStatus == ProjectStatus.CustomerRating ||
+                                projectStatus == ProjectStatus.CustomerRatingNotification ||
+                                projectStatus == ProjectStatus.ServiceProvRating ||
+                                projectStatus == ProjectStatus.ServiceProviderRatingNotification ||
+                                projectStatus == ProjectStatus.ProjectClose) {
+
+                            if (mCustomerRequest.getServiceProviderRatingValue() > 0) {
+                                rbRatedValue.setRating((float) mCustomerRequest.getServiceProviderRatingValue());
+
+                                lblRatedValue.setVisibility(View.VISIBLE);
+                                rbRatedValue.setVisibility(View.VISIBLE);
                             }
                         }
-                    });
 
-                    tvPhone.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            String number = "tel:" + returnedServiceProvider.getPhone().toString().trim();
-                            Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(number));
-                            startActivity(callIntent);
+                        if ((HelpUBaseActivity) getActivity() != null) {
+                            ((HelpUBaseActivity) getActivity()).hideMenuProgress();
                         }
-                    });
+                    }
                 }
             }
         });
@@ -112,7 +141,7 @@ public class ServiceProviderFragment extends Fragment {
         Log.d(TAG, "ServiceProviderFragment showErrorMessage");
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity().getBaseContext());
         dialogBuilder.setMessage("Get Customer Request Fail!!");
-        dialogBuilder.setPositiveButton("Ok", null);
+        dialogBuilder.setPositiveButton(android.R.string.ok, null);
         dialogBuilder.show();
     }
 }

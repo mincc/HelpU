@@ -4,69 +4,121 @@
     android:layout_height="match_parent"
     tools:context="fragments.ServiceProviderFragment">
 
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Service Provider"
+        android:text="@string/strSPdr"
         android:id="@+id/tvFragTitle"
         android:textStyle="bold"
-        android:textSize="20dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:textSize="20sp"
+        android:layout_gravity="bottom" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Serv. Prov ID : "
-        android:id="@+id/textView9"
-        android:layout_below="@+id/tvFragTitle" />
 
-    <TextView
-        android:id="@+id/tvServiceProviderId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="000000"
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_below="@+id/tvFragTitle"
-        android:layout_toRightOf="@+id/textView9"
-        android:layout_toEndOf="@+id/textView9" />
-
-    <TextView
-        android:id="@+id/tvPhone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="012-555 7777"
-        style="@style/selectorLink"
-        android:layout_below="@+id/tvEmail"
-        android:layout_alignLeft="@+id/tvEmail"
-        android:layout_alignStart="@+id/tvEmail" />
-
-    <TextView
-        android:id="@+id/tvEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="aaa@gmail.com"
-        style="@style/selectorLink"
-        android:layout_below="@+id/textView15"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Service : "
-        android:id="@+id/textView15"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/textView9" />
+        android:shrinkColumns="1"
+        android:stretchColumns="1">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="000000"
-        android:id="@+id/tvService"
-        android:layout_alignTop="@+id/textView15"
-        android:layout_toRightOf="@+id/textView9"
-        android:layout_toEndOf="@+id/textView9" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="150dp"
+                android:text="@string/strSPdrId"
+                android:id="@+id/lblServiceProviderId"
+                android:layout_column="0" />
+
+            <TextView
+                android:id="@+id/tvServiceProviderId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/strService"
+                android:id="@+id/lblService"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvService"
+                android:layout_column="1" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/lblRatedValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/strRatedByCust"
+                android:layout_column="0"
+                android:visibility="gone" />
+
+            <RatingBar
+                android:id="@+id/rbRatedValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:stepSize="0.1"
+                android:rating="2.5"
+                android:layout_gravity="left"
+                style="@style/CustomRatingBar"
+                android:isIndicator="true"
+                android:layout_column="1"
+                android:visibility="gone" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:id="@+id/imgvEmail"
+                    android:src="@drawable/email_open" />
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:id="@+id/imgvPhone"
+                    android:src="@drawable/mobile" />
+
+            </LinearLayout>
+
+        </TableRow>
+    </TableLayout>
+
 
 </RelativeLayout>

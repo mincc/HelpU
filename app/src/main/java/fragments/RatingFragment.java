@@ -85,7 +85,7 @@ public class RatingFragment extends Fragment {
                 rating.setCustomerRequestId(mCustomerRequestId);
                 //Toast.makeText(getActivity(), String.valueOf(ratingBar.getRating()), Toast.LENGTH_SHORT).show();
                 String url = getString(R.string.server_uri) + ((Globals)getActivity().getApplicationContext()).getRatingInsert();
-                RatingServerRequests serverRequest = new RatingServerRequests(getActivity());
+                RatingServerRequests serverRequest = new RatingServerRequests();
                 serverRequest.setRatingInsert(rating, url, new GetRatingCallback() {
                     @Override
                     public void done(Rating returnedRating) {
@@ -110,9 +110,9 @@ public class RatingFragment extends Fragment {
 
         lblRateMe = (TextView)view.findViewById(R.id.lblRateMe);
         if(mType == "Customer") {
-            lblRateMe.setText("Please rate for customer");
+            lblRateMe.setText(R.string.strCustRate);
         }else {
-            lblRateMe.setText("Please rate for service provider");
+            lblRateMe.setText(R.string.strSPdrRate);
         }
 
         addListenerOnButton(view);

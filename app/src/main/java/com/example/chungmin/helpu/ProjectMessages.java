@@ -4,16 +4,16 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ipay.Ipay;
 import com.ipay.IpayPayment;
@@ -22,9 +22,10 @@ import fragments.CreateQuotationFragment;
 import fragments.CustomerRequestFragment;
 import fragments.RatingFragment;
 import fragments.ServiceProviderFragment;
+import fragments.UserInfoFragment;
 
 
-public class ProjectMessages extends ActionBarActivity implements View.OnClickListener {
+public class ProjectMessages extends HelpUBaseActivity implements View.OnClickListener {
     private CustomerRequest mCustomerRequest = null;
     private ServiceProvider mServiceProvider = null;
     private User mUser = null;
@@ -35,7 +36,9 @@ public class ProjectMessages extends ActionBarActivity implements View.OnClickLi
     private PaymentInfo mPaymentInfo;
     private PaymentResultDelegate mPaymentResultDelegate;
     private ProjectStatus mProjectStatus;
+    private int mCustomerRequestId;
     private int mUserId;
+    private boolean mIsStillStayHere = false;
 
     public static String resultTitle;
     public static String resultInfo;
@@ -53,6 +56,7 @@ public class ProjectMessages extends ActionBarActivity implements View.OnClickLi
         //get from bundle
         Bundle b = getIntent().getExtras();
         mProjectStatus = ProjectStatus.values()[b.getInt("projectStatusId", 0)];
+        mCustomerRequestId = b.getInt("customerRequestId", 0);
 
         UserLocalStore userLocalStore = new UserLocalStore(this);
         mUser = userLocalStore.getLoggedInUser();
@@ -70,227 +74,36 @@ public class ProjectMessages extends ActionBarActivity implements View.OnClickLi
         txtResultDetails = (TextView) findViewById(R.id.txtResultDetails);
 
         if (savedInstanceState == null) {
-            FragmentManager fm = getFragmentManager();
-            final FragmentTransaction ft = fm.beginTransaction();
-            mCustomerRequest = ((Globals) getApplication()).getCustomerRequest();
             if (mCustomerRequest == null) {
-                String url = this.getString(R.string.server_uri) + ((Globals)getApplicationContext()).getServiceProviderJobOffer();
-                ServiceProviderServerRequests serverRequest = new ServiceProviderServerRequests(this);
-                serverRequest.getServiceProviderJobOffer(mUserId, url, new GetCustomerRequestCallback() {
-                    @Override
-                    public void done(CustomerRequest returnedCustomerRequest) {
-                        if(returnedCustomerRequest != null) {
-                            ((Globals) getApplication()).setCustomerRequest(returnedCustomerRequest);
-                        }
-                    }
-                });;
+                //notification redirect
+                getCustomerRequestInfo();
+            } else {
+                //normal retrieve from list in application
+                getServiceProviderInfo();
             }
-            mCustomerRequest = ((Globals) getApplication()).getCustomerRequest();
-
-            String url = getString(R.string.server_uri) + ((Globals)getApplication()).getServiceProviderGetByID();
-            ServiceProviderServerRequests serverRequest = new ServiceProviderServerRequests(this);
-            serverRequest.getServiceProviderByID(mCustomerRequest.getServiceProviderId(), url, new GetServiceProviderCallback() {
-                @Override
-                public void done(ServiceProvider returnedServiceProvider) {
-                    if (returnedServiceProvider == null) {
-                        showErrorMessage();
-                    } else {
-                        mServiceProvider = returnedServiceProvider;
-                        Fragment frag = new CustomerRequestFragment().newInstance(mCustomerRequest.getCustomerRequestId());
-                        ft.add(R.id.llCustomerRequest, frag);
-                        frag = new ServiceProviderFragment().newInstance(mCustomerRequest.getServiceProviderId());
-                        ft.add(R.id.llServiceProvider, frag);
-
-                        if (mProjectStatus.getId() == ProjectStatus.Quotation.getId()) {
-                            frag = new CreateQuotationFragment().newInstance(14);
-                            ft.add(R.id.llCreateQuotation, frag);
-                        }
-
-                        if (mUserId == mCustomerRequest.getUserId() &&
-                                (mProjectStatus.getId() == ProjectStatus.ServiceDone.getId() ||
-                                        mProjectStatus.getId() == ProjectStatus.ServiceProvRating.getId() ||
-                                        mProjectStatus.getId() == ProjectStatus.CustomerRating.getId())
-                                ) {
-                            frag = new RatingFragment().newInstance("ServiceProvider", mUserId, mServiceProvider.getUserId(), mCustomerRequest.getCustomerRequestId());
-                            ft.add(R.id.llRating, frag);
-                        } else if (mUserId != mCustomerRequest.getUserId() &&
-                                (mProjectStatus.getId() == ProjectStatus.ServiceDone.getId() ||
-                                        mProjectStatus.getId() == ProjectStatus.ServiceProvRating.getId() ||
-                                        mProjectStatus.getId() == ProjectStatus.CustomerRating.getId())
-                                ) {
-                            frag = new RatingFragment().newInstance("Customer", mUserId, mCustomerRequest.getUserId(), mCustomerRequest.getCustomerRequestId());
-                            ft.add(R.id.llRating, frag);
-                        }
-
-                        ft.commit();
-                    }
-                }
-            });
         }
-
-        //region Project Status Checking
-        switch (mProjectStatus)
-        {
-            case Pick:
-                setTitle("Choose Service Provider");
-                if (mUserId == mCustomerRequest.getUserId()) {
-                    tvMessageBox.setText("Please wait for selected Service Provider Reply.");
-                }
-                else {
-                    tvMessageBox.setText("No define yet");
-                }
-                break;
-            case CandidateNotification:
-                setTitle("Candidate Notification");
-                if (mUserId == mCustomerRequest.getUserId()) {
-                    tvMessageBox.setText("Please wait for selected Service Provider Reply.");
-                }
-                else {
-                    tvMessageBox.setVisibility(View.GONE);
-                    btnTask.setText("Confirm And Accept the Job");
-                    btnTask.setVisibility(View.VISIBLE);
-                }
-                break;
-            case ConfirmRequest:
-                setTitle("Confirm The Job");
-                if (mUserId == mCustomerRequest.getUserId()) {
-                    tvMessageBox.setText("Please wait for service provider create quotation.");
-                }
-                else {
-                    llCreateQuotation.setVisibility(View.VISIBLE);
-                    btnTask.setVisibility(View.GONE);
-                    tvMessageBox.setVisibility(View.GONE);
-                }
-                break;
-            case Quotation:
-                setTitle("Create Quotation");
-                if (mUserId == mCustomerRequest.getUserId()) {
-                    tvMessageBox.setText("Please wait for service provider create quotation.");
-                }
-                else {
-                    llCreateQuotation.setVisibility(View.VISIBLE);
-                    btnTask.setVisibility(View.GONE);
-                    tvMessageBox.setVisibility(View.GONE);
-                }
-                break;
-            case ConfirmQuotation:
-                setTitle("Confirm Quotation");
-                if (mUserId == mCustomerRequest.getUserId()) {
-                    //only uncomment when not involve real payment and just want to change state like testing
-                    llCreateQuotation.setVisibility(View.VISIBLE);
-//                    btnTask.setText("Do Payment");
-                    btnTask.setText("OK, Deal");
-                    btnTask.setVisibility(View.VISIBLE);
-                    btnCancel.setText("Cancel, No Deal");
-                    btnCancel.setVisibility(View.VISIBLE);
-                    //btnPaymentGateway.setVisibility(View.VISIBLE);
-                    tvMessageBox.setVisibility(View.GONE);
-                }
-                else {
-//                    tvMessageBox.setText("Please wait for customer to confirm quotation and do the down payment.");
-                    tvMessageBox.setText("Please wait for customer to confirmation.");
-                }
-                break;
-            case DoDownPayment:
-                setTitle("Deal?");
-                if (mUserId == mCustomerRequest.getUserId()) {
-//                    tvMessageBox.setText("Please wait while payment being processing by system and notify service provider...");
-                    tvMessageBox.setText("Service provider will be notify by our system...");
-                }else {
-                    tvMessageBox.setText("No define yet");
-                }
-                break;
-            case WinAwardNotification:
-                setTitle("Win Award Notification");
-                if (mUserId == mCustomerRequest.getUserId()) {
-//                    tvMessageBox.setText("Down payment received and notification already send to service provider");
-                    tvMessageBox.setText("Notification already send to service provider");
-                }else {
-                    tvMessageBox.setVisibility(View.GONE);
-//                    btnTask.setText("Received Payment");
-                    btnTask.setText("OK, Noted and will arrange start date");
-                    btnTask.setVisibility(View.VISIBLE);
-                }
-                break;
-            case ReceiveDownPayment:
-                setTitle("Received Down Payment");
-                if (mUserId == mCustomerRequest.getUserId()) {
-                    tvMessageBox.setText("Received Down payment and wait service provider to start the job");
-                }else {
-                    tvMessageBox.setVisibility(View.GONE);
-                    btnTask.setText("Service Start");
-                    btnTask.setVisibility(View.VISIBLE);
-                }
-                break;
-            case ServiceStart:
-                setTitle("Service Start");
-                if (mUserId == mCustomerRequest.getUserId()) {
-                    tvMessageBox.setVisibility(View.GONE);
-                    btnTask.setText("Service End");
-                    btnTask.setVisibility(View.VISIBLE);
-                }else {
-                    tvMessageBox.setText("Customer will determine end of the job after satisfaction");
-                    tvMessageBox.setVisibility(View.VISIBLE);
-                    btnTask.setVisibility(View.GONE);
-                }
-                break;
-            case ServiceDone:
-                setTitle("Rating");
-                if (mUserId == mCustomerRequest.getUserId()) {
-                }else {
-                }
-                tvMessageBox.setVisibility(View.GONE);
-                btnTask.setVisibility(View.GONE);
-                llRating.setVisibility(View.VISIBLE);
-                break;
-            case CustomerRating:
-                setTitle("Customer Rating");
-                if (mUserId == mCustomerRequest.getUserId()) {
-                    tvMessageBox.setText("Project already finish and will close after service provider rating");
-                    tvMessageBox.setVisibility(View.VISIBLE);
-                }else {
-                    tvMessageBox.setText("Please rate for customer");
-                    tvMessageBox.setVisibility(View.VISIBLE);
-                    llRating.setVisibility(View.VISIBLE);
-                }
-                btnTask.setVisibility(View.GONE);
-                break;
-            case ServiceProvRating:
-                setTitle("Service Provider Rating");
-                if (mUserId == mCustomerRequest.getUserId()) {
-                    tvMessageBox.setText("Please rate for service provider");
-                    tvMessageBox.setVisibility(View.VISIBLE);
-                    llRating.setVisibility(View.VISIBLE);
-                }else {
-                    tvMessageBox.setText("Project already finish and will close after customer rating");
-                    tvMessageBox.setVisibility(View.VISIBLE);
-                }
-                btnTask.setVisibility(View.GONE);
-                break;
-            case Done:
-                setTitle("Project Done");
-                tvMessageBox.setText("Project Done successfully");
-                tvMessageBox.setVisibility(View.VISIBLE);
-                llRating.setVisibility(View.GONE);
-                btnTask.setVisibility(View.GONE);
-                break;
-            default:
-                tvMessageBox.setText("Project Status still not define...");
-                break;
-        }
-        //endregion
 
         btnTask.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
         btnPaymentGateway.setOnClickListener(this);
 
-    }
+        isAllowMenuProgressBar = true;
 
-    private void showErrorMessage() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(ProjectMessages.this);
-        dialogBuilder.setMessage("Get Service Provider By ID Fail!!");
-        dialogBuilder.setPositiveButton("Ok", null);
-        dialogBuilder.show();
+        if (!BuildConfig.DEBUG) {
+            mIsStillStayHere = true;
+            int timer = 20 * 1000; //20 second
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (mIsStillStayHere) {
+                        Intent redirect = new Intent(ProjectMessages.this, MainActivity.class);
+                        redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(redirect);
+                        finish();
+                    }
+                }
+            }, timer);
+        }
     }
 
     @Override
@@ -320,23 +133,32 @@ public class ProjectMessages extends ActionBarActivity implements View.OnClickLi
                 Intent checkoutIntent = Ipay.getInstance().checkout(payment, this, mPaymentResultDelegate);
                 startActivityForResult(checkoutIntent, 1);
             } else {
-                Toast.makeText(this, "Some info is missing and can't retrieve", Toast.LENGTH_LONG).show();
+                showToast("Some info is missing and can't retrieve");
                 return;
             }
             //endregion
         } else if (v == btnTask) {
             //region Button Task
-            CustomerRequest customerRequest = ((Globals) getApplication()).getCustomerRequest();
             switch (mProjectStatus) {
-                case CandidateNotification:
+                case Pick:
+                case SelectedNotification:
                     if (mUserId == mCustomerRequest.getUserId()) {
                         //customer
                     } else {
                         //service provider
-                        customerRequest.setProjectStatusId(ProjectStatus.Quotation.getId());
+                        mCustomerRequest.setProjectStatusId(ProjectStatus.ConfirmRequest.getId());
                     }
                     break;
                 case ConfirmRequest:
+                case ConfirmRequestNotification:
+                    if (mUserId == mCustomerRequest.getUserId()) {
+                        //customer
+                    } else {
+                        //service provider
+                    }
+                    break;
+                case Quotation:
+                case QuotationNotification:
                     if (mUserId == mCustomerRequest.getUserId()) {
                         //customer
                     } else {
@@ -344,19 +166,30 @@ public class ProjectMessages extends ActionBarActivity implements View.OnClickLi
                     }
                     break;
                 case ConfirmQuotation:
+                case ConfirmQuotationNotification:
                     if (mUserId == mCustomerRequest.getUserId()) {
                         //customer
-                        customerRequest.setProjectStatusId(ProjectStatus.DoDownPayment.getId());
+                        mCustomerRequest.setProjectStatusId(ProjectStatus.Deal.getId());
                     } else {
                         //service provider
                     }
                     break;
-                case WinAwardNotification:
+                case Deal:
+                case DealNotification:
                     if (mUserId == mCustomerRequest.getUserId()) {
                         //customer
                     } else {
                         //service provider
-                        customerRequest.setProjectStatusId(ProjectStatus.ReceiveDownPayment.getId());
+                        mCustomerRequest.setProjectStatusId(ProjectStatus.PlanStartDate.getId());
+                    }
+                    break;
+                case PlanStartDate:
+                case PlanStartDateNotification:
+                    if (mUserId == mCustomerRequest.getUserId()) {
+                        //customer
+                    } else {
+                        //service provider
+                        mCustomerRequest.setProjectStatusId(ProjectStatus.ServiceStart.getId());
                     }
                     break;
                 case ReceiveDownPayment:
@@ -364,27 +197,38 @@ public class ProjectMessages extends ActionBarActivity implements View.OnClickLi
                         //customer
                     } else {
                         //service provider
-                        customerRequest.setProjectStatusId(ProjectStatus.ServiceStart.getId());
                     }
                     break;
                 case ServiceStart:
+                case ServiceStartNotification:
                     if (mUserId == mCustomerRequest.getUserId()) {
                         //customer
-                        customerRequest.setProjectStatusId(ProjectStatus.ServiceDone.getId());
+                        mCustomerRequest.setProjectStatusId(ProjectStatus.ServiceDone.getId());
                     } else {
                         //service provider
                     }
                     break;
                 case ServiceDone:
+                case ServiceDoneNotification:
                     if (mUserId == mCustomerRequest.getUserId()) {
                         //customer
-                        customerRequest.setProjectStatusId(ProjectStatus.CustomerRating.getId());
+                        mCustomerRequest.setProjectStatusId(ProjectStatus.CustomerRating.getId());
                     } else {
                         //service provider
-                        customerRequest.setProjectStatusId(ProjectStatus.ServiceProvRating.getId());
+                        mCustomerRequest.setProjectStatusId(ProjectStatus.ServiceProvRating.getId());
                     }
                     break;
                 case CustomerRating:
+                case CustomerRatingNotification:
+                    if (mUserId == mCustomerRequest.getUserId()) {
+                        //customer
+
+                    } else {
+                        //service provider
+                    }
+                    break;
+                case ServiceProvRating:
+                case ServiceProviderRatingNotification:
                     if (mUserId == mCustomerRequest.getUserId()) {
                         //customer
 
@@ -398,8 +242,8 @@ public class ProjectMessages extends ActionBarActivity implements View.OnClickLi
             }
 
             String url = getString(R.string.server_uri) + ((Globals) getApplicationContext()).getCustomerRequestUpdate();
-            CustomerRequestServerRequests serverRequest = new CustomerRequestServerRequests(getBaseContext());
-            serverRequest.getCustomerRequestUpdate(customerRequest, url, new GetCustomerRequestCallback() {
+            CustomerRequestServerRequests serverRequest = new CustomerRequestServerRequests();
+            serverRequest.getCustomerRequestUpdate(mCustomerRequest, url, new GetCustomerRequestCallback() {
                 @Override
                 public void done(CustomerRequest returnedCustomerRequest) {
                 }
@@ -407,28 +251,29 @@ public class ProjectMessages extends ActionBarActivity implements View.OnClickLi
 
             Intent redirect = new Intent(ProjectMessages.this, ProjectMessages.class);
             Bundle b = new Bundle();
-            b.putInt("projectStatusId", customerRequest.getProjectStatusId());
+            b.putInt("projectStatusId", mCustomerRequest.getProjectStatusId());
+            b.putInt("customerRequestId", mCustomerRequest.getCustomerRequestId());
             redirect.putExtras(b);
             redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(redirect);
             finish();
+
             //endregion
         } else if (v == btnCancel) {
             //region Button Cancel
             AlertDialog.Builder adb = new AlertDialog.Builder(this);
             final AlertDialog alertDialog = adb.create();
-            adb.setMessage("Are you sure you want reselect the service provider?");
-            adb.setTitle("Reselect Service Provider?");
+            adb.setMessage(R.string.strReSltSPdr);
+            adb.setTitle(R.string.strTitleReSltSPdr);
             adb.setIcon(android.R.drawable.ic_dialog_alert);
-            adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            adb.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
 //                    Toast.makeText(getBaseContext(), "OK Button is press", Toast.LENGTH_SHORT).show();
 
-                    CustomerRequest customerRequest = ((Globals) getApplication()).getCustomerRequest();
-                    customerRequest.setProjectStatusId(ProjectStatus.New.getId());
+                    mCustomerRequest.setProjectStatusId(ProjectStatus.New.getId());
                     String url = getString(R.string.server_uri) + ((Globals) getApplicationContext()).getCustomerRequestUpdate();
-                    CustomerRequestServerRequests serverRequest = new CustomerRequestServerRequests(getBaseContext());
-                    serverRequest.getCustomerRequestUpdate(customerRequest, url, new GetCustomerRequestCallback() {
+                    CustomerRequestServerRequests serverRequest = new CustomerRequestServerRequests();
+                    serverRequest.getCustomerRequestUpdate(mCustomerRequest, url, new GetCustomerRequestCallback() {
                         @Override
                         public void done(CustomerRequest returnedCustomerRequest) {
                         }
@@ -436,7 +281,7 @@ public class ProjectMessages extends ActionBarActivity implements View.OnClickLi
 
                     Intent redirect = new Intent(getBaseContext(), ServiceProviderListByServiceID.class);
                     Bundle b = new Bundle();
-                    b.putInt("serviceId", customerRequest.getServiceId());
+                    b.putInt("serviceId", mCustomerRequest.getServiceId());
                     redirect.putExtras(b);
                     redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(redirect);
@@ -444,7 +289,7 @@ public class ProjectMessages extends ActionBarActivity implements View.OnClickLi
                 }
             });
 
-            adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            adb.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     alertDialog.dismiss();
                 }
@@ -452,6 +297,15 @@ public class ProjectMessages extends ActionBarActivity implements View.OnClickLi
             adb.show();
             //endregion
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        mIsStillStayHere = false;
+        Intent redirect = new Intent(this, MainActivity.class);
+        redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(redirect);
+        finish();
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -503,18 +357,17 @@ public class ProjectMessages extends ActionBarActivity implements View.OnClickLi
         if (paymentStatus == "SUCCESS") {    //SUCCESS, FAILURE
             btnTask.setVisibility(View.GONE);
             btnPaymentGateway.setVisibility(View.GONE);
-            tvMessageBox.setText("page will redirect after 10 seconds!!");
+            tvMessageBox.setText(R.string.strPageRedirect);
             tvMessageBox.setVisibility(View.VISIBLE);
 
             txtResultTitle.setVisibility(View.GONE);
             txtResultDescription.setVisibility(View.GONE);
             txtResultDetails.setVisibility(View.GONE);
 
-            final CustomerRequest customerRequest = ((Globals) getApplication()).getCustomerRequest();
-            customerRequest.setProjectStatusId(ProjectStatus.DoDownPayment.getId());
+            mCustomerRequest.setProjectStatusId(ProjectStatus.Deal.getId());
             String url = getString(R.string.server_uri) + ((Globals) getApplicationContext()).getCustomerRequestUpdate();
-            CustomerRequestServerRequests serverRequest = new CustomerRequestServerRequests(getBaseContext());
-            serverRequest.getCustomerRequestUpdate(customerRequest, url, new GetCustomerRequestCallback() {
+            CustomerRequestServerRequests serverRequest = new CustomerRequestServerRequests();
+            serverRequest.getCustomerRequestUpdate(mCustomerRequest, url, new GetCustomerRequestCallback() {
                 @Override
                 public void done(CustomerRequest returnedCustomerRequest) {
                 }
@@ -526,7 +379,8 @@ public class ProjectMessages extends ActionBarActivity implements View.OnClickLi
             /* Create an Intent that will start the Menu-Activity. */
                     Intent redirect = new Intent(ProjectMessages.this, ProjectMessages.class);
                     Bundle b = new Bundle();
-                    b.putInt("projectStatusId", customerRequest.getProjectStatusId());
+                    b.putInt("projectStatusId", mCustomerRequest.getProjectStatusId());
+                    b.putInt("customerRequestId", mCustomerRequest.getCustomerRequestId());
                     redirect.putExtras(b);
                     redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(redirect);
@@ -538,11 +392,261 @@ public class ProjectMessages extends ActionBarActivity implements View.OnClickLi
 
     private void storeTransactionInfo(Transaction transaction) {
         String requestUrl = getString(R.string.server_uri) + ((Globals) getApplicationContext()).getTransactionInsert();
-        TransactionServerRequests serverRequest = new TransactionServerRequests(getBaseContext());
+        TransactionServerRequests serverRequest = new TransactionServerRequests();
         serverRequest.transactionInsert(transaction, requestUrl, new GetTransactionCallback() {
             @Override
             public void done(Transaction returnedTransaction) {
             }
         });
+    }
+
+    public void getCustomerRequestInfo() {
+        String url = getString(R.string.server_uri) + ((Globals) getApplicationContext()).getCustomerRequestGetByID();
+        CustomerRequestServerRequests serverRequest = new CustomerRequestServerRequests();
+        serverRequest.getCustomerRequestByID(mCustomerRequestId, url, new GetCustomerRequestCallback() {
+            @Override
+            public void done(CustomerRequest returnedCustomerRequest) {
+                if (returnedCustomerRequest != null) {
+                    mCustomerRequest = returnedCustomerRequest;
+                    //Need to for Rating to get more current status instead of the status when notification trigger
+                    //due to two direction rating at the same time and status done is trigger when both site rating
+                    if (mCustomerRequest.getProjectStatus() == ProjectStatus.ProjectClose ||
+                            mCustomerRequest.getProjectStatus() == ProjectStatus.PlanStartDateNotification) {
+                        mProjectStatus = mCustomerRequest.getProjectStatus();
+                    }
+                    getServiceProviderInfo();
+                }
+            }
+        });
+    }
+
+    public void getServiceProviderInfo() {
+        String url = getString(R.string.server_uri) + ((Globals) getApplication()).getServiceProviderGetByID();
+        ServiceProviderServerRequests serverRequest = new ServiceProviderServerRequests();
+        serverRequest.getServiceProviderByID(mCustomerRequest.getServiceProviderId(), url, new GetServiceProviderCallback() {
+            @Override
+            public void done(ServiceProvider returnedServiceProvider) {
+                if (returnedServiceProvider == null) {
+                    showAlert("Get Service Provider By ID Fail!!");
+                } else {
+                    mServiceProvider = returnedServiceProvider;
+                    getDisplayFragmentDetail();
+                    getProjectStatusChecking();
+                }
+            }
+        });
+    }
+
+    public void getProjectStatusChecking() {
+        //region Project Status Checking
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        switch (mProjectStatus) {
+            case Pick:
+            case SelectedNotification:
+                if (mUserId == mCustomerRequest.getUserId()) {
+                    setTitle(R.string.strPlsWait);
+                    tvMessageBox.setText(R.string.strCustCdtNtfMessage);
+                } else {
+                    setTitle(R.string.strCfmJobOfr);
+                    tvMessageBox.setVisibility(View.GONE);
+                    btnTask.setText(R.string.strSPdrCdtNtfMessage);
+                    btnTask.setVisibility(View.VISIBLE);
+                    notificationManager.cancel(mCustomerRequest.getCustomerRequestId());
+                }
+                break;
+            case ConfirmRequest:
+            case ConfirmRequestNotification:
+                if (mUserId == mCustomerRequest.getUserId()) {
+                    setTitle(R.string.strPlsWait);
+                    tvMessageBox.setText(R.string.strCustCfmRqtMessage);
+                    notificationManager.cancel(mCustomerRequest.getCustomerRequestId());
+                } else {
+                    setTitle(R.string.strCreatQtt);
+                    llCreateQuotation.setVisibility(View.VISIBLE);
+                    btnTask.setVisibility(View.GONE);
+                    tvMessageBox.setVisibility(View.GONE);
+                }
+                break;
+            case Quotation:
+            case QuotationNotification:
+                if (mUserId == mCustomerRequest.getUserId()) {
+                    setTitle(R.string.strPlsWait);
+                    tvMessageBox.setText(R.string.strCustQttMessage);
+                    notificationManager.cancel(mCustomerRequest.getCustomerRequestId());
+                } else {
+                    setTitle(R.string.strCreatQtt);
+                    llCreateQuotation.setVisibility(View.VISIBLE);
+                    btnTask.setVisibility(View.GONE);
+                    tvMessageBox.setVisibility(View.GONE);
+                }
+                break;
+            case ConfirmQuotation:
+            case ConfirmQuotationNotification:
+                if (mUserId == mCustomerRequest.getUserId()) {
+                    setTitle(R.string.strTitleCfmQtt);
+                    llCreateQuotation.setVisibility(View.VISIBLE);
+                    btnTask.setText(R.string.strOkDeal);
+                    btnTask.setVisibility(View.VISIBLE);
+                    btnCancel.setText(R.string.strCancelNoDeal);
+                    btnCancel.setVisibility(View.VISIBLE);
+                    tvMessageBox.setVisibility(View.GONE);
+                    notificationManager.cancel(mCustomerRequest.getCustomerRequestId());
+                } else {
+                    setTitle(R.string.strPlsWait);
+                    tvMessageBox.setText(R.string.strSPdrCfmQttMessage);
+                }
+
+                break;
+            case Deal:
+            case DealNotification:
+                if (mUserId == mCustomerRequest.getUserId()) {
+                    setTitle(R.string.strPlsWait);
+                    tvMessageBox.setText(R.string.strCustWinAwdNtfMessage);
+                } else {
+                    setTitle(R.string.strTitleDDPmt);
+                    tvMessageBox.setVisibility(View.GONE);
+                    btnTask.setText(R.string.strSPdrWinAwdNtfTask);
+                    btnTask.setVisibility(View.VISIBLE);
+                    notificationManager.cancel(mCustomerRequest.getCustomerRequestId());
+                }
+                break;
+            case PlanStartDate:
+            case PlanStartDateNotification:
+                if (mUserId == mCustomerRequest.getUserId()) {
+                    setTitle(R.string.strPlsWait);
+                    tvMessageBox.setText(R.string.strPlanStartDate);
+                    notificationManager.cancel(mCustomerRequest.getCustomerRequestId());
+                } else {
+                    setTitle(R.string.strTitleRcvDwnPmt);
+                    tvMessageBox.setVisibility(View.GONE);
+                    btnTask.setText(R.string.strSPdrSvrStrTask);
+                    btnTask.setVisibility(View.VISIBLE);
+                }
+                break;
+            case ReceiveDownPayment:
+                break;
+            case ServiceStart:
+            case ServiceStartNotification:
+                if (mUserId == mCustomerRequest.getUserId()) {
+                    setTitle(R.string.strSvrDone);
+                    tvMessageBox.setVisibility(View.GONE);
+                    btnTask.setText(R.string.strSvrDone);
+                    btnTask.setVisibility(View.VISIBLE);
+                    notificationManager.cancel(mCustomerRequest.getCustomerRequestId());
+                } else {
+                    setTitle(R.string.strSvrDone);
+                    tvMessageBox.setText(R.string.strSPdrSvrStrMessage);
+                    tvMessageBox.setVisibility(View.VISIBLE);
+                    btnTask.setVisibility(View.GONE);
+                }
+                break;
+            case ServiceDone:
+            case ServiceDoneNotification:
+                setTitle(R.string.strTitleRtg);
+                tvMessageBox.setVisibility(View.GONE);
+                btnTask.setVisibility(View.GONE);
+                llRating.setVisibility(View.VISIBLE);
+
+                if (mUserId == mCustomerRequest.getUserId()) {
+                    tvMessageBox.setText(R.string.strWaitSPdrReply);
+                } else {
+                    notificationManager.cancel(mCustomerRequest.getCustomerRequestId());
+                }
+                break;
+            case CustomerRating:
+            case CustomerRatingNotification:
+                setTitle(R.string.strTitleCustRtg);
+                if (mUserId == mCustomerRequest.getUserId()) {
+                    tvMessageBox.setText(R.string.strCustCustRtgMessage);
+                    tvMessageBox.setVisibility(View.VISIBLE);
+                } else {
+                    tvMessageBox.setText(R.string.strSPdrCustRtgMessage);
+                    tvMessageBox.setVisibility(View.VISIBLE);
+                    llRating.setVisibility(View.VISIBLE);
+                    notificationManager.cancel(mCustomerRequest.getCustomerRequestId());
+                }
+                break;
+            case ServiceProvRating:
+            case ServiceProviderRatingNotification:
+                setTitle(R.string.strTitleSPdrRtg);
+                if (mUserId == mCustomerRequest.getUserId()) {
+                    tvMessageBox.setText(R.string.strCustSPdrRtgMessage);
+                    tvMessageBox.setVisibility(View.VISIBLE);
+                    llRating.setVisibility(View.VISIBLE);
+                    notificationManager.cancel(mCustomerRequest.getCustomerRequestId());
+                } else {
+                    tvMessageBox.setText(R.string.strSPdrSPdrRtgMessage);
+                    tvMessageBox.setVisibility(View.VISIBLE);
+                }
+                btnTask.setVisibility(View.GONE);
+                break;
+            case ProjectClose:
+                setTitle(R.string.strTitlePjtDone);
+                tvMessageBox.setText(R.string.strCustPjtDoneMessage);
+                tvMessageBox.setVisibility(View.VISIBLE);
+                llRating.setVisibility(View.GONE);
+                btnTask.setVisibility(View.GONE);
+                break;
+            default:
+                tvMessageBox.setText(R.string.strUnknownAction);
+                break;
+        }
+        //endregion
+
+    }
+
+    public void getDisplayFragmentDetail() {
+        FragmentManager fm = getFragmentManager();
+        final FragmentTransaction ft = fm.beginTransaction();
+        Fragment frag = new UserInfoFragment().newInstance(mUser.getUserName(), mCustomerRequest.getProjectStatus(), mUserId, mCustomerRequest.getUserId());
+        ft.add(R.id.llUserInfo, frag);
+        frag = new CustomerRequestFragment().newInstance(mCustomerRequest, mUser);
+        ft.add(R.id.llCustomerRequest, frag);
+        frag = new ServiceProviderFragment().newInstance(mCustomerRequest);
+        ft.add(R.id.llServiceProvider, frag);
+
+        if (mProjectStatus.getId() == ProjectStatus.ConfirmRequest.getId() ||
+                mProjectStatus.getId() == ProjectStatus.ConfirmRequestNotification.getId()) {
+            frag = new CreateQuotationFragment().newInstance(mCustomerRequest);
+            ft.add(R.id.llCreateQuotation, frag);
+        }
+
+        if (mUserId == mCustomerRequest.getUserId() &&
+                (mProjectStatus.getId() == ProjectStatus.ServiceDone.getId() ||
+                        mProjectStatus.getId() == ProjectStatus.ServiceDoneNotification.getId() ||
+                        mProjectStatus.getId() == ProjectStatus.ServiceProvRating.getId() ||
+                        mProjectStatus.getId() == ProjectStatus.ServiceProviderRatingNotification.getId() ||
+                        mProjectStatus.getId() == ProjectStatus.CustomerRating.getId() ||
+                        mProjectStatus.getId() == ProjectStatus.CustomerRatingNotification.getId())
+                ) {
+            frag = new RatingFragment().newInstance("ServiceProvider", mUserId, mServiceProvider.getUserId(), mCustomerRequest.getCustomerRequestId());
+            ft.add(R.id.llRating, frag);
+        } else if (mUserId != mCustomerRequest.getUserId() &&
+                (mProjectStatus.getId() == ProjectStatus.ServiceDone.getId() ||
+                        mProjectStatus.getId() == ProjectStatus.ServiceDoneNotification.getId() ||
+                        mProjectStatus.getId() == ProjectStatus.ServiceProvRating.getId() ||
+                        mProjectStatus.getId() == ProjectStatus.ServiceProviderRatingNotification.getId() ||
+                        mProjectStatus.getId() == ProjectStatus.CustomerRating.getId() ||
+                        mProjectStatus.getId() == ProjectStatus.CustomerRatingNotification.getId())
+                ) {
+            frag = new RatingFragment().newInstance("Customer", mUserId, mCustomerRequest.getUserId(), mCustomerRequest.getCustomerRequestId());
+            ft.add(R.id.llRating, frag);
+        }
+
+        ft.commit();
+
+        setAlreadyReadNotification();
+    }
+
+    public void setAlreadyReadNotification() {
+        String url = getString(R.string.server_uri) + ((Globals) getApplicationContext()).getCustomerRequestUpdate();
+        CustomerRequestServerRequests serverRequest = new CustomerRequestServerRequests();
+        mCustomerRequest.setAlreadyReadNotification(1); //already read
+        serverRequest.getCustomerRequestUpdate(mCustomerRequest, url, new GetCustomerRequestCallback() {
+            @Override
+            public void done(CustomerRequest returnedCustomerRequest) {
+            }
+        });
+
     }
 }
