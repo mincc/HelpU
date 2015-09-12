@@ -1,0 +1,258 @@
+<resources>
+    <string name="server_uri">http://192.168.1.8/HelpU/</string>
+    <!--<string name="server_uri">http://helpu.hostei.com/</string>-->
+    <!--<string name="server_uri">http://helpu.comuf.com/</string>-->
+    <!--<string name="server_uri">http://helpu.hostingsiteforfree.com/</string>-->
+
+    <string name="app_name">豪优</string>
+    <string name="hello_world">你好，世界！</string>
+
+    <string name="action_settings">设置</string>
+    <string name="action_about_us">关于我们</string>
+    <string name="action_project_status_flow">项目状态</string>
+
+    <string-array name="hire_list">
+        <item>0|请选择...</item>
+        <item>1|承包商</item>
+        <item>2|水管工人</item>
+        <item>3|杂工</item>
+        <item>4|室内设计师</item>
+        <item>5|清洁服务</item>
+        <item>6|搬家</item>
+        <item>7|摄影师</item>
+        <item>8|动态影像摄影师</item>
+        <item>9|发型和化妆</item>
+        <item>10|婚礼策划师</item>
+    </string-array>
+
+    <string name="title_activity_login">登录</string>
+    <string name="title_activity_register">注册</string>
+    <string name="title_activity_hire">雇佣</string>
+    <string name="title_activity_work">工作</string>
+    <string name="title_activity_application_list">应用程序列表</string>
+    <string name="title_activity_work_list">工作列表</string>
+    <string name="title_activity_service_provider_list">服务供应商名单</string>
+    <string name="title_activity_test">试</string>
+    <string name="title_activity_user_profile_setting">用户设置</string>
+
+    <string name="title_activity_customer_request_list">客户请求列表</string>
+    <string name="title_activity_customer_request_by_id">客户询问编号</string>
+    <string name="title_activity_service_provider_by_id">服务供应商编号</string>
+    <string name="title_activity_help">疑问</string>
+    <string name="title_activity_customer_request_pick_service_provider">
+        客户挑选服务提供商
+    </string>
+    <string name="title_activity_notification_job_offer">通知招聘启事</string>
+    <string name="title_activity_service_provider_create_quotation">服务提供者提供报价
+    </string>
+    <string name="title_activity_customer_request_job_list">客户要求作业列表</string>
+    <string name="title_activity_service_provider_confirm_quotation">
+        服务提供商确认报价
+    </string>
+    <string name="title_activity_customer_do_down_payment">客户首付</string>
+    <string name="title_activity_project_messages">项目信息</string>
+    <string name="title_activity_ipay88_sample">IPay88示例活动</string>
+    <string name="title_activity_about_us">关于我们</string>
+    <string name="title_activity_help_ubase">HelpU Base Activity</string>
+    <string name="title_activity_contact_us">联系我们</string>
+
+    <!--//IPay88-->
+    <string name="ProdDesc">产品描述</string>
+    <!--<string name="app_name">v2 IPAY88 Android Payment</string>-->
+    <string name="UserName">客户名字</string>
+    <string name="UserContact">电话号码</string>
+    <string name="strEmail">电子邮件</string>
+    <string name="Result">结果</string>
+    <string name="btnPrint">打印收据</string>
+    <string name="btnHome">主页</string>
+    <string name="strPaymentId">付款编号</string>
+    <string name="strRefNo">Ref No</string>
+    <string name="strAmount">共计 </string>
+    <string name="strRemark">备注</string>
+    <string name="strTransId">Trans Id</string>
+    <string name="strAuthCode">验证码</string>
+    <string name="strStatus">状态</string>
+    <string name="strErrDesc">错误说明</string>
+    <string name="strSignature">署名</string>
+    <string name="strREFID">参考编号</string>
+    <string name="imgDesc">ipay 演示标志</string>
+    <string name="strPay">现在付款</string>
+    <string name="strCancel">取消</string>
+    <string name="strMerchantKey">商家</string>
+    <string name="strMerchantCode">商户编号</string>
+    <string name="strPaymentID">付款编号</string>
+    <string name="strCurrency">货币</string>
+    <string name="strLang">语言</string>
+    <string name="strCountry">国家</string>
+    <string name="strBackendPost">后端网址</string>
+    <string name="strRequery">重新查询</string>
+    <string name="action_contact_us">联系我们</string>
+    <string name="title_activity_life_cycle">周期</string>
+    <string name="title_activity_server_info">服务器信息</string>
+    <string name="action_server_info">服务器信息</string>
+    <string name="title_activity_send_email">发电子邮件</string>
+    <string name="action_send_email">发电子邮件</string>
+    <string name="Amount">金额（零吉）</string>
+    <string name="strUsername">用户名</string>
+    <string name="strLogin">登录</string>
+    <string name="strPassword">密码</string>
+    <string name="strRegister">注册</string>
+    <string name="strContact">联系电话</string>
+    <string name="strName">姓名</string>
+    <string name="strRetypePassword">重新输入密码</string>
+    <string name="strNameEmpty">没有姓名</string>
+    <string name="strPasswordEmpty">没有密码</string>
+    <string name="strPasswordMismatch">密码不一样</string>
+    <string name="strPasswordTooShort">密码太短。需要超过六个字母</string>
+    <string name="strUnknownAction">行动还没有定义</string>
+    <string name="strUserContactEmpty">没有联系号码</string>
+    <string name="strUserEmailEmpty">没有电子邮件</string>
+    <string name="strUserEmailInvalid">不合规电邮</string>
+    <string name="strUsernameAlreadyExists">用户名已存在</string>
+    <string name="strUsernameEmpty">没有用户名</string>
+    <string name="strPlsWait">请稍候...</string>
+    <string name="strProcessing">处理中...</string>
+    <string name="strAreYouSureYouWantToExit">你确定要离开？</string>
+    <string name="strHire">雇佣</string>
+    <string name="strJobOffer">工作招聘:</string>
+    <string name="strJobOfferDone">工作完成:</string>
+    <string name="strLogout">登出</string>
+    <string name="strProjectStatus">项目进展情况：</string>
+    <string name="strReallyExist">真的退出？</string>
+    <string name="strTotalRequestHire">总共请求[雇佣]：</string>
+    <string name="strTotalServiceProviderWork">总共服务[工作]：</string>
+    <string name="strWelcome">"欢迎 "</string>
+    <string name="strWork">工作</string>
+    <string name="strAbtUsHireCont">通过使用豪优，我们帮您除去一些麻烦，提供你专业人士服务。现在，你可以快速的比较及可靠地找到合适的专业服务</string>
+    <string name="strAbtUsHireTitle">更简单方式聘请专业服务</string>
+    <string name="strAbtUsWorkCont">通过使用豪优, 我们帮助您找到更多新客户并连接到您的企业。 只要您加入我们，我们将带给您更多的商业机会。</string>
+    <string name="strAbtUsWorkTitle">增加您的客户群</string>
+    <string name="strCancelNoDeal">取消，没有成交</string>
+    <string name="strContactEmpty">没有联系方式</string>
+    <string name="strCreateQuotation">创建报价</string>
+    <string name="strCustCdtNtfMessage">请等待您所选择的服务商回复。</string>
+    <string name="strCustCfmRqtMessage">服务商接受您的要求. 请等待服务商联络您或现场检查后,创建报价。</string>
+    <string name="strCustCustRtgMessage">项目已经完成，服务商评级后将关闭.</string>
+    <string name="strCustDDPmtMessage">通过我们的系统服务商将被通知...</string>
+    <string name="strWaitSPdrReply">请等待服务商回复。</string>
+    <string name="strCustPjtDoneMessage">项目顺利完成</string>
+    <string name="strCustQttMessage">请等待服务商创建报价。</string>
+    <string name="strCustRcvDwnPmtMessage">已收到预付款，并等待服务商启动服务</string>
+    <string name="strCustSPdrRtgMessage">请评价的服务商</string>
+    <string name="strSvrDone">服务结束</string>
+    <string name="strCustWinAwdNtfMessage">请等待服务商确认收到您交易通知。</string>
+    <string name="strDeal">交易</string>
+    <string name="strDone">完成</string>
+    <string name="strDownPaymentReleased">预付款释出</string>
+    <string name="strEmailEmpty">没有电子邮件</string>
+    <string name="strEmailInvalid">不合规电邮</string>
+    <string name="strHireSubTitle">雇佣或寻找专业服务</string>
+    <string name="strMoreDescription">更多说明：</string>
+    <string name="strNotificationSend">发送通知</string>
+    <string name="strOk">确定</string>
+    <string name="strOkDeal">确定，交易</string>
+    <string name="strPageRedirect">页面将在10秒后离开！</string>
+    <string name="strQuotationRM">报价（零吉）：</string>
+    <string name="strWaitingConfirmation">等待确认</string>
+    <string name="strWorkSubTitle">更多信息关于您是为了联系目的</string>
+    <string name="strType">类型：</string>
+    <string name="strReSltSPdr">你确定你想重新选择服务商？</string>
+    <string name="strRegisterAsSrvPdr">注册成为服务商</string>
+    <string name="strSPdrCdtNtfMessage">确认并接受招聘</string>
+    <string name="strSPdrCfmQttMessage">请等待客户确认报价。</string>
+    <string name="strSPdrCustRtgMessage">请评价客户</string>
+    <string name="strToConfirmPriceQuoted">确认所报价格</string>
+    <string name="strTitleDealNtf">获得工作通知</string>
+    <string name="strTitleSPdrRtg">服务商评级</string>
+    <string name="strTitleRtg">评级</string>
+    <string name="strTitleReSltSPdr">重新选择服务商？</string>
+    <string name="strTitleRcvDwnPmt">计划开始日期</string>
+    <string name="strCreatQtt">创建报价</string>
+    <string name="strTitlePjtDone">项目完成</string>
+    <string name="strTitleDDPmt">交易吗？</string>
+    <string name="strTitleCustRtg">客户评价</string>
+    <string name="strTitleCfmRqt">确认工作</string>
+    <string name="strTitleCfmQtt">确认报价</string>
+    <string name="strCfmJobOfr">确认工作机会</string>
+    <string name="strNtfWillSend">通知一会儿将发送给您。</string>
+    <string name="strSPdrSPdrRtgMessage">项目已经完成，客户评价后将关闭</string>
+    <string name="strSPdrSvrStrMessage">客户确定满意后，工作结束</string>
+    <string name="strSPdrSvrStrTask">服务开始</string>
+    <string name="strSPdrWinAwdNtfTask">好的，知道并会安排开始日期</string>
+    <string name="strServiceAlreadyExist">服务已经登记。请检查您所提供服务</string>
+    <string name="strServiceEmpty">没有服务提供</string>
+    <string name="strCustomer">客户</string>
+    <string name="strCustomerRequestID">客户请求编号：</string>
+    <string name="strDescription">说明：</string>
+    <string name="strServiceNeeded">需要的服务：</string>
+    <string name="strServiceProviderID">服务商编号：</string>
+    <string name="strCustRate">请评价客户</string>
+    <string name="strSPdr">服务商</string>
+    <string name="strSPdrId">服务商编号 : </string>
+    <string name="strSPdrRate">请评价的服务商</string>
+    <string name="strService">服务：</string>
+    <string name="strSave">保存</string>
+    <string name="strDelete">删除</string>
+    <string name="strEnter">进入</string>
+    <string name="strProvider">提供者：</string>
+    <string name="strRating">评分：</string>
+    <string name="strSltNtf">被选通知</string>
+    <string name="strCfmQtt">确认报价</string>
+    <string name="strCfmRqt">确认请求</string>
+    <string name="strCustRtg">客户评价</string>
+    <string name="strNew">新建</string>
+    <string name="strPick">选择</string>
+    <string name="strQtt">报价</string>
+    <string name="strRcvDownPmt">收到预付款</string>
+    <string name="strRmvFrmView">从视图中删除</string>
+    <string name="strRslt">重新选择</string>
+    <string name="strSPdrRtg">服务商评级</string>
+    <string name="strSlctProjStat">请选择项目状态</string>
+    <string name="strSvcDone">服务完成</string>
+    <string name="strSvcStr">服务启动</string>
+    <string name="strTtlRmv">完全消除</string>
+    <string name="strDealNtf">交易通知</string>
+    <string name="strMatch">匹配</string>
+    <string name="strCleaningService">清洁服务</string>
+    <string name="strContractor">承包商</string>
+    <string name="strHairAndMakeup">发型和化妆</string>
+    <string name="strHandyman">杂工</string>
+    <string name="strInteriorDesigner">室内设计师</string>
+    <string name="strMoveHouse">搬家</string>
+    <string name="strPhotographer">摄影师</string>
+    <string name="strPlumber">水管工人</string>
+    <string name="strPlsSlct">请选择...</string>
+    <string name="strVideographer">动态影像摄影师</string>
+    <string name="strWeddingPlanner">婚礼策划师</string>
+    <string name="strJobDoneList">完成作业列表</string>
+    <string name="strJobOfferList">招聘列表</string>
+    <string name="strServiceProvided">服务提供</string>
+    <string name="strDayOfWeekWork">(周一至周五)</string>
+    <string name="strEnterprise">Beng &amp; Ang 企业 :</string>
+    <string name="strTechAsstHour">协助时间：</string>
+    <string name="action_app_stats">程序统计</string>
+    <string name="strCfmQttNtf">确认报价通知</string>
+    <string name="strCfmRqtNtf">确认申请通知</string>
+    <string name="strCtmRtgNtf">客户评价通知</string>
+    <string name="strIncorrectUserDetails">用户信息不正确</string>
+    <string name="strQttNtf">报价通知</string>
+    <string name="strSvcDoneNtf">服务完成通知</string>
+    <string name="strSvcPdrRtgNtf">服务商评级通知</string>
+    <string name="strSvcSttNtf">服务启动通知</string>
+    <string name="title_activity_app_stats_summary">程序统计摘要</string>
+    <string name="strTitleCfmQttNtf">确认报价通知</string>
+    <string name="strTitleCustRtgNtf">客户评价通知</string>
+    <string name="strCreatQttNtf">报价通知</string>
+    <string name="strTitleSPdrRtgNtf">服务商评级的通知</string>
+    <string name="strTitleSvcDoneNtf">服务完成通知</string>
+    <string name="strTitleSvcSttNtf">服务开始通知</string>
+    <string name="strWaitCustReply">请等待客户回复。</string>
+    <string name="strPrjClose">项目关闭</string>
+    <string name="strPlanStartDate">请等待服务商计划开始日期</string>
+    <string name="strPlanStartDateNtf">计划开始日期通知</string>
+    <string name="strPlanStrtDate">计划开始日期</string>
+    <string name="strRatedByCust">客户评价 : </string>
+    <string name="strRatedBySPdr">服务商评价：</string>
+
+
+</resources>

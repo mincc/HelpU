@@ -1,0 +1,256 @@
+<resources>
+    <string name="server_uri">http://192.168.1.8/HelpU/</string>
+    <!--<string name="server_uri">http://helpu.hostei.com/</string>-->
+    <!--<string name="server_uri">http://helpu.comuf.com/</string>-->
+    <!--<string name="server_uri">http://helpu.hostingsiteforfree.com/</string>-->
+
+    <string name="app_name">HelpU</string>
+    <string name="hello_world">Hello Dunia!</string>
+
+    <string name="action_settings">Tetapan</string>
+    <string name="action_about_us">Tentang Kami</string>
+    <string name="action_project_status_flow">Projek Aliran Status</string>
+
+    <string-array name="hire_list">
+        <item>0|Please select...</item>
+        <item>1|Contractor</item>
+        <item>2|Plumber</item>
+        <item>3|Handyman</item>
+        <item>4|Interior Designer</item>
+        <item>5|Cleaning Service</item>
+        <item>6|Move House</item>
+        <item>7|Photographer</item>
+        <item>8|Videographer</item>
+        <item>9|Hair and Makeup</item>
+        <item>10|Wedding Planner</item>
+    </string-array>
+
+    <string name="title_activity_login"> Log Masuk</string>
+    <string name="title_activity_register">Daftar</string>
+    <string name="title_activity_hire">Upah</string>
+    <string name="title_activity_work">Kerja</string>
+    <string name="title_activity_application_list">Senarai App</string>
+    <string name="title_activity_work_list">Senarai Kerja</string>
+    <string name="title_activity_service_provider_list">Senarai Pembekal khidmat </string>
+    <string name="title_activity_test">Ujian</string>
+    <string name="title_activity_user_profile_setting">Profil Pengguna Setting</string>
+
+    <string name="title_activity_customer_request_list"> Senarai Permintaan Pelanggan</string>
+    <string name="title_activity_customer_request_by_id">Permintaan Pelanggan Oleh ID</string>
+    <string name="title_activity_service_provider_by_id">Pembekal khidmat Oleh ID</string>
+    <string name="title_activity_help">Help</string>
+    <string name="title_activity_customer_request_pick_service_provider">
+        Customer Request Pick Service Provider
+    </string>
+    <string name="title_activity_notification_job_offer">Pemberitahuan Tawaran Kerja</string>
+    <string name="title_activity_service_provider_create_quotation">Pembekal khidmat Buat Sebutharga</string>
+    <string name="title_activity_customer_request_job_list">Senarai Permintaan Pelanggan Kerja</string>
+    <string name="title_activity_service_provider_confirm_quotation">Pembekal khidmat Sahkan Sebutharga</string>
+    <string name="title_activity_customer_do_down_payment">Pelanggan Adakah Bayaran Muka</string>
+    <string name="title_activity_project_messages">Mesej Projek</string>
+    <string name="title_activity_ipay88_sample">IPay88SampleActivity</string>
+    <string name="title_activity_about_us">Tentang Kami</string>
+    <string name="title_activity_help_ubase">HelpU Base Activity</string>
+    <string name="title_activity_contact_us">Hubungi Kami</string>
+
+
+    <!--//IPay88-->
+    <string name="ProdDesc">Penerangan Produk</string>
+    <!--<string name="app_name">v2 IPAY88 Android Payment</string>-->
+    <string name="Amount"> Jumlah (RM)</string>
+    <string name="UserName">Nama Pelanggan</string>
+    <string name="UserContact">Nombor Telefon</string>
+    <string name="strEmail">E-mel</string>
+    <string name="Result">Keputusan</string>
+    <string name="btnPrint">Print Receipt</string>
+    <string name="btnHome">Laman Utama</string>
+    <string name="strPaymentId">PaymentId</string>
+    <string name="strRefNo">Ref No</string>
+    <string name="strAmount">Jumlah</string>
+    <string name="strRemark">Catatan</string>
+    <string name="strTransId">Trans Id</string>
+    <string name="strAuthCode">Kod Pengesahan</string>
+    <string name="strStatus">Status</string>
+    <string name="strErrDesc">Error Penerangan</string>
+    <string name="strSignature">Tandatangan</string>
+    <string name="strREFID">Rujukan ID</string>
+    <string name="imgDesc">ipay demo logo</string>
+    <string name="strPay">Bayar Sekarang</string>
+    <string name="strCancel">Batal</string>
+    <string name="strMerchantKey">Kunci Merchant</string>
+    <string name="strMerchantCode">Kod Merchant</string>
+    <string name="strPaymentID">ID Pembayaran</string>
+    <string name="strCurrency">Mata Wang</string>
+    <string name="strLang">Bahasa</string>
+    <string name="strCountry">Negara</string>
+    <string name="strBackendPost">Backend Post URL</string>
+    <string name="strRequery">Pertanyaan Semula</string>
+    <string name="action_contact_us">Hubungi Kami</string>
+    <string name="title_activity_life_cycle">Kitaran Hidup</string>
+    <string name="title_activity_server_info">Maklumat Server</string>
+    <string name="action_server_info">Maklumat Server</string>
+    <string name="title_activity_send_email">Menghantar E-mel</string>
+    <string name="action_send_email">Menghantar E-mel</string>
+    <string name="strUsername">Nama Pengguna</string>
+    <string name="strLogin">Log Masuk</string>
+    <string name="strPassword">Kata Laluan</string>
+    <string name="strRegister">Daftar</string>
+    <string name="strContact">Tel. No</string>
+    <string name="strName">Nama</string>
+    <string name="strRetypePassword">Tulis Semula Kata Laluan</string>
+    <string name="strNameEmpty">Nama Tidak Boleh Kosong</string>
+    <string name="strPasswordEmpty">Kata Laluan Tidak Boleh Kosong</string>
+    <string name="strPasswordMismatch">Kata Laluan Tidak Sepadan</string>
+    <string name="strPasswordTooShort">Kata Laluan Terlalu Pendek. Perlu Lebih dari Enam Huruf</string>
+    <string name="strUnknownAction">Tindakan Masih Belum Tentukan</string>
+    <string name="strUserContactEmpty">Nombor Telefon Tidak Boleh Kosong</string>
+    <string name="strUserEmailEmpty">E-mel Tidak Boleh Kosong</string>
+    <string name="strUserEmailInvalid">E-mel Tidak Sah</string>
+    <string name="strUsernameAlreadyExists">Nama Pengguna Sudah Diguna</string>
+    <string name="strUsernameEmpty">Nama Pengguna Tidak Boleh Kosong</string>
+    <string name="strPlsWait">Sila Tunggu...</string>
+    <string name="strProcessing">Processing ...</string>
+    <string name="strAreYouSureYouWantToExit">Adakah Anda Pasti Mahu Keluar?</string>
+    <string name="strHire">Upah</string>
+    <string name="strJobOffer">Tawaran Kerja : </string>
+    <string name="strJobOfferDone">Tawaran Kerja Selesai : </string>
+    <string name="strLogout">Log keluar</string>
+    <string name="strProjectStatus">Status Projek : </string>
+    <string name="strReallyExist">Keluar?</string>
+    <string name="strTotalRequestHire">Jumlah Permintaan [Upah]   :</string>
+    <string name="strTotalServiceProviderWork">Jumlah Perkhidmatan [Kerja]:</string>
+    <string name="strWelcome">"Selamat Datang "</string>
+    <string name="strWork">Kerja</string>
+    <string name="strAbtUsHireCont">Dengan menggunakan HelpU, Kami membantu kamu dengan membawa profesional perkhidmatan kepada anda tanpa masalah. Anda kini boleh mencari, membanding dan mengupah perkhidmatan profesional yang tepat dengan cepat dan dipercayai.</string>
+    <string name="strAbtUsHireTitle">Cara yang lebih mudah untuk mengupah perkhidmatan profesional</string>
+    <string name="strAbtUsWorkCont">Dengan menggunakan HelpU, kami Membantu anda mencari pelanggan baru dan meningkatkat perniagaan anda. Selagi anda menyertai kami, kami akan membawa anda lebih banyak peluang perniagaan.</string>
+    <string name="strAbtUsWorkTitle">Meningkatkan Pelanggan Baru </string>
+    <string name="strCancelNoDeal">Batal, Tiada Perjanjian</string>
+    <string name="strContactEmpty">Tiada Tel No.</string>
+    <string name="strCreateQuotation">Buat Sebutharga</string>
+    <string name="strCustCdtNtfMessage">Sila tunggu pembekal perkhidmatan yang dipilih membalas.</string>
+    <string name="strCustCfmRqtMessage">Pembekal perkhidmatan menerima permintaan anda. Sila tunggu pembekal perkhidmatan membuat sebut harga selepas hubungi anda atau pemeriksaan di tapak.</string>
+    <string name="strCustCustRtgMessage">Projek sudah selesai dan akan ditutup selepas perkhidmatan pembekal penilaian</string>
+    <string name="strCustDDPmtMessage">Pembekal perkhidmatan akan memberitahu melalui sistem kami ...</string>
+    <string name="strWaitSPdrReply">Sila tunggu pembekal perkhidmatan membalas.</string>
+    <string name="strCustPjtDoneMessage">Projek berjaya selesai</string>
+    <string name="strCustQttMessage">Sila tunggu pembekal perkhidmatan membuat sebut harga.</string>
+    <string name="strCustRcvDwnPmtMessage">Menerima bayaran muka dan tunggu pembekal perkhidmatan memulakan kerja</string>
+    <string name="strCustSPdrRtgMessage">Sila nilaikan pembekal perkhidmatan</string>
+    <string name="strSvrDone">Perkhidmatan Tamat</string>
+    <string name="strCustWinAwdNtfMessage">Sila tunggu pembekal perkhidmatan confirm menerima pemberitahuan tawaran anda.</string>
+    <string name="strDeal">Tawaran</string>
+    <string name="strDone">Selesai</string>
+    <string name="strDownPaymentReleased">Bayaran Muka Dibayarkan</string>
+    <string name="strEmailEmpty">E-mel tidak boleh kosong</string>
+    <string name="strEmailInvalid">Email tidak sah</string>
+    <string name="strHireSubTitle">Upah Atau Cari Profesional Bagi Perkhidmatan Berikut</string>
+    <string name="strMoreDescription">Lebih Penerangan:</string>
+    <string name="strNotificationSend">Pemberitahuan Hantar</string>
+    <string name="strOk">Okay</string>
+    <string name="strOkDeal">Okay, Tawaran</string>
+    <string name="strPageRedirect">Page akan mengarahkan selepas 10 saat !!</string>
+    <string name="strQuotationRM">Sebut Harga (RM):</string>
+    <string name="strWaitingConfirmation">Menunggu Pengesahan</string>
+    <string name="strWorkSubTitle">Maklumat Lanjut Mengenai Anda Untuk Tujuan Hubungi</string>
+    <string name="strType">Jenis:</string>
+    <string name="strReSltSPdr">Adakah anda pasti anda mahu memilih semula pembekal perkhidmatan?</string>
+    <string name="strRegisterAsSrvPdr"> Mendaftar Sebagai Pembekal khidmat</string>
+    <string name="strSPdrCdtNtfMessage">Sahkan Dan Terima Kerja</string>
+    <string name="strSPdrCfmQttMessage">Sila tunggu pengesahan sebut harga pelanggan.</string>
+    <string name="strSPdrCustRtgMessage">Sila nilaikan pelanggan</string>
+    <string name="strToConfirmPriceQuoted">Pengesahan Sebut Harga</string>
+    <string name="strTitleDealNtf">Pemberitahuan Tawaran</string>
+    <string name="strTitleSPdrRtg">Perkhidmatan Penilaian</string>
+    <string name="strTitleRtg">Penilaian</string>
+    <string name="strTitleReSltSPdr">Memilih Semula Pembekal khidmat?</string>
+    <string name="strTitleRcvDwnPmt"> Pelan Tarikh Mula</string>
+    <string name="strCreatQtt">Buat Sebut Harga</string>
+    <string name="strTitlePjtDone">Projek Selesai</string>
+    <string name="strTitleDDPmt">Tawaran?</string>
+    <string name="strTitleCustRtg">Penilaian Pelanggan</string>
+    <string name="strTitleCfmRqt">Sahkan Kerja</string>
+    <string name="strTitleCfmQtt">Sahkan Sebut Harga</string>
+    <string name="strCfmJobOfr">Sahkan Tawaran Kerja</string>
+    <string name="strNtfWillSend">Pemberitahuan akan hantar kepada anda sebentar lagi.</string>
+    <string name="strSPdrSPdrRtgMessage">Projek sudah selesai dan akan ditutup selepas nilaian pelanggan</string>
+    <string name="strSPdrSvrStrMessage">Pelanggan akan menentukan kerja tamat setelah berpuas hati</string>
+    <string name="strSPdrSvrStrTask">Perkhidmatan Mula</string>
+    <string name="strSPdrWinAwdNtfTask">OK, saya tahu dan akan merancang tarikh mula</string>
+    <string name="strServiceAlreadyExist">Perkhidmatan telah didaftarkan. Sila menyemak perkhidmatan yang anda tawarkan</string>
+    <string name="strServiceEmpty">Perkhidmatan tidak boleh kosong</string>
+    <string name="strCustomer">Pelanggan</string>
+    <string name="strCustomerRequestID">Pelanggan Permintaan ID:</string>
+    <string name="strDescription">Penerangan:</string>
+    <string name="strServiceNeeded">Perkhidmatan Diperlukan:</string>
+    <string name="strServiceProviderID">Pembekal khidmat ID:</string>
+    <string name="strCustRate">Sila nilaikan pelanggan</string>
+    <string name="strSPdr">Pembekal Khidmat</string>
+    <string name="strSPdrId">Pembekal khidmat ID : </string>
+    <string name="strSPdrRate">Sila nilaikan pembekal perkhidmatan</string>
+    <string name="strService">Perkhidmatan:</string>
+    <string name="strSave">Simpan</string>
+    <string name="strDelete">Padam</string>
+    <string name="strEnter">Masuk</string>
+    <string name="strProvider">Pembekal:</string>
+    <string name="strRating">Penilaian:</string>
+    <string name="strSltNtf">Pemberitahuan Dipilih</string>
+    <string name="strCfmQtt">Sahkan Sebut Harga</string>
+    <string name="strCfmRqt">Sahkan Permintaan</string>
+    <string name="strCustRtg">Penilaian Pelanggan</string>
+    <string name="strNew">Baru</string>
+    <string name="strPick">Memilih</string>
+    <string name="strQtt">Sebut Harga</string>
+    <string name="strRcvDownPmt">Menerima Bayaran Muka</string>
+    <string name="strRmvFrmView">Alih Keluar Dari Pandangan</string>
+    <string name="strRslt">Memilih Semula</string>
+    <string name="strSPdrRtg">Penilaian Pembekal khidmat</string>
+    <string name="strSlctProjStat"> Sila Pilih Projek Status</string>
+    <string name="strSvcDone">Perkhidmatan Selesai</string>
+    <string name="strSvcStr">Perkhidmatan Mula</string>
+    <string name="strTtlRmv">Dipadam Sepenuhnya </string>
+    <string name="strDealNtf">Pemberitahuan Tawaran</string>
+    <string name="strMatch">Padan</string>
+    <string name="strCleaningService">Perkhidmatan Pembersihan</string>
+    <string name="strContractor">Kontraktor</string>
+    <string name="strHairAndMakeup">Rambut dan Solek</string>
+    <string name="strHandyman">Pembaikan dan Pengubahsuaian Kecil.</string>
+    <string name="strInteriorDesigner">Rekabentuk Dalaman</string>
+    <string name="strMoveHouse">Pindah Rumah</string>
+    <string name="strWeddingPlanner">Perancang Perkahwinan</string>
+    <string name="strVideographer">Juruvideo</string>
+    <string name="strPlumber">Tukang Paip</string>
+    <string name="strPlsSlct">Sila Pilih ...</string>
+    <string name="strPhotographer">Jurugambar</string>
+    <string name="strJobDoneList">Senarai Perkhidmatan Selesai</string>
+    <string name="strJobOfferList">Senarai Perkhidmatan Tawaran</string>
+    <string name="strServiceProvided">Perkhidmatan Diberikan</string>
+    <string name="strDayOfWeekWork">(Isnin-Jumaat)</string>
+    <string name="strEnterprise">Beng &amp; Ang Enterprise :</string>
+    <string name="strTechAsstHour">Jam Teknikal Tolong</string>
+    <string name="action_app_stats">Statistik Aplikasi</string>
+    <string name="strCfmQttNtf">Pemberitahuan Sahkan Sebutharga</string>
+    <string name="strCfmRqtNtf">Pemberitahuan Sahkan Mohon </string>
+    <string name="strCtmRtgNtf">Pemberitahuan Penilaian Pelanggan</string>
+    <string name="strIncorrectUserDetails">Maklumat pengguna tidak betul</string>
+    <string name="strQttNtf">Pemberitahuan Sebut Harga</string>
+    <string name="strSvcDoneNtf">Pemberitahuan Perkhidmatan Selesai</string>
+    <string name="strSvcPdrRtgNtf">Pemberitahuan Penilaian Perkhidmatan Pembekal </string>
+    <string name="strSvcSttNtf">Pemberitahuan Perkhidmatan Mula</string>
+    <string name="title_activity_app_stats_summary">Aplikasi Ringkasan Statistik </string>
+    <string name="strTitleCfmQttNtf">Pemberitahuan Sahkan Sebut Harga</string>
+    <string name="strTitleCustRtgNtf">Pemberitahuan Penilaian Pelanggan</string>
+    <string name="strCreatQttNtf">Pemberitahuan Sebut Harga</string>
+    <string name="strTitleSPdrRtgNtf">Pemberitahuan Penilaian Perkhidmatan Pembekal </string>
+    <string name="strTitleSvcDoneNtf">Pemberitahuan Perkhidmatan Selesai</string>
+    <string name="strTitleSvcSttNtf">Pemberitahuan Perkhidmatan Mula </string>
+    <string name="strWaitCustReply">Sila tunggu balasan pelanggan.</string>
+    <string name="strPrjClose">Projek Tutup</string>
+    <string name="strPlanStartDate">Sila tunggu pembekal perkhidmatan merancang tarikh permulaan</string>
+    <string name="strPlanStartDateNtf">Pemberitahuan Pelan Tarikh Mula </string>
+    <string name="strPlanStrtDate">Pelan Tarikh Mula</string>
+    <string name="strRatedByCust">Penilaian Pelanggan:</string>
+    <string name="strRatedBySPdr">Penilaian Pembekal Khidmatan :</string>
+
+
+</resources>

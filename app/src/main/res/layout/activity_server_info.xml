@@ -1,0 +1,100 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.example.chungmin.helpu.ServerInfo">
+
+    <TextView
+        android:text="Server : "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/lblServer" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/tvServer"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/lblServer"
+        android:layout_toEndOf="@+id/lblServer" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Check Connection"
+        android:id="@+id/btnConnectionChecking"
+        android:layout_below="@+id/etPassword"
+        android:layout_alignRight="@+id/rgServer"
+        android:layout_alignEnd="@+id/rgServer" />
+
+    <RadioGroup
+        android:id="@+id/rgServer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lblServer"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="35dp">
+
+        <RadioButton
+            android:id="@+id/rbLocalhost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="http://192.168.1.8/HelpU/"
+            android:checked="true" />
+
+        <RadioButton
+            android:id="@+id/rbComufServer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="http://helpu.comuf.com/" />
+
+        <RadioButton
+            android:id="@+id/rbbyethost33"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="http://helpu.hostingsiteforfree.com/"
+            android:checked="true" />
+
+    </RadioGroup>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/etUsername"
+        android:hint="Username"
+        android:layout_alignTop="@+id/rgServer"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/rgServer"
+        android:layout_toEndOf="@+id/rgServer" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/etPassword"
+        android:layout_below="@+id/etUsername"
+        android:layout_alignLeft="@+id/etUsername"
+        android:layout_alignStart="@+id/etUsername"
+        android:hint="Password" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:id="@+id/tvResult"
+        android:singleLine="false"
+        android:layout_alignBaseline="@+id/btnConnectionChecking"
+        android:layout_alignBottom="@+id/btnConnectionChecking"
+        android:layout_alignLeft="@+id/etPassword"
+        android:layout_alignStart="@+id/etPassword" />
+
+
+</RelativeLayout>

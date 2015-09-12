@@ -1,0 +1,48 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+
+    <item
+        android:id="@+id/action_aboutus"
+        android:title="@string/action_about_us"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_contactus"
+        android:title="@string/action_contact_us"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_serverinfo"
+        android:title="@string/action_server_info"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_sendemail"
+        android:title="@string/action_send_email"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_appstats"
+        android:title="@string/action_app_stats"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
+    <!--<item-->
+    <!--android:id="@+id/action_project_status_flow"-->
+    <!--android:title="@string/action_project_status_flow"-->
+    <!--android:orderInCategory="100"-->
+    <!--app:showAsAction="never" />-->
+
+    <item
+        android:id="@+id/menu_progress"
+        android:visible="false"
+        app:showAsAction="always"
+        app:actionLayout="@layout/progress_indeterminate"
+        tools:ignore="AlwaysShowAction,UnusedAttribute" />
+</menu>
