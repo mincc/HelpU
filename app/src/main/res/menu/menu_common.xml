@@ -15,6 +15,12 @@
         android:orderInCategory="100"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_changepassword"
+        android:title="@string/action_change_password"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
     <!--<item-->
     <!--android:id="@+id/action_project_status_flow"-->
     <!--android:title="@string/action_project_status_flow"-->

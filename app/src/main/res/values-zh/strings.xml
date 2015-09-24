@@ -1,8 +1,8 @@
 <resources>
-    <string name="server_uri">http://192.168.1.8/HelpU/</string>
+    <!--<string name="server_uri">http://192.168.1.8/HelpU/</string>-->
     <!--<string name="server_uri">http://helpu.hostei.com/</string>-->
     <!--<string name="server_uri">http://helpu.comuf.com/</string>-->
-    <!--<string name="server_uri">http://helpu.hostingsiteforfree.com/</string>-->
+    <string name="server_uri">http://helpu.hostingsiteforfree.com/</string>
 
     <string name="app_name">豪优</string>
     <string name="hello_world">你好，世界！</string>
@@ -253,6 +253,20 @@
     <string name="strPlanStrtDate">计划开始日期</string>
     <string name="strRatedByCust">客户评价 : </string>
     <string name="strRatedBySPdr">服务商评价：</string>
+    <string name="strDescriptionEmpty">没有说明.</string>
+    <string name="strSlctSPdr">请选择服务商...</string>
+    <string name="strConnTimeout">连接超时</string>
+    <string name="strInvalidResponse">无效回应</string>
+    <string name="strMakeSureGotInternet">请确保您连接到互联网</string>
+    <string name="strNetworkIssue">网络问题</string>
+    <string name="strNoNetworkConn">无网络连接</string>
+    <string name="strNoResponseFromServer">服务器无回应</string>
+    <string name="action_change_password">更改密码</string>
+    <string name="retypeNewPwd"> 再次输入新密码</string>
+    <string name="strCurrentPwd">您当前使用的密码</string>
+    <string name="strInvalidPassword">无效的密码</string>
+    <string name="strNewPwd">您的新密码</string>
+    <string name="title_activity_change_password">更改密码</string>
 
 
 </resources>

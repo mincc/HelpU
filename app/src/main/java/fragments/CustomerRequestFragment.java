@@ -16,15 +16,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.chungmin.helpu.BuildConfig;
-import com.example.chungmin.helpu.CustomerRequest;
-import com.example.chungmin.helpu.CustomerRequestServerRequests;
-import com.example.chungmin.helpu.GetCustomerRequestCallback;
-import com.example.chungmin.helpu.Globals;
-import com.example.chungmin.helpu.ProjectStatus;
-import com.example.chungmin.helpu.ProjectStatusFlow;
+import com.example.chungmin.helpu.models.CustomerRequest;
+import com.example.chungmin.helpu.enumeration.ProjectStatus;
 import com.example.chungmin.helpu.R;
-import com.example.chungmin.helpu.ServiceType;
-import com.example.chungmin.helpu.User;
+import com.example.chungmin.helpu.enumeration.ServiceType;
+import com.example.chungmin.helpu.models.User;
 
 public class CustomerRequestFragment extends Fragment {
 

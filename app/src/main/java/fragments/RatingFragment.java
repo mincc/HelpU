@@ -1,8 +1,6 @@
 package fragments;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,13 +9,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.chungmin.helpu.MainActivity;
-import com.example.chungmin.helpu.Rating;
-import com.example.chungmin.helpu.RatingServerRequests;
-import com.example.chungmin.helpu.GetRatingCallback;
-import com.example.chungmin.helpu.Globals;
+import com.example.chungmin.helpu.activities.MainActivity;
+import com.example.chungmin.helpu.models.Rating;
+import com.example.chungmin.helpu.serverrequest.RatingManager;
+import com.example.chungmin.helpu.callback.GetRatingCallback;
+import com.example.chungmin.helpu.models.Globals;
 import com.example.chungmin.helpu.R;
 
 
@@ -84,9 +81,9 @@ public class RatingFragment extends Fragment {
                 }
                 rating.setCustomerRequestId(mCustomerRequestId);
                 //Toast.makeText(getActivity(), String.valueOf(ratingBar.getRating()), Toast.LENGTH_SHORT).show();
-                String url = getString(R.string.server_uri) + ((Globals)getActivity().getApplicationContext()).getRatingInsert();
-                RatingServerRequests serverRequest = new RatingServerRequests();
-                serverRequest.setRatingInsert(rating, url, new GetRatingCallback() {
+                String url = getString(R.string.server_uri) + ((Globals) getActivity().getApplicationContext()).getRatingInsertUrl();
+                RatingManager serverRequest = new RatingManager();
+                serverRequest.insert(rating, url, new GetRatingCallback() {
                     @Override
                     public void done(Rating returnedRating) {
                     }

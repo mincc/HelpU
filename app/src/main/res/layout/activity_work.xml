@@ -22,7 +22,7 @@
     <Spinner
         android:layout_width="317dp"
         android:layout_height="wrap_content"
-        android:id="@+id/spHire"
+        android:id="@+id/spWork"
         android:layout_marginTop="10dp" />
 
     <TextView

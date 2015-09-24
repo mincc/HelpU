@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.chungmin.helpu"
-        minSdkVersion 11
+        minSdkVersion 11    //11 after doing testing, 18 for uiautomator
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -34,7 +34,6 @@ android {
                 exclude '**/FetchDataListener.java'
                 exclude '**/FetchDataTask.java'
 
-                exclude '**/CustomerDoDownPayment.java'
                 exclude '**/IPay88SampleActivity.java'
                 exclude '**/IPay88ResultDelegate.java'
 //                exclude '**/Test.java'
@@ -43,15 +42,18 @@ android {
         androidTest {
             java {
                 exclude '**/TestSomeExcludedClass.java'
-                exclude '**/TestEspressoTestCaseTest.java'
+
+//                exclude '**/LoginTest.java' (Dun use because cause problem with breakpoint)
             }
         }
     }
+
 }
 
 repositories {
     mavenCentral()
 }
+
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -63,4 +65,7 @@ dependencies {
     // Testing-only dependencies
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2'
     androidTestCompile 'com.android.support.test:runner:0.3'
+
+    // Set this dependency to build and run UI Automator tests
+    //androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.0.0'
 }

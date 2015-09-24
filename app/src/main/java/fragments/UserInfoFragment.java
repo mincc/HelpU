@@ -1,19 +1,16 @@
 package fragments;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.chungmin.helpu.ProjectStatus;
+import com.example.chungmin.helpu.enumeration.ProjectStatus;
 import com.example.chungmin.helpu.R;
-import com.example.chungmin.helpu.UserProfileSetting;
+import com.example.chungmin.helpu.activities.UserProfileSetting;
 
 public class UserInfoFragment extends Fragment {
 
@@ -62,8 +59,8 @@ public class UserInfoFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_user_info, container, false);
 
         txUsername = (TextView) v.findViewById(R.id.txUsername);
-        lblProjectStatus = (TextView) v.findViewById(R.id.lblProjectStatus);
-        tvProjectStatus = (TextView) v.findViewById(R.id.tvProjectStatus);
+//        lblProjectStatus = (TextView) v.findViewById(R.id.lblProjectStatus);
+//        tvProjectStatus = (TextView) v.findViewById(R.id.tvProjectStatus);
 
         txUsername.setText(mUsername);
 
@@ -169,8 +166,8 @@ public class UserInfoFragment extends Fragment {
         }
 
         //temporary totally remove and dun used
-        lblProjectStatus.setVisibility(View.GONE);
-        tvProjectStatus.setVisibility(View.GONE);
+//        lblProjectStatus.setVisibility(View.GONE);
+//        tvProjectStatus.setVisibility(View.GONE);
         return v;
 
     }

@@ -9,12 +9,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.chungmin.helpu.CustomerRequest;
-import com.example.chungmin.helpu.CustomerRequestServerRequests;
-import com.example.chungmin.helpu.GetCustomerRequestCallback;
-import com.example.chungmin.helpu.Globals;
-import com.example.chungmin.helpu.ProjectMessages;
-import com.example.chungmin.helpu.ProjectStatus;
+import com.example.chungmin.helpu.models.CustomerRequest;
+import com.example.chungmin.helpu.serverrequest.CustomerRequestManager;
+import com.example.chungmin.helpu.callback.GetCustomerRequestCallback;
+import com.example.chungmin.helpu.models.Globals;
+import com.example.chungmin.helpu.activities.ProjectMessages;
+import com.example.chungmin.helpu.enumeration.ProjectStatus;
 import com.example.chungmin.helpu.R;
 
 public class CreateQuotationFragment extends Fragment {
@@ -69,9 +69,9 @@ public class CreateQuotationFragment extends Fragment {
             public void onClick(View v) {
                 mCustomerRequest.setProjectStatusId(ProjectStatus.ConfirmQuotation.getId());
                 mCustomerRequest.setQuotation(Double.parseDouble(etQuotation.getText().toString()));
-                String url = getString(R.string.server_uri) + ((Globals)getActivity().getApplicationContext()).getCustomerRequestUpdate();
-                CustomerRequestServerRequests serverRequest = new CustomerRequestServerRequests();
-                serverRequest.getCustomerRequestUpdate(mCustomerRequest, url, new GetCustomerRequestCallback() {
+                String url = getString(R.string.server_uri) + ((Globals) getActivity().getApplicationContext()).getCustomerRequestUpdateUrl();
+                CustomerRequestManager serverRequest = new CustomerRequestManager();
+                serverRequest.update(mCustomerRequest, url, new GetCustomerRequestCallback() {
                     @Override
                     public void done(CustomerRequest returnedCustomerRequest) {
                         Intent redirect = new Intent(getActivity(), ProjectMessages.class);

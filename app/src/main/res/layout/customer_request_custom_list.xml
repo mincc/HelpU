@@ -5,39 +5,5 @@
 
     <include layout="@layout/basic_customer_info" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/strEnter"
-        android:id="@+id/btnEnter"
-        style="@style/btnStyleBeige"
-        android:layout_marginTop="17dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/strDelete"
-        android:id="@+id/btnRemoveFromView"
-        android:layout_below="@+id/btnEnter"
-        android:layout_alignLeft="@+id/btnEnter"
-        android:layout_alignStart="@+id/btnEnter"
-        android:layout_marginTop="17dp"
-        android:visibility="gone"
-        style="@style/btnStyleBeige" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvLocBadge"
-        android:layout_marginTop="12dp"
-        android:text="   "
-        android:layout_marginRight="38dp"
-        android:layout_marginEnd="38dp"
-        android:layout_below="@+id/btnEnter"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="10dp" />
 </RelativeLayout>

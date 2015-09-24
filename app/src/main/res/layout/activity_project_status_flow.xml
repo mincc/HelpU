@@ -49,7 +49,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Comfirm Request"
+        android:text="Confirm Request"
         android:id="@+id/tvConfirmRequest"
         android:layout_below="@+id/tvSelectedNotification"
         android:layout_alignLeft="@+id/tvSelectedNotification"

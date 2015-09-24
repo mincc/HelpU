@@ -15,7 +15,7 @@
         android:layout_marginBottom="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/edit_text_style"/>
+        android:background="@drawable/edit_text_orange" />
 
     <TextView
         android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
         android:inputType="textPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/edit_text_style"/>
+        android:background="@drawable/edit_text_orange" />
 
     <Button
         android:id="@+id/btnLogin"
@@ -45,5 +45,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="@string/strRegister"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/strForgetPassword"
+        android:id="@+id/tvForgetPassword"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
         android:textStyle="bold" />
 </LinearLayout>

@@ -6,7 +6,7 @@
     <!--<string name="server_uri">http://helpu.hostingsiteforfree.com/</string>-->
 
     <string-array name="hire_list">
-        <item>0|Please select...</item>
+        <item>0|Please Select...</item>
         <item>1|Contractor</item>
         <item>2|Plumber</item>
         <item>3|Handyman</item>
@@ -234,8 +234,8 @@
     <string name="title_activity_app_stats_summary">Application Stats Summary</string>
     <string name="action_app_stats">Application Statistic</string>
     <string name="title_activity_test_espresso_test_case" translatable="false">TestEspressoTestCase</string>
-    <string name="strIncorrectUserDetails">Incorrect user details</string>
-    <string name="strCfmRqtNtf">Comfirm Request Notification</string>
+    <string name="strIncorrectUserDetails">Incorrect User Details</string>
+    <string name="strCfmRqtNtf">Confirm Request Notification</string>
     <string name="strQttNtf">Quotation Notification</string>
     <string name="strCfmQttNtf">Confirm Quotation Notification</string>
     <string name="strSvcSttNtf">Service Start Notification</string>
@@ -254,6 +254,30 @@
     <string name="strPlanStartDateNtf">Plan Start Date Notification</string>
     <string name="strRatedByCust">Rated By Customer :</string>
     <string name="strRatedBySPdr">Rated By Serv. Provider :</string>
+    <string name="strDescriptionEmpty">Description Can Not Empty.</string>
+    <string name="strSlctSPdr">Select Service Provider...</string>
+    <string name="strNetworkIssue">Network Issue</string>
+    <string name="strMakeSureGotInternet">Please make sure that you are connected to the internet</string>
+    <string name="strConnTimeout">Connection Timeout</string>
+    <string name="strInvalidResponse">Invalid Response</string>
+    <string name="strNoNetworkConn">No Network Connection</string>
+    <string name="strNoResponseFromServer">No Response From Server</string>
+    <string name="title_activity_change_password">Change Password</string>
+    <string name="strCurrentPwd">Your current password</string>
+    <string name="strNewPwd">Your new password</string>
+    <string name="retypeNewPwd">Type your new password again</string>
+    <string name="action_change_password">Change Password</string>
+    <string name="strInvalidPassword">Invalid Password</string>
+    <string name="title_activity_account_recovery">Account Recovery</string>
+    <string name="strSendNewPassword"><![CDATA[Enter your registered email and we&apos;ll send your new password right away.]]></string>
+    <string name="strEmailAddress">Email Address :</string>
+    <string name="strSendEmail">Send Email</string>
+    <string name="strForgetPassword">Forget Password?</string>
+    <string name="strEmailNotExist">Email Not Exist</string>
+    <string name="strResetPassword">Reset your HelpU password</string>
+    <string name="strPwdEmailSend">Email Send. Please check your email inbox for the new password.</string>
+    <string name="strInputUsername">Please enter username</string>
+    <string name="strInputPassword">Please enter password</string>
 
 
 </resources>

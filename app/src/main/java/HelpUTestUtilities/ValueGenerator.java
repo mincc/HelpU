@@ -4,6 +4,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Random;
 import java.util.UUID;
 
@@ -12,7 +13,6 @@ import java.util.UUID;
  * Created by Chung Min on 8/23/2015.
  */
 public class ValueGenerator {
-    private static Random randoTron = new Random();
 
     private final static String randomStringChars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789!";
 
@@ -412,8 +412,17 @@ public class ValueGenerator {
     /// </summary>
     /// <returns></returns>
     public static String getRandomUsername() {
-        return String.format("{0} {1}", firstNames[getRandomInt(0, firstNames.length - 1)], lastNames[getRandomInt(0, lastNames.length - 1)]);
+        return String.format("%1$s%2$s", firstNames[getRandomInt(0, firstNames.length - 1)], String.valueOf(getRandomInt(10, 99)));
     }
+
+    /// <summary>
+    /// Gets a random user name.
+    /// </summary>
+    /// <returns></returns>
+    public static String getRandomUserName() {
+        return String.format("%1$s %2$s", firstNames[getRandomInt(0, firstNames.length - 1)], lastNames[getRandomInt(0, lastNames.length - 1)]);
+    }
+
 
     /// <summary>
     /// Gets a random first name.
@@ -438,14 +447,14 @@ public class ValueGenerator {
     public static String getRandomEmailAddress() {
         String host = emailHosts[getRandomInt(0, emailHosts.length - 1)];
 
-        return String.format("{0}@{1}", getRandomUsername(), host);
+        return String.format("%1$s@%2$s", getRandomUsername().replace(" ", ""), host);
     }
 
     public static String getRandomMobileNumber() {
         String prefix = "601";
         String part2 = Integer.toString(getRandomInt(11111111, 99999999));
 
-        return String.format("{0}{1}", prefix, part2);
+        return String.format("%1$s%2$s", prefix, part2);
     }
 
 
@@ -464,7 +473,7 @@ public class ValueGenerator {
     /// </summary>
     /// <returns></returns>
     public static String getRandomLandlineNumber() {
-        return String.format("61{0}{1}0{2}{3}", getRandomInt(1, 9), getRandomInt(1, 9), getRandomInt(1, 9), getRandomInt(1111, 9999));
+        return String.format("61%1$s%2$s0%3$s%4$s", getRandomInt(1, 9), getRandomInt(1, 9), getRandomInt(1, 9), getRandomInt(1111, 9999));
     }
 
     /// <summary>
@@ -508,7 +517,7 @@ public class ValueGenerator {
         String adjective = adjectives[getRandomInt(0, adjectives.length - 1)];
         String noun = nouns[getRandomInt(0, nouns.length - 1)];
         if (getRandomBoolean()) {
-            return String.format("{0}", noun);
+            return String.format("%1$s", noun);
         } else {
             if (getRandomBoolean()) {
                 return String.format("%1$s %2$s %3$s", verb, adjective, noun);
@@ -516,7 +525,7 @@ public class ValueGenerator {
                 if (getRandomBoolean()) {
                     return getRandomUsername();
                 } else {
-                    return String.format("{0} {1}", tags[getRandomInt(0, tags.length - 1)], tags[getRandomInt(0, tags.length - 1)]);
+                    return String.format("%1$s %2$s", tags[getRandomInt(0, tags.length - 1)], tags[getRandomInt(0, tags.length - 1)]);
                 }
             }
         }
@@ -719,15 +728,24 @@ public class ValueGenerator {
     }
 
     public static String getRandomWebsiteAddress() {
-        return String.format("www.{0}.{1}",
+        return String.format("www.%1$s.%2$s",
                 nouns[getRandomInt(0, nouns.length - 1)],
                 randomTopLevelDomains[getRandomInt(0, randomTopLevelDomains.length - 1)]);
     }
 
     private static Random m_Rand = new Random();
 
-    public static double getRandomFloatNumber(double min, double max) {
-        return (max - min) * m_Rand.nextDouble() + min;
+    public static double getRandomDoubleNumber(double min, double max) {
+        double result = (max - min) * m_Rand.nextDouble() + min;
+        return round(result, 2);
+    }
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 
     public static String getRandomOperateHour() {

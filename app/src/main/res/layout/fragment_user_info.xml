@@ -23,24 +23,24 @@
         android:textColor="@color/selector_link"
         android:textSize="16sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/strProjectStatus"
-        android:id="@+id/lblProjectStatus"
-        android:visibility="gone"
-        android:layout_below="@+id/lblWelcome"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="@string/strProjectStatus"-->
+    <!--android:id="@+id/lblProjectStatus"-->
+    <!--android:visibility="gone"-->
+    <!--android:layout_below="@+id/lblWelcome"-->
+    <!--android:layout_alignParentLeft="true"-->
+    <!--android:layout_alignParentStart="true" />-->
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New"
-        android:id="@+id/tvProjectStatus"
-        android:layout_alignTop="@+id/lblProjectStatus"
-        android:layout_toRightOf="@+id/lblProjectStatus"
-        android:layout_toEndOf="@+id/lblProjectStatus"
-        android:visibility="gone" />
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="New"-->
+    <!--android:id="@+id/tvProjectStatus"-->
+    <!--android:layout_alignTop="@+id/lblProjectStatus"-->
+    <!--android:layout_toRightOf="@+id/lblProjectStatus"-->
+    <!--android:layout_toEndOf="@+id/lblProjectStatus"-->
+    <!--android:visibility="gone" />-->
 
 </RelativeLayout>

@@ -14,15 +14,15 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.chungmin.helpu.CustomerRequest;
-import com.example.chungmin.helpu.GetServiceProviderCallback;
-import com.example.chungmin.helpu.Globals;
-import com.example.chungmin.helpu.HelpUBaseActivity;
-import com.example.chungmin.helpu.ProjectStatus;
+import com.example.chungmin.helpu.models.CustomerRequest;
+import com.example.chungmin.helpu.callback.GetServiceProviderCallback;
+import com.example.chungmin.helpu.models.Globals;
+import com.example.chungmin.helpu.activities.HelpUBaseActivity;
+import com.example.chungmin.helpu.enumeration.ProjectStatus;
 import com.example.chungmin.helpu.R;
-import com.example.chungmin.helpu.ServiceProvider;
-import com.example.chungmin.helpu.ServiceProviderServerRequests;
-import com.example.chungmin.helpu.ServiceType;
+import com.example.chungmin.helpu.models.ServiceProvider;
+import com.example.chungmin.helpu.serverrequest.ServiceProviderManager;
+import com.example.chungmin.helpu.enumeration.ServiceType;
 
 public class ServiceProviderFragment extends Fragment {
     private static final String TAG = "ServiceProviderFragment";
@@ -74,9 +74,9 @@ public class ServiceProviderFragment extends Fragment {
         imgvEmail = (ImageView) view.findViewById(R.id.imgvEmail);
         imgvPhone = (ImageView) view.findViewById(R.id.imgvPhone);
 
-        String url = getString(R.string.server_uri) + ((Globals)getActivity().getApplication()).getServiceProviderGetByID();
-        ServiceProviderServerRequests serverRequest = new ServiceProviderServerRequests();
-        serverRequest.getServiceProviderByID(mCustomerRequest.getServiceProviderId(), url, new GetServiceProviderCallback() {
+        String url = getString(R.string.server_uri) + ((Globals) getActivity().getApplication()).getServiceProviderGetByIDUrl();
+        ServiceProviderManager serverRequest = new ServiceProviderManager();
+        serverRequest.getByID(mCustomerRequest.getServiceProviderId(), url, new GetServiceProviderCallback() {
             @Override
             public void done(final ServiceProvider returnedServiceProvider) {
                 if (returnedServiceProvider == null) {

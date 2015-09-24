@@ -12,13 +12,13 @@
     <!-- <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> -->
     <!-- <uses-permission android:name="android.permission.READ_PHONE_STATE" /> -->
     <application
-        android:name=".Globals"
+        android:name=".models.Globals"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
@@ -29,25 +29,26 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Login"
+            android:name=".activities.Login"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_login"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".Register"
+            android:name=".activities.Register"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_register"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".Hire"
+            android:name=".activities.Hire"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_hire"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".Work"
+            android:name=".activities.Work"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_work"
             android:screenOrientation="portrait">
@@ -59,51 +60,45 @@
         </activity>
         -->
         <activity
-            android:name=".ServiceProviderList"
+            android:name=".activities.ServiceProviderList"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_service_provider_list"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".UserProfileSetting"
+            android:name=".activities.UserProfileSetting"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_user_profile_setting"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".CustomerRequestList"
+            android:name=".activities.CustomerRequestList"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_customer_request_list"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".CustomerRequestByID"
+            android:name=".activities.CustomerRequestByID"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_customer_request_by_id"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".ServiceProviderByID"
+            android:name=".activities.ServiceProviderByID"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_service_provider_by_id"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".ProjectStatusFlow"
+            android:name=".activities.sample.ProjectStatusFlow"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_help"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".ServiceProviderListByServiceID"
+            android:name=".activities.ServiceProviderListByServiceID"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_service_provider_by_id"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
-            android:name=".CustomerRequestPickServiceProvider"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/title_activity_customer_request_pick_service_provider"
             android:screenOrientation="portrait">
         </activity>
         <!-- <activity -->
@@ -112,18 +107,18 @@
         <!-- </activity> -->
 
         <service
-            android:name=".TriggerNotificationService"
+            android:name=".service.TriggerNotificationService"
             android:enabled="true"
             android:exported="true" >
         </service>
 
         <receiver
-            android:name=".AlarmManagerBroadcastReceiver"
+            android:name=".service.AlarmManagerBroadcastReceiver"
             android:enabled="true"
             android:exported="true" >
         </receiver>
         <receiver
-            android:name=".BootComplete"
+            android:name=".service.BootComplete"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
@@ -132,31 +127,13 @@
         </receiver>
 
         <activity
-            android:name=".ExcludeServiceProviderCreateQuotation"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/title_activity_service_provider_create_quotation"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
-            android:name=".CustomerRequestJobList"
+            android:name=".activities.CustomerRequestJobList"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_customer_request_job_list"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".ExcludeServiceProviderConfirmQuotation"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/title_activity_service_provider_confirm_quotation"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
-            android:name=".CustomerDoDownPayment"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/title_activity_customer_do_down_payment"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
-            android:name=".ProjectMessages"
+            android:name=".activities.ProjectMessages"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_project_messages"
             android:screenOrientation="portrait">
@@ -172,36 +149,39 @@
         <!-- android:label="@string/title_activity_ipay88_sample" > -->
         <!-- </activity> -->
         <activity
-            android:name=".AboutUs"
-            android:label="@string/title_activity_about_us"></activity>
+            android:name=".activities.AboutUs"
+            android:label="@string/title_activity_about_us" />
         <!-- <activity -->
         <!-- android:name=".HelpUBaseActivity" -->
         <!-- android:label="@string/title_activity_help_ubase" > -->
         <!-- </activity> -->
         <activity
-            android:name=".ContactUs"
-            android:label="@string/title_activity_contact_us"></activity>
+            android:name=".activities.ContactUs"
+            android:label="@string/title_activity_contact_us" />
         <!-- <activity -->
         <!-- android:name=".LifeCycle" -->
         <!-- android:label="@string/title_activity_life_cycle" > -->
         <!-- </activity> -->
         <service
-            android:name=".AutoStartUp"
+            android:name=".service.AutoStartUp"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
 
         <activity
-            android:name=".ServerInfo"
-            android:label="@string/title_activity_server_info"></activity>
+            android:name=".activities.ServerInfo"
+            android:label="@string/title_activity_server_info" />
         <activity
-            android:name=".SendEmail"
-            android:label="@string/title_activity_send_email"></activity>
+            android:name=".activities.SendEmail"
+            android:label="@string/title_activity_send_email" />
         <activity
-            android:name=".AppStatsSummary"
-            android:label="@string/title_activity_app_stats_summary"></activity>
+            android:name=".activities.AppStatsSummary"
+            android:label="@string/title_activity_app_stats_summary" />
         <activity
-            android:name=".TestEspressoTestCase"
-            android:label="@string/title_activity_test_espresso_test_case"></activity>
+            android:name=".activities.ChangePasswordActivity"
+            android:label="@string/title_activity_change_password"></activity>
+        <activity
+            android:name=".activities.AccountRecoveryActivity"
+            android:label="@string/title_activity_account_recovery"></activity>
     </application>
 
 </manifest>
