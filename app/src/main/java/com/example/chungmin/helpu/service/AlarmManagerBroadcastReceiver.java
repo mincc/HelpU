@@ -7,8 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+import com.example.chungmin.helpu.activities.HelpUBaseActivity;
+import com.example.chungmin.helpu.callback.Callback;
 import com.example.chungmin.helpu.serverrequest.CustomerRequestManager;
-import com.example.chungmin.helpu.callback.GetCustomerRequestListCallback;
 import com.example.chungmin.helpu.models.Globals;
 import com.example.chungmin.helpu.enumeration.ProjectStatus;
 import com.example.chungmin.helpu.R;
@@ -32,12 +33,10 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
     }
 
     private void TriggerNotification(final Context context) {
-        String url = context.getString(R.string.server_uri) + ((Globals) context.getApplicationContext()).getCustomerRequestNotificationTriggerUrl();
-        CustomerRequestManager serverRequest = new CustomerRequestManager();
         int userId = ((Globals)context.getApplicationContext()).getUserId();
-        serverRequest.getCustomerRequestNotificationTrigger(userId, url, new GetCustomerRequestListCallback() {
+        CustomerRequestManager.getCustomerRequestNotificationTrigger(userId, new Callback.GetCustomerRequestListCallback() {
             @Override
-            public void Complete(List<CustomerRequest> customerRequestList) {
+            public void complete(List<CustomerRequest> customerRequestList) {
                 for (int i = 0; i < customerRequestList.size(); i++) {
                     ProjectStatus projectStatus = customerRequestList.get(i).getProjectStatus();
                     Intent serviceIntent = new Intent(context, TriggerNotificationService.class);
@@ -63,8 +62,7 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
             }
 
             @Override
-            public void Failure(String msg) {
-
+            public void failure(String msg) {
             }
         });
 
