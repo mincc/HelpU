@@ -1,4 +1,4 @@
-package com.example.chungmin.helpu.common;
+package com.example.chungmin.helpu.ui_test.common;
 
 import android.app.Activity;
 import android.support.test.espresso.UiController;
@@ -116,6 +116,9 @@ public class ActivityUtils {
         fromActivityToActivity(from, to, "");
     }
 
+    /*
+        only one step to reach other acticity
+     */
     public static void fromActivityToActivity(Class<?> from, Class<?> to, String shareActivity) {
         switch (from.getSimpleName()) {
             case "MainActivity":
@@ -149,6 +152,10 @@ public class ActivityUtils {
                     case "ChangePasswordActivity":
                         onView(isRoot()).perform(pressMenuKey());
                         onView(withText(R.string.action_change_password)).check(matches(isDisplayed())).perform(click());
+                        break;
+                    case "CustomerCareActivity":
+                        onView(isRoot()).perform(pressMenuKey());
+                        onView(withText(R.string.strCustomerCare)).check(matches(isDisplayed())).perform(click());
                         break;
                     case "AboutUs":
                         onView(isRoot()).perform(pressMenuKey());
@@ -298,6 +305,20 @@ public class ActivityUtils {
                 break;
             case "ChangePasswordActivity":
                 //region ChangePassword
+                switch (to.getSimpleName()) {
+                    case "MainActivity":
+                        onView(isRoot()).perform(pressBack());
+                        break;
+                    default:
+                        String message = "From : " + from.getSimpleName() +
+                                " To : " + to.getSimpleName() +
+                                " : Undefined Class To Action";
+                        Log.d(mTag, message);
+                }
+                //endregion
+                break;
+            case "CustomerCareActivity":
+                //region Sample
                 switch (to.getSimpleName()) {
                     case "MainActivity":
                         onView(isRoot()).perform(pressBack());
