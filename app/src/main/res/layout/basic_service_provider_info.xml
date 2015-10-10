@@ -69,11 +69,29 @@
             android:layout_height="match_parent">
 
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/strOnline"
+                android:id="@+id/lblOnline"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvOnline"
+                android:layout_column="1" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
                 android:id="@+id/tvPhone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_span="2"
-                android:layout_gravity="center_horizontal" />
+                android:layout_column="1" />
         </TableRow>
 
         <TableRow
@@ -84,8 +102,7 @@
                 android:id="@+id/tvEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_span="2"
-                android:layout_gravity="center_horizontal" />
+                android:layout_column="1" />
         </TableRow>
 
         <TableRow
@@ -120,12 +137,6 @@
                 android:layout_column="1" />
         </TableRow>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </TableRow>
-
     </TableLayout>
 
     <RelativeLayout
@@ -139,7 +150,6 @@
             android:id="@+id/btnDelete"
             android:visibility="visible"
             style="@style/btnStyleBeige"
-            android:layout_span="4"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="39dp"
             android:layout_alignParentTop="true"
