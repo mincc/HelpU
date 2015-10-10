@@ -6,7 +6,16 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <!--
+        The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+         Google Maps Android API v2, but are recommended.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
+    <!-- android:label="@string/title_activity_send_log" -->
+    <!-- android:theme="@android:style/Theme.Dialog" -->
     <!-- For attachment when send email -->
     <!-- <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> -->
     <!-- <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> -->
@@ -53,12 +62,6 @@
             android:label="@string/title_activity_work"
             android:screenOrientation="portrait">
         </activity>
-        <!--
-        <activity
-            android:name=".ApplicationList"
-            android:label="@string/title_activity_application_list" >
-        </activity>
-        -->
         <activity
             android:name=".activities.ServiceProviderList"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -152,7 +155,7 @@
             android:name=".activities.AboutUs"
             android:label="@string/title_activity_about_us" />
         <!-- <activity -->
-        <!-- android:name=".HelpUBaseActivity" -->
+        <!-- android:name=".activities.HelpUBaseActivity" -->
         <!-- android:label="@string/title_activity_help_ubase" > -->
         <!-- </activity> -->
         <activity
@@ -178,10 +181,48 @@
             android:label="@string/title_activity_app_stats_summary" />
         <activity
             android:name=".activities.ChangePasswordActivity"
-            android:label="@string/title_activity_change_password"></activity>
+            android:label="@string/title_activity_change_password" />
         <activity
             android:name=".activities.AccountRecoveryActivity"
-            android:label="@string/title_activity_account_recovery"></activity>
+            android:label="@string/title_activity_account_recovery" />
+        <activity
+            android:name=".activities.CustomerCareActivity"
+            android:label="@string/strCustomerCare"></activity>
+        <activity
+            android:name=".activities.SearchActivity"
+            android:label="@string/title_activity_search">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+
+        <provider
+            android:name=".provider.AppRecentSearchesProvider"
+            android:authorities="com.example.chungmin.helpu"
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.SendLog"
+            android:theme="@style/Theme.UserDialog"
+            android:windowSoftInputMode="stateHidden"></activity>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".activities.MapsActivity"
+            android:label="@string/title_activity_maps"></activity>
+        <activity
+            android:name=".activities.LocationActivity"
+            android:label="@string/title_activity_location"></activity>
     </application>
 
 </manifest>
