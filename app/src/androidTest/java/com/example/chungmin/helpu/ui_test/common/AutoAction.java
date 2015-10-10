@@ -1,4 +1,4 @@
-package com.example.chungmin.helpu.common;
+package com.example.chungmin.helpu.ui_test.common;
 
 import android.app.Activity;
 import android.support.test.espresso.matcher.ViewMatchers;
@@ -13,7 +13,7 @@ import com.example.chungmin.helpu.activities.Register;
 import com.example.chungmin.helpu.activities.ServiceProviderList;
 import com.example.chungmin.helpu.activities.ServiceProviderListByServiceID;
 import com.example.chungmin.helpu.activities.Work;
-import com.example.chungmin.helpu.custom.CustomMatchers;
+import com.example.chungmin.helpu.ui_test.custom.CustomMatchers;
 import com.example.chungmin.helpu.models.CustomerRequest;
 import com.example.chungmin.helpu.models.ServiceProvider;
 import com.example.chungmin.helpu.models.User;
@@ -104,7 +104,12 @@ public class AutoAction {
         String mRandomContact = ValueGenerator.getRandomMobileNumber();
         String mRandomEmail = ValueGenerator.getRandomEmailAddress();
 
-        User user = new User(0, mRandomUserName, mRandomUsername, mRandomPassword, mRandomContact, mRandomEmail);
+        User user = new User();
+        user.setUserName(mRandomUserName);
+        user.setUsername(mRandomUsername);
+        user.setPassword(mRandomPassword);
+        user.setUserContact(mRandomContact);
+        user.setUserEmail(mRandomEmail);
 
         onView(withId(R.id.etName))
                 .perform(typeText(mRandomUserName), ActivityUtils.closeSoftKeyboard());
@@ -123,6 +128,9 @@ public class AutoAction {
         return user;
     }
 
+    /*
+        for a few step to reach certain activity
+     */
     public static void goToActivity(Class<?> from, Class<?> to) {
         switch (from.getSimpleName()) {
             case "MainActivity":
@@ -324,5 +332,11 @@ public class AutoAction {
         }
 
         return serviceProviderListList;
+    }
+
+    public static void InitialSetting(Class<?> toActivity) {
+        autoLogout();
+        userLogin(true);
+        ActivityUtils.fromActivityToActivity(MainActivity.class, toActivity);
     }
 }
