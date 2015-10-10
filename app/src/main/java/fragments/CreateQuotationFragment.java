@@ -9,9 +9,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.chungmin.helpu.activities.HelpUBaseActivity;
+import com.example.chungmin.helpu.callback.Callback;
 import com.example.chungmin.helpu.models.CustomerRequest;
 import com.example.chungmin.helpu.serverrequest.CustomerRequestManager;
-import com.example.chungmin.helpu.callback.GetCustomerRequestCallback;
 import com.example.chungmin.helpu.models.Globals;
 import com.example.chungmin.helpu.activities.ProjectMessages;
 import com.example.chungmin.helpu.enumeration.ProjectStatus;
@@ -69,11 +70,9 @@ public class CreateQuotationFragment extends Fragment {
             public void onClick(View v) {
                 mCustomerRequest.setProjectStatusId(ProjectStatus.ConfirmQuotation.getId());
                 mCustomerRequest.setQuotation(Double.parseDouble(etQuotation.getText().toString()));
-                String url = getString(R.string.server_uri) + ((Globals) getActivity().getApplicationContext()).getCustomerRequestUpdateUrl();
-                CustomerRequestManager serverRequest = new CustomerRequestManager();
-                serverRequest.update(mCustomerRequest, url, new GetCustomerRequestCallback() {
+                CustomerRequestManager.update(mCustomerRequest, new Callback.GetCustomerRequestCallback() {
                     @Override
-                    public void done(CustomerRequest returnedCustomerRequest) {
+                    public void complete(CustomerRequest returnedCustomerRequest) {
                         Intent redirect = new Intent(getActivity(), ProjectMessages.class);
                         Bundle b = new Bundle();
                         b.putInt("projectStatusId", mCustomerRequest.getProjectStatusId());
@@ -82,6 +81,12 @@ public class CreateQuotationFragment extends Fragment {
                         redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(redirect);
                         getActivity().finish();
+                    }
+
+                    @Override
+                    public void failure(String msg) {
+                        msg = ((Globals) getActivity().getApplication()).translateErrorType(msg);
+                        ((HelpUBaseActivity) getActivity()).showAlert(msg);
                     }
                 });
             }
