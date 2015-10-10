@@ -7,9 +7,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.chungmin.helpu.activities.sample.ProjectStatusFlow;
+import com.example.chungmin.helpu.callback.Callback;
 import com.example.chungmin.helpu.models.CustomerRequest;
 import com.example.chungmin.helpu.serverrequest.CustomerRequestManager;
-import com.example.chungmin.helpu.callback.GetCustomerRequestCallback;
 import com.example.chungmin.helpu.models.Globals;
 import com.example.chungmin.helpu.R;
 
@@ -36,11 +36,9 @@ public class CustomerRequestByID extends HelpUBaseActivity {
         Bundle b = getIntent().getExtras();
         int customerRequestId =b.getInt("customerRequestId",0);
 
-        String url = getString(R.string.server_uri) + ((Globals) getApplication()).getCustomerRequestGetByIDUrl();
-        CustomerRequestManager serverRequest = new CustomerRequestManager();
-        serverRequest.getByID(customerRequestId, url, new GetCustomerRequestCallback() {
+        CustomerRequestManager.getByID(customerRequestId, new Callback.GetCustomerRequestCallback() {
             @Override
-            public void done(final CustomerRequest returnedCustomerRequest) {
+            public void complete(final CustomerRequest returnedCustomerRequest) {
                 if (returnedCustomerRequest == null) {
                     showErrorMessage();
                 } else {
@@ -62,6 +60,12 @@ public class CustomerRequestByID extends HelpUBaseActivity {
                         finish();
                     }
                 });
+            }
+
+            @Override
+            public void failure(String msg) {
+                msg = ((Globals) getApplication()).translateErrorType(msg);
+                showAlert(msg);
             }
         });
     }
