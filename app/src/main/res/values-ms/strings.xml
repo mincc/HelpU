@@ -312,6 +312,8 @@
     <string name="strHowLongToGoWeeks">dalam %1$s minggu</string>
     <string name="strHowLongToGoYear">dalam 1 tahun</string>
     <string name="strHowLongToGoYears">dalam %1$s tahun</string>
+    <string name="title_activity_location">Lokasi</string>
+    <string name="title_activity_maps">Peta</string>
 
 
 </resources>
