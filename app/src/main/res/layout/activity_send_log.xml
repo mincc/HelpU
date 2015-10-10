@@ -1,0 +1,48 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/rounded_corner_dialog">
+
+    <TextView
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="The process HelpU has stopped unexpectedly. Please try again."
+        android:id="@+id/tvMessage"
+        android:textSize="20dp"
+        android:padding="8dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_weight="1.50">
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/strRestart"
+            android:id="@+id/btnRestart"
+            android:layout_gravity="end"
+            android:layout_marginRight="26dp"
+            android:layout_marginEnd="26dp"
+            style="@style/btnStyleBeige"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/strReport"
+            android:id="@+id/btnReport"
+            android:layout_gravity="end"
+            style="@style/btnStyleBeige"
+            android:layout_alignTop="@+id/btnRestart"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="25dp"
+            android:layout_marginStart="25dp" />
+    </RelativeLayout>
+
+</LinearLayout>
+
