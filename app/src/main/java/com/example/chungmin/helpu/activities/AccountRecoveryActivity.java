@@ -8,7 +8,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.chungmin.helpu.R;
-import com.example.chungmin.helpu.callback.GetUserCallback;
+import com.example.chungmin.helpu.callback.Callback;
 import com.example.chungmin.helpu.models.Globals;
 import com.example.chungmin.helpu.models.User;
 import com.example.chungmin.helpu.serverrequest.UserManager;
@@ -88,11 +88,10 @@ public class AccountRecoveryActivity extends AppCompatActivity implements View.O
     }
 
     private void updateNewPassword(String email, final String newPassword, final AccountRecoveryActivity accountRecoveryActivity) {
-        String url = getString(R.string.server_uri) + ((Globals) getApplication()).getUserUpdatePasswordByEmailUrl();
         UserManager serverRequest = new UserManager(this);
-        serverRequest.updatePasswordByEmail(email, newPassword, url, new GetUserCallback() {
+        serverRequest.updatePasswordByEmail(email, newPassword, new Callback.GetUserCallback() {
             @Override
-            public void done(User returnedUser) {
+            public void complete(User returnedUser) {
                 if (returnedUser != null) {
                     mUser = returnedUser;
 
@@ -117,7 +116,7 @@ public class AccountRecoveryActivity extends AppCompatActivity implements View.O
             }
 
             @Override
-            public void fail(String msg) {
+            public void failure(String msg) {
                 msg = ((Globals) getApplication()).translateErrorType(msg);
                 tvMessageBox.setText(msg);
                 tvMessageBox.setBackgroundDrawable(getResources().getDrawable(R.drawable.red_box));
