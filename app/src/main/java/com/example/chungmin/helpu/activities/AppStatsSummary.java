@@ -3,8 +3,8 @@ package com.example.chungmin.helpu.activities;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.example.chungmin.helpu.callback.Callback;
 import com.example.chungmin.helpu.serverrequest.AppStatsManager;
-import com.example.chungmin.helpu.callback.GetAppStatsCallback;
 import com.example.chungmin.helpu.models.Globals;
 import com.example.chungmin.helpu.R;
 import com.example.chungmin.helpu.models.AppStats;
@@ -39,11 +39,9 @@ public class AppStatsSummary extends HelpUBaseActivity {
         tvTtlUserWeek = (TextView) findViewById(R.id.tvTtlUserWeek);
         tvTtlUserMonth = (TextView) findViewById(R.id.tvTtlUserMonth);
 
-        String url = getString(R.string.server_uri) + ((Globals) getApplication()).geAppStatsInfoUrl();
-        AppStatsManager serverRequest = new AppStatsManager();
-        serverRequest.getAppStats(url, new GetAppStatsCallback() {
+        AppStatsManager.getAppStats(new Callback.GetAppStatsCallback() {
             @Override
-            public void done(AppStats returnedAppStats) {
+            public void complete(AppStats returnedAppStats) {
                 tvTtlCustReqtDay.setText(Integer.toString(returnedAppStats.getTotalCustomerRequestInOneDay()));
                 tvTtlCustReqtWeek.setText(Integer.toString(returnedAppStats.getTotalCustomerRequestInOneWeek()));
                 tvTtlCustReqtMonth.setText(Integer.toString(returnedAppStats.getTotalCustomerRequestInOneMonth()));
@@ -59,6 +57,12 @@ public class AppStatsSummary extends HelpUBaseActivity {
                 tvTtlUserDay.setText(Integer.toString(returnedAppStats.getTotalUserInOneDay()));
                 tvTtlUserWeek.setText(Integer.toString(returnedAppStats.getTotalUserInOneWeek()));
                 tvTtlUserMonth.setText(Integer.toString(returnedAppStats.getTotalUserInOneMonth()));
+            }
+
+            @Override
+            public void failure(String msg) {
+                msg = ((Globals) getApplication()).translateErrorType(msg);
+                showAlert(msg);
             }
         });
 
