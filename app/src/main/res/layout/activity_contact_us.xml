@@ -1,97 +1,114 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+<ScrollView
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.example.chungmin.helpu.activities.ContactUs">
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
-        android:text="@string/strEnterprise"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:custom="http://schemas.android.com/apk/res-auto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/lblCompanyName" />
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        tools:context="com.example.chungmin.helpu.activities.ContactUs">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="17, SOLOK BETEK 3,\nTAMAN SRI JAYA, \nSUNGAI RAMBAI, \n14000 BUKIT MERTAJAM \nPENANG, MALAYSIA."
-        android:id="@+id/tvAddress"
-        android:layout_alignTop="@+id/lblCompanyName"
-        android:layout_toRightOf="@+id/lblCompanyName"
-        android:layout_toEndOf="@+id/lblCompanyName" />
+        <com.example.chungmin.helpu.models.TextViewColon
+            android:text="@string/strEnterprise"
+            custom:addColon="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lblCompanyName"
+            android:layout_weight="1" />
 
-    <com.example.chungmin.helpu.models.TextViewColon
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/strContact"
-        custom:addColon="true"
-        android:id="@+id/lblContact"
-        android:layout_alignTop="@+id/tvContactNo"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="17, SOLOK BETEK 2,\nTAMAN SRI JAYA, \nSUNGAI RAMBAI, \n14000 BUKIT MERTAJAM \nPENANG, MALAYSIA."
+            android:id="@+id/tvAddress"
+            android:layout_alignTop="@+id/lblCompanyName"
+            android:layout_toRightOf="@+id/lblCompanyName"
+            android:layout_toEndOf="@+id/lblCompanyName" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="6017-502 2877 (Steve Ang)\n6012-572 1091(Beng)"
-        android:id="@+id/tvContactNo"
-        android:layout_below="@+id/tvAddress"
-        android:layout_alignLeft="@+id/tvAddress"
-        android:layout_alignStart="@+id/tvAddress"
-        android:layout_marginTop="22dp" />
+        <com.example.chungmin.helpu.models.TextViewColon
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/strContact"
+            custom:addColon="true"
+            android:id="@+id/lblContact"
+            android:layout_alignTop="@+id/tvContactNo"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
-    <com.example.chungmin.helpu.models.TextViewColon
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/strEmail"
-        custom:addColon="true"
-        android:id="@+id/lblEmail"
-        android:layout_marginTop="22dp"
-        android:layout_below="@+id/tvContactNo"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="6017-502 2877 (Steve Ang)\n6012-572 1091(Beng)"
+            android:id="@+id/tvContactNo"
+            android:layout_below="@+id/tvAddress"
+            android:layout_alignLeft="@+id/tvAddress"
+            android:layout_alignStart="@+id/tvAddress"
+            android:layout_marginTop="22dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="menugarden@gmail.com"
-        android:id="@+id/tvEmail"
-        android:layout_alignTop="@+id/lblEmail"
-        android:layout_alignLeft="@+id/tvContactNo"
-        android:layout_alignStart="@+id/tvContactNo"
-        android:singleLine="true" />
+        <com.example.chungmin.helpu.models.TextViewColon
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/strEmail"
+            custom:addColon="true"
+            android:id="@+id/lblEmail"
+            android:layout_marginTop="22dp"
+            android:layout_below="@+id/tvContactNo"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/strTechAsstHour"
-        android:id="@+id/lblTechAssistHour"
-        android:layout_below="@+id/lblEmail"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="false"
-        android:layout_marginTop="22dp"
-        android:singleLine="false" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="menugarden@gmail.com"
+            android:id="@+id/tvEmail"
+            android:layout_alignTop="@+id/lblEmail"
+            android:layout_alignLeft="@+id/tvContactNo"
+            android:layout_alignStart="@+id/tvContactNo"
+            android:singleLine="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="09:00am - 1:00pm\n2:00pm - 6:00pm"
-        android:id="@+id/tvAsstHour"
-        android:layout_alignTop="@+id/lblTechAssistHour"
-        android:layout_alignLeft="@+id/tvEmail"
-        android:layout_alignStart="@+id/tvEmail" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/strTechAsstHour"
+            android:id="@+id/lblTechAssistHour"
+            android:layout_below="@+id/lblEmail"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="false"
+            android:layout_marginTop="22dp"
+            android:singleLine="false" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/strDayOfWeekWork"
-        android:id="@+id/tvDayOfWeek"
-        android:layout_below="@+id/tvAsstHour"
-        android:layout_alignLeft="@+id/tvAsstHour"
-        android:layout_alignStart="@+id/tvAsstHour" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="09:00am - 1:00pm\n2:00pm - 6:00pm"
+            android:id="@+id/tvAsstHour"
+            android:layout_alignTop="@+id/lblTechAssistHour"
+            android:layout_alignLeft="@+id/tvEmail"
+            android:layout_alignStart="@+id/tvEmail" />
 
-</RelativeLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/strDayOfWeekWork"
+            android:id="@+id/tvDayOfWeek"
+            android:layout_below="@+id/tvAsstHour"
+            android:layout_alignLeft="@+id/tvAsstHour"
+            android:layout_alignStart="@+id/tvAsstHour" />
+
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="350dp"
+            android:layout_height="350dp"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_below="@+id/tvDayOfWeek"
+            android:layout_marginTop="10dp" />
+
+    </RelativeLayout>
+
+</ScrollView>
