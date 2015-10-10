@@ -14,8 +14,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.chungmin.helpu.callback.Callback;
 import com.example.chungmin.helpu.models.CustomerRequest;
-import com.example.chungmin.helpu.callback.GetServiceProviderCallback;
 import com.example.chungmin.helpu.models.Globals;
 import com.example.chungmin.helpu.activities.HelpUBaseActivity;
 import com.example.chungmin.helpu.enumeration.ProjectStatus;
@@ -74,11 +74,9 @@ public class ServiceProviderFragment extends Fragment {
         imgvEmail = (ImageView) view.findViewById(R.id.imgvEmail);
         imgvPhone = (ImageView) view.findViewById(R.id.imgvPhone);
 
-        String url = getString(R.string.server_uri) + ((Globals) getActivity().getApplication()).getServiceProviderGetByIDUrl();
-        ServiceProviderManager serverRequest = new ServiceProviderManager();
-        serverRequest.getByID(mCustomerRequest.getServiceProviderId(), url, new GetServiceProviderCallback() {
+        ServiceProviderManager.getByID(mCustomerRequest.getServiceProviderId(), new Callback.GetServiceProviderCallback() {
             @Override
-            public void done(final ServiceProvider returnedServiceProvider) {
+            public void complete(final ServiceProvider returnedServiceProvider) {
                 if (returnedServiceProvider == null) {
                     showErrorMessage();
                 } else {
@@ -132,6 +130,12 @@ public class ServiceProviderFragment extends Fragment {
                         }
                     }
                 }
+            }
+
+            @Override
+            public void failure(String msg) {
+                msg = ((Globals) getActivity().getApplication()).translateErrorType(msg);
+                ((HelpUBaseActivity) getActivity()).showAlert(msg);
             }
         });
 

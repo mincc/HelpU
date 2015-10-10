@@ -228,7 +228,7 @@
     <string name="strJobOfferList">Job Offer List</string>
     <string name="strJobDoneList">Job Done List</string>
     <string name="strServiceProvided">Service Provided</string>
-    <string name="strEnterprise">Beng &amp; Ang Enterprise :</string>
+    <string name="strEnterprise">Beng &amp; Ang Enterprise</string>
     <string name="strTechAsstHour">Tech Asst. Hour :</string>
     <string name="strDayOfWeekWork">(Mon-Fri)</string>
     <string name="title_activity_app_stats_summary">Application Stats Summary</string>
@@ -278,6 +278,45 @@
     <string name="strPwdEmailSend">Email Send. Please check your email inbox for the new password.</string>
     <string name="strInputUsername">Please enter username</string>
     <string name="strInputPassword">Please enter password</string>
+    <string name="strCreateIssue">Create Issue</string>
+    <string name="strNewIssue">New Issue</string>
+    <string name="strActionedIssue">Actioned Issue</string>
+    <string name="strIgnoredIssue">Ignored Issue</string>
+    <string name="strClosedIssue">Closed Issue</string>
+    <string name="strDeletedIssue">Deleted Issue</string>
+    <string name="strTechnicalIssue">Technical Issue</string>
+    <string name="strComplaint">Complaint</string>
+    <string name="strSuggestion">Suggestion</string>
+    <string name="strHelp">Help</string>
+    <string name="strCustomerCare">Customer Care</string>
+    <string name="strSubject">Subject : </string>
+    <string name="strSubmit">Submit</string>
+    <string name="strTypeEmpty">Type Can Not Empty.</string>
+    <string name="strSubjectEmpty">Subject Can Not Empty.</string>
+    <string name="strSearch">Search</string>
+    <string name="title_activity_search">Search Result</string>
+    <string name="strNoItemsFound">No items found!</string>
+    <string name="strSearchHint">Search customer request</string>
+    <string name="title_activity_send_log">Send Log</string>
+    <string name="strRestart">Restart</string>
+    <string name="strReport">Report</string>
+    <string name="strRefresh">Refresh</string>
+    <string name="strOnline">Online : </string>
+    <string name="strNeverReachDate">never</string>
+    <string name="strHowLongAgoWeek">1 week ago</string>
+    <string name="strHowLongAgoWeeks">%1$s weeks ago</string>
+    <string name="strHowLongToGoWeek">in 1 week</string>
+    <string name="strHowLongToGoWeeks">in %1$s weeks</string>
+    <string name="strHowLongAgoMonth">1 month ago</string>
+    <string name="strHowLongAgoMonths">%1$s months ago</string>
+    <string name="strHowLongToGoMonth">in 1 month</string>
+    <string name="strHowLongToGoMonths">in %1$s months</string>
+    <string name="strHowLongAgoYear">1 year ago</string>
+    <string name="strHowLongAgoYears">%1$s years ago</string>
+    <string name="strHowLongToGoYear">in 1 year</string>
+    <string name="strHowLongToGoYears">in %1$s years</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_location">Location</string>
 
 
 </resources>

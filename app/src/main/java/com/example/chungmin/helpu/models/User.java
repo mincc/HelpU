@@ -9,23 +9,28 @@ import android.os.Parcelable;
 public class User implements Parcelable {
 
     private String name, username, password, userContact, userEmail;
-    private int userId;
+    private int userId, isAdmin;
 
     public User(int userId, String name, String username, String password, String userContact, String userEmail) {
+        new User(userId, name, username, password, userContact, userEmail, 0);
+    }
+
+    public User(int userId, String name, String username, String password, String userContact, String userEmail, int isAdmin) {
         this.userId = userId;
         this.name = name;
         this.username = username;
         this.password = password;
         this.userContact = userContact;
         this.userEmail = userEmail;
+        this.isAdmin = isAdmin;
     }
 
     public User(String username, String password) {
-        this(-1, "", username, password, "", "");
+        this(-1, "", username, password, "", "", 0);
     }
 
     public User(int userId, String name){
-        this(userId, name, "", "", "", "");
+        this(userId, name, "", "", "", "", 0);
     }
 
     public User() {
@@ -74,6 +79,13 @@ public class User implements Parcelable {
         this.userEmail = userEmail;
     }
 
+    public int getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(int isAdmin) {
+        this.isAdmin = isAdmin;
+    }
 
     @Override
     public int describeContents() {
@@ -88,6 +100,7 @@ public class User implements Parcelable {
         dest.writeString(this.userContact);
         dest.writeString(this.userEmail);
         dest.writeInt(this.userId);
+        dest.writeInt(this.isAdmin);
     }
 
     protected User(Parcel in) {
@@ -97,9 +110,10 @@ public class User implements Parcelable {
         this.userContact = in.readString();
         this.userEmail = in.readString();
         this.userId = in.readInt();
+        this.isAdmin = in.readInt();
     }
 
-    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+    public static final Creator<User> CREATOR = new Creator<User>() {
         public User createFromParcel(Parcel source) {
             return new User(source);
         }

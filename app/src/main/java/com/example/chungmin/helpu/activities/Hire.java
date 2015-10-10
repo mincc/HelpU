@@ -10,9 +10,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.chungmin.helpu.callback.Callback;
 import com.example.chungmin.helpu.models.CustomerRequest;
 import com.example.chungmin.helpu.serverrequest.CustomerRequestManager;
-import com.example.chungmin.helpu.callback.GetCustomerRequestCallback;
 import com.example.chungmin.helpu.models.Globals;
 import com.example.chungmin.helpu.enumeration.ProjectStatus;
 import com.example.chungmin.helpu.R;
@@ -133,11 +133,10 @@ public class Hire extends HelpUBaseActivity implements AdapterView.OnItemSelecte
     }
 
     private void registerCustomerRequest(final CustomerRequest customerRequest) {
-        String url = getString(R.string.server_uri) + ((Globals) getApplication()).getCustomerRequestInsertUrl();
         CustomerRequestManager customerRequestServerRequest = new CustomerRequestManager();
-        customerRequestServerRequest.insert(customerRequest, url, new GetCustomerRequestCallback() {
+        customerRequestServerRequest.insert(customerRequest, new Callback.GetCustomerRequestCallback() {
             @Override
-            public void done(CustomerRequest returnedCustomerRequest) {
+            public void complete(CustomerRequest returnedCustomerRequest) {
                 ((Globals) getApplication()).setCustomerRequest(returnedCustomerRequest);
                 Intent redirect = new Intent(Hire.this, ServiceProviderListByServiceID.class);
                 Bundle b = new Bundle();
@@ -146,13 +145,18 @@ public class Hire extends HelpUBaseActivity implements AdapterView.OnItemSelecte
                 startActivity(redirect);
                 finish();
             }
+
+            @Override
+            public void failure(String msg) {
+                msg = ((Globals) getApplication()).translateErrorType(msg);
+                showAlert(msg);
+            }
         });
     }
 
     public void validateServiceNeeded() {
         if (mSelectedService == null) {
             tvServiceNeeded.setError(strServiceNeededEmpty);
-            ;
             mIsServiceNeededValid = false;
         } else {
             if (mSelectedService.id == 0) {

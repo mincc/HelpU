@@ -4,10 +4,10 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.example.chungmin.helpu.callback.Callback;
 import com.example.chungmin.helpu.models.Globals;
 import com.example.chungmin.helpu.R;
 import com.example.chungmin.helpu.serverrequest.ServiceProviderManager;
-import com.example.chungmin.helpu.callback.GetServiceProviderCallback;
 import com.example.chungmin.helpu.models.ServiceProvider;
 
 
@@ -34,11 +34,9 @@ public class ServiceProviderByID extends HelpUBaseActivity {
         Bundle b = getIntent().getExtras();
         int serviceProviderId =b.getInt("serviceProviderId",0);
 
-        String url = getString(R.string.server_uri) + ((Globals) getApplication()).getServiceProviderGetByIDUrl();
-        ServiceProviderManager serverRequest = new ServiceProviderManager();
-        serverRequest.getByID(serviceProviderId, url, new GetServiceProviderCallback() {
+        ServiceProviderManager.getByID(serviceProviderId, new Callback.GetServiceProviderCallback() {
             @Override
-            public void done(ServiceProvider returnedServiceProvider) {
+            public void complete(ServiceProvider returnedServiceProvider) {
                 if (returnedServiceProvider == null) {
                     showErrorMessage();
                 } else {
@@ -48,6 +46,12 @@ public class ServiceProviderByID extends HelpUBaseActivity {
                     tvPhone.setText(returnedServiceProvider.getPhone());
                     tvEmail.setText(returnedServiceProvider.getEmail() + "");
                 }
+            }
+
+            @Override
+            public void failure(String msg) {
+                msg = ((Globals) getApplication()).translateErrorType(msg);
+                showAlert(msg);
             }
         });
     }

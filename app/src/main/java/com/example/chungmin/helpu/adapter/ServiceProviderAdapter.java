@@ -7,6 +7,7 @@ package com.example.chungmin.helpu.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,16 +15,24 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.chungmin.helpu.R;
+import com.example.chungmin.helpu.activities.HelpUBaseActivity;
+import com.example.chungmin.helpu.callback.Callback;
 import com.example.chungmin.helpu.serverrequest.ServiceProviderManager;
 import com.example.chungmin.helpu.activities.ServiceProviderList;
-import com.example.chungmin.helpu.callback.GetServiceProviderCallback;
 import com.example.chungmin.helpu.enumeration.ServiceType;
 import com.example.chungmin.helpu.models.Globals;
 import com.example.chungmin.helpu.models.ServiceProvider;
 
+import java.util.Date;
 import java.util.List;
+
+import HelpUGenericUtilities.DateTimeUtils;
+import HelpUGenericUtilities.Enumerations;
+
+import static android.text.format.DateUtils.getRelativeTimeSpanString;
 
 public class ServiceProviderAdapter extends ArrayAdapter<ServiceProvider>{
     private List<ServiceProvider> items;
@@ -46,6 +55,7 @@ public class ServiceProviderAdapter extends ArrayAdapter<ServiceProvider>{
         TextView tvServiceProviderId;
         TextView tvUserName;
         TextView tvService;
+        TextView tvOnline;
         TextView tvPhone;
         TextView tvEmail;
         Button btnDelete;
@@ -66,6 +76,7 @@ public class ServiceProviderAdapter extends ArrayAdapter<ServiceProvider>{
             viewHolder.tvServiceProviderId = (TextView) v.findViewById(R.id.tvServiceProviderId);
             viewHolder.tvUserName = (TextView) v.findViewById(R.id.tvUserName);
             viewHolder.tvService = (TextView) v.findViewById(R.id.tvService);
+            viewHolder.tvOnline = (TextView) v.findViewById(R.id.tvOnline);
             viewHolder.tvPhone = (TextView) v.findViewById(R.id.tvPhone);
             viewHolder.tvEmail = (TextView) v.findViewById(R.id.tvEmail);
             viewHolder.btnDelete = (Button) v.findViewById(R.id.btnDelete);
@@ -96,6 +107,11 @@ public class ServiceProviderAdapter extends ArrayAdapter<ServiceProvider>{
                 viewHolder.tvService.setText(ServiceType.values()[serviceprovider.getServiceId()].toString());
             }
 
+            if (viewHolder.tvOnline != null) {
+                String result = DateTimeUtils.ToHuman(serviceprovider.getLastOnline(), Enumerations.DateStyle.HowLong, mContext);
+                viewHolder.tvOnline.setText(result);
+            }
+
             if (viewHolder.tvPhone != null) {
                 viewHolder.tvPhone.setText(serviceprovider.getPhone());
             }
@@ -122,15 +138,19 @@ public class ServiceProviderAdapter extends ArrayAdapter<ServiceProvider>{
                     TextView tvServiceProviderId = (TextView) superView.findViewById(R.id.tvServiceProviderId);
                     int serviceProviderId = Integer.parseInt(tvServiceProviderId.getText().toString());
                     int isLogicalDelete = 1;
-                    ServiceProviderManager serverRequest = new ServiceProviderManager();
-                    String url = mContext.getString(R.string.server_uri) + ((Globals) mContext.getApplicationContext()).serviceProviderDeleteUrl();
-                    serverRequest.delete(serviceProviderId, isLogicalDelete, url, new GetServiceProviderCallback() {
+                    ServiceProviderManager.delete(serviceProviderId, isLogicalDelete, new Callback.GetServiceProviderCallback() {
                         @Override
-                        public void done(final ServiceProvider returnedServiceProvider) {
+                        public void complete(final ServiceProvider returnedServiceProvider) {
                             Intent redirect = new Intent(v.getContext(), ServiceProviderList.class);
                             redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             mContext.startActivity(redirect);
                             ((Activity) mContext).finish();
+                        }
+
+                        @Override
+                        public void failure(String msg) {
+                            msg = ((Globals) mContext.getApplicationContext()).translateErrorType(msg);
+                            ((HelpUBaseActivity) mContext).showAlert(msg);
                         }
                     });
 

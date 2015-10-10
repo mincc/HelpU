@@ -2,15 +2,23 @@ package com.example.chungmin.helpu.activities;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.chungmin.helpu.models.Globals;
@@ -22,6 +30,7 @@ public abstract class HelpUBaseActivity extends ActionBarActivity {
     private ProgressDialog mProgressDialog;
     public boolean isAllowMenuProgressBar = false;
     public boolean mIsNetworkAvailable = true;
+    private Menu mMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +45,14 @@ public abstract class HelpUBaseActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        int userId = ((Globals) getApplication()).getUserId();
-        if (userId == 1) {
+        int isAdmin = ((Globals) getApplication()).getIsAdmin();
+        if (isAdmin == 1) {
             getMenuInflater().inflate(R.menu.menu_admin, menu);
+
+            SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+            SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(this, SearchActivity.class)));
+
         } else {
             getMenuInflater().inflate(R.menu.menu_common, menu);
         }
@@ -47,6 +61,7 @@ public abstract class HelpUBaseActivity extends ActionBarActivity {
             mProgressMenu = menu.findItem(R.id.menu_progress);
             showMenuProgress();
         }
+        mMenu = menu;
         return true;
     }
 
@@ -80,6 +95,18 @@ public abstract class HelpUBaseActivity extends ActionBarActivity {
 //            case R.id.action_project_status_flow:
 //                redirect = new Intent(this, ProjectStatusFlow.class);
 //                break;
+            case R.id.action_customercare:
+                redirect = new Intent(this, CustomerCareActivity.class);
+                break;
+            case R.id.action_refresh:
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                ImageView iv = (ImageView) inflater.inflate(R.layout.iv_refresh, null);
+                Animation rotation = AnimationUtils.loadAnimation(this, R.anim.rotate_refresh);
+                rotation.setRepeatCount(Animation.INFINITE);
+                iv.startAnimation(rotation);
+                item.setActionView(iv);
+                new UpdateTask(this).execute();
+                return super.onOptionsItemSelected(item);
             default:
                 Toast.makeText(this, "Still not create redirect link", Toast.LENGTH_LONG).show();
                 break;
@@ -172,5 +199,45 @@ public abstract class HelpUBaseActivity extends ActionBarActivity {
         ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public class UpdateTask extends AsyncTask<Void, Void, Void> {
+
+        private Context mCon;
+
+        public UpdateTask(Context con) {
+            mCon = con;
+        }
+
+        @Override
+        protected Void doInBackground(Void... nope) {
+            try {
+                // Set a time to simulate a long update process.
+                Thread.sleep(1000);
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+                return null;
+
+            } catch (Exception e) {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Void nope) {
+            // Change the menu back
+            resetUpdating();
+        }
+    }
+
+    private void resetUpdating() {
+        // Get our refresh item from the menu
+        MenuItem m = mMenu.findItem(R.id.action_refresh);
+        if (m.getActionView() != null) {
+            // Remove the animation.
+            m.getActionView().clearAnimation();
+            m.setActionView(null);
+        }
     }
 }

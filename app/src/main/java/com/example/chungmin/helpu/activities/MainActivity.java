@@ -14,8 +14,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.chungmin.helpu.callback.Callback;
+import com.example.chungmin.helpu.serverrequest.UserManager;
 import com.example.chungmin.helpu.service.AutoStartUp;
-import com.example.chungmin.helpu.callback.GetUserStatsCallback;
 import com.example.chungmin.helpu.models.Globals;
 import com.example.chungmin.helpu.R;
 import com.example.chungmin.helpu.models.User;
@@ -96,6 +97,7 @@ public class MainActivity extends HelpUBaseActivity implements View.OnClickListe
             mUser = userLocalStore.getLoggedInUser();
             if (mUser != null) {
                 String userId = String.valueOf(mUser.getUserId());
+                ((Globals) getApplication()).setIsAdmin(mUser.getIsAdmin());
                 ((Globals) this.getApplication()).setUserId(mUser.getUserId());
 
                 //restart the auto startup service if being kill before
@@ -111,11 +113,9 @@ public class MainActivity extends HelpUBaseActivity implements View.OnClickListe
                     ft.add(R.id.llUserInfo, fragUserInfo);
                     ft.commit();
 
-                    String url = getString(R.string.server_uri) + ((Globals) getApplication()).getUserStatsInfoUrl();
-                    UserStatsManager serverRequest = new UserStatsManager();
-                    serverRequest.getByUserId(mUser.getUserId(), url, new GetUserStatsCallback() {
+                    UserStatsManager.getByUserId(mUser.getUserId(), new Callback.GetUserStatsCallback() {
                         @Override
-                        public void done(UserStats returnedUserStats) {
+                        public void complete(UserStats returnedUserStats) {
                             if (returnedUserStats != null) {
                                 tvTotalCountHire.setText(Integer.toString(returnedUserStats.getTotalCustomerRequest()));
                                 tvTotalCountWork.setText(Integer.toString(returnedUserStats.getTotalServiceProvider()));
@@ -148,6 +148,12 @@ public class MainActivity extends HelpUBaseActivity implements View.OnClickListe
                             }
                             hideMenuProgress();
                         }
+
+                        @Override
+                        public void failure(String msg) {
+                            msg = ((Globals) getApplication()).translateErrorType(msg);
+                            showAlert(msg);
+                        }
                     });
                 }
 
@@ -156,6 +162,8 @@ public class MainActivity extends HelpUBaseActivity implements View.OnClickListe
         }
 
         isAllowMenuProgressBar = true;
+
+//        ((Globals)getApplication()).testUncaughtExceptionhandler();
 
         //reset the icon count number
         ((Globals) getApplication()).setBadgeCount(0);
@@ -170,6 +178,7 @@ public class MainActivity extends HelpUBaseActivity implements View.OnClickListe
             case R.id.btnLogout:
                 userLocalStore.clearUserData();
                 userLocalStore.setUserLoggedIn(false);
+                logoutUpdate();
                 redirect = new Intent(this, Login.class);
                 break;
             case R.id.btnHire:
@@ -181,6 +190,21 @@ public class MainActivity extends HelpUBaseActivity implements View.OnClickListe
         }
         startActivity(redirect);
         finish();
+    }
+
+    private void logoutUpdate() {
+        UserManager serverRequest = new UserManager(this);
+        serverRequest.logout(mUser.getUserId(), new Callback.GetUserCallback() {
+            @Override
+            public void complete(User returnedUser) {
+            }
+
+            @Override
+            public void failure(String msg) {
+                msg = ((Globals) getApplication()).translateErrorType(msg);
+                showAlert(msg);
+            }
+        });
     }
 
 

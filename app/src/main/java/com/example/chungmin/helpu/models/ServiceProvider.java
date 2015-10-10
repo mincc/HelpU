@@ -1,5 +1,7 @@
 package com.example.chungmin.helpu.models;
 
+import org.joda.time.DateTime;
+
 /**
  * Created by Chung Min on 7/22/2015.
  */
@@ -7,6 +9,7 @@ public class ServiceProvider {
     private String phone, email, userName, serviceName;
     private int userId, serviceId, serviceProviderId;
     private double avgRatedValue;
+    private DateTime lastOnline;
 
     public ServiceProvider() {
 
@@ -71,7 +74,6 @@ public class ServiceProvider {
     public double getAvgRatedValue() {
         return avgRatedValue;
     }
-
     public void setAvgRatedValue(double avgRatedValue) {
         this.avgRatedValue = avgRatedValue;
     }
@@ -82,6 +84,14 @@ public class ServiceProvider {
     }
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public DateTime getLastOnline() {
+        return lastOnline;
+    }
+
+    public void setLastOnline(DateTime lastOnline) {
+        this.lastOnline = lastOnline;
     }
 
     //Service Table

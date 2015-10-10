@@ -10,16 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
+import com.example.chungmin.helpu.callback.Callback;
+import com.example.chungmin.helpu.models.AppLink;
 import com.example.chungmin.helpu.models.CustomerRequest;
 import com.example.chungmin.helpu.adapter.CustomerRequestAdapter;
-import com.example.chungmin.helpu.serverrequest.CustomerRequestDataTask;
-import com.example.chungmin.helpu.callback.GetCustomerRequestListCallback;
 import com.example.chungmin.helpu.models.Globals;
 import com.example.chungmin.helpu.R;
 import com.example.chungmin.helpu.models.User;
 import com.example.chungmin.helpu.models.UserLocalStore;
+import com.example.chungmin.helpu.serverrequest.CustomerRequestManager;
 
 import java.util.List;
 
@@ -51,7 +51,7 @@ public class CustomerRequestJobList extends HelpUBaseActivity {
         isAllowMenuProgressBar = false;
     }
 
-    public static class GetCustomerRequestJobStatusListFragment extends ListFragment implements GetCustomerRequestListCallback {
+    public static class GetCustomerRequestJobStatusListFragment extends ListFragment {
         private Context mContext;
 
         @Override
@@ -90,35 +90,26 @@ public class CustomerRequestJobList extends HelpUBaseActivity {
 
         private void initView() {
 
-            String url = "";
-            if (mTypeList.equals("JobOfferList")) {
-                url = getString(R.string.server_uri) + ((Globals) mContext.getApplicationContext()).getCustomerRequestJobListGetByUserIDUrl();
-            } else if (mTypeList.equals("JobDoneList")) {
-                url = getString(R.string.server_uri) + ((Globals) mContext.getApplicationContext()).getCustomerRequestJobDoneListGetByUserIDUrl();
-            }
-
             UserLocalStore userLocalStore = new UserLocalStore(mContext);
             User user = userLocalStore.getLoggedInUser();
-            String userId = String.valueOf(user.getUserId());
+            int userId = user.getUserId();
 
-            CustomerRequestDataTask task = new CustomerRequestDataTask(this);
-            task.execute(url, userId);
+            CustomerRequestManager.getListByUserId(userId, mTypeList, new Callback.GetCustomerRequestListCallback() {
+
+                @Override
+                public void complete(List<CustomerRequest> data) {
+                    // create new adapter
+                    CustomerRequestAdapter adapter = new CustomerRequestAdapter(mContext, data);
+                    // set the adapter to list
+                    setListAdapter(adapter);
+                }
+
+                @Override
+                public void failure(String msg) {
+                    msg = ((Globals) mContext.getApplicationContext()).translateErrorType(msg);
+                    ((HelpUBaseActivity) mContext).showAlert(msg);
+                }
+            });
         }
-
-        @Override
-        public void Complete(List<CustomerRequest> data) {
-
-            // create new adapter
-            CustomerRequestAdapter adapter = new CustomerRequestAdapter(mContext, data);
-            // set the adapter to list
-            setListAdapter(adapter);
-        }
-
-        @Override
-        public void Failure(String msg) {
-            // show failure message
-            Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();
-        }
-
     }
 }

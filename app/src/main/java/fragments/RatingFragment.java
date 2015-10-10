@@ -10,10 +10,11 @@ import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.example.chungmin.helpu.activities.HelpUBaseActivity;
 import com.example.chungmin.helpu.activities.MainActivity;
+import com.example.chungmin.helpu.callback.Callback;
 import com.example.chungmin.helpu.models.Rating;
 import com.example.chungmin.helpu.serverrequest.RatingManager;
-import com.example.chungmin.helpu.callback.GetRatingCallback;
 import com.example.chungmin.helpu.models.Globals;
 import com.example.chungmin.helpu.R;
 
@@ -81,11 +82,15 @@ public class RatingFragment extends Fragment {
                 }
                 rating.setCustomerRequestId(mCustomerRequestId);
                 //Toast.makeText(getActivity(), String.valueOf(ratingBar.getRating()), Toast.LENGTH_SHORT).show();
-                String url = getString(R.string.server_uri) + ((Globals) getActivity().getApplicationContext()).getRatingInsertUrl();
-                RatingManager serverRequest = new RatingManager();
-                serverRequest.insert(rating, url, new GetRatingCallback() {
+                RatingManager.insert(rating, new Callback.GetRatingCallback() {
                     @Override
-                    public void done(Rating returnedRating) {
+                    public void complete(Rating returnedRating) {
+                    }
+
+                    @Override
+                    public void failure(String msg) {
+                        msg = ((Globals) getActivity().getApplication()).translateErrorType(msg);
+                        ((HelpUBaseActivity) getActivity()).showAlert(msg);
                     }
                 });
 

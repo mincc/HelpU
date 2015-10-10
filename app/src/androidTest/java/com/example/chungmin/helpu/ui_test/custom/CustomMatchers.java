@@ -1,14 +1,9 @@
-package com.example.chungmin.helpu.custom;
+package com.example.chungmin.helpu.ui_test.custom;
 
-import android.support.test.espresso.PerformException;
-import android.support.test.espresso.UiController;
-import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.matcher.BoundedMatcher;
-import android.support.test.espresso.matcher.ViewMatchers;
-import android.support.test.espresso.util.HumanReadables;
-import android.view.View;
-import android.widget.AdapterView;
 
+import com.example.chungmin.helpu.enumeration.CustomerIssueTypes;
+import com.example.chungmin.helpu.models.CustomerIssue;
 import com.example.chungmin.helpu.models.CustomerRequest;
 import com.example.chungmin.helpu.models.Service;
 import com.example.chungmin.helpu.models.ServiceProvider;
@@ -16,11 +11,8 @@ import com.example.chungmin.helpu.models.ServiceProvider;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayingAtLeast;
 import static android.support.test.internal.util.Checks.checkNotNull;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
 /**
@@ -146,6 +138,40 @@ public class CustomMatchers {
             @Override
             public void describeTo(Description description) {
                 description.appendText("with id: " + customerRequestId);
+            }
+        };
+    }
+
+    /**
+     * Matches CustomerIssue with a specific type
+     */
+    public static Matcher<Object> withCustomerIssueType(final String typeName) {
+        return new BoundedMatcher<Object, CustomerIssueTypes>(CustomerIssueTypes.class) {
+            @Override
+            protected boolean matchesSafely(CustomerIssueTypes customerIssueType) {
+                return typeName.equals(customerIssueType.toString());
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with type name: " + typeName);
+            }
+        };
+    }
+
+    /**
+     * Matches a CustomerIssueTypeId with a specific ID
+     */
+    public static Matcher<Object> withCustomerIssueTypeId(final int customerIssueTypeId) {
+        return new BoundedMatcher<Object, CustomerIssueTypes>(CustomerIssueTypes.class) {
+            @Override
+            protected boolean matchesSafely(CustomerIssueTypes customerIssueType) {
+                return customerIssueTypeId == customerIssueType.getId();
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with customer issue type id: " + customerIssueTypeId);
             }
         };
     }

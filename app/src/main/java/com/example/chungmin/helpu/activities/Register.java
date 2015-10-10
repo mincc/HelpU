@@ -6,8 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.chungmin.helpu.callback.GetBooleanCallback;
-import com.example.chungmin.helpu.callback.GetUserCallback;
+import com.example.chungmin.helpu.callback.Callback;
 import com.example.chungmin.helpu.models.Globals;
 import com.example.chungmin.helpu.R;
 import com.example.chungmin.helpu.models.User;
@@ -82,7 +81,7 @@ public class Register extends HelpUBaseActivity implements View.OnClickListener,
                 String userContact = etUserContact.getText().toString();
                 String userEmail = etUserEmail.getText().toString();
 
-                User user = new User(-1, name, username, password, userContact, userEmail);
+                User user = new User(-1, name, username, password, userContact, userEmail, 0);
                 registerUser(user);
                 break;
         }
@@ -106,19 +105,19 @@ public class Register extends HelpUBaseActivity implements View.OnClickListener,
         if (mIsValid) {
             //to prevent execute multiple time
             btnRegister.setEnabled(false);
-            String url = getString(R.string.server_uri) + ((Globals) getApplication()).getUserInsertUrl();
             UserManager serverRequest = new UserManager(this);
-            serverRequest.insert(user, url, new GetUserCallback() {
+            serverRequest.insert(user, new Callback.GetUserCallback() {
                 @Override
-                public void done(User returnedUser) {
+                public void complete(User returnedUser) {
                     Intent loginIntent = new Intent(Register.this, Login.class);
                     startActivity(loginIntent);
                     finish();
                 }
 
                 @Override
-                public void fail(String msg) {
-
+                public void failure(String msg) {
+                    msg = ((Globals) getApplication()).translateErrorType(msg);
+                    showAlert(msg);
                 }
             });
         }
@@ -172,17 +171,22 @@ public class Register extends HelpUBaseActivity implements View.OnClickListener,
         }
 
         if (!username.trim().equals("")) {
-            String url = getString(R.string.server_uri) + ((Globals) getApplication()).getIsUsernameAlreadyExistsUrl();
             UserManager serverRequest = new UserManager(this);
-            serverRequest.isUsernameExists(username, url, new GetBooleanCallback() {
+            serverRequest.isUsernameExists(username, new Callback.GetBooleanCallback() {
                 @Override
-                public void done(Boolean isUsernameExists) {
+                public void complete(Boolean isUsernameExists) {
                     if (isUsernameExists) {
                         etUsername.setError(strUsernameAlreadyExists);
                         mIsUsernameValid = false;
                     } else {
                         mIsUsernameValid = true;
                     }
+                }
+
+                @Override
+                public void failure(String msg) {
+                    msg = ((Globals) getApplication()).translateErrorType(msg);
+                    showAlert(msg);
                 }
             });
         }

@@ -10,8 +10,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.chungmin.helpu.callback.GetBooleanCallback;
-import com.example.chungmin.helpu.callback.GetServiceProviderCallback;
+import com.example.chungmin.helpu.callback.Callback;
 import com.example.chungmin.helpu.models.Globals;
 import com.example.chungmin.helpu.R;
 import com.example.chungmin.helpu.models.Service;
@@ -147,14 +146,19 @@ public class Work extends HelpUBaseActivity implements AdapterView.OnItemSelecte
     }
 
     private void registerServiceProvider(ServiceProvider serviceProvider) {
-        String url = getString(R.string.server_uri) + ((Globals) getApplication()).getServiceProviderInsertUrl();
         ServiceProviderManager serviceProviderServerRequest = new ServiceProviderManager();
-        serviceProviderServerRequest.insert(serviceProvider, url, new GetServiceProviderCallback() {
+        serviceProviderServerRequest.insert(serviceProvider, new Callback.GetServiceProviderCallback() {
             @Override
-            public void done(ServiceProvider returnedServiceProvider) {
+            public void complete(ServiceProvider returnedServiceProvider) {
                 Intent redirect = new Intent(Work.this, ServiceProviderList.class);
                 startActivity(redirect);
                 finish();
+            }
+
+            @Override
+            public void failure(String msg) {
+                msg = ((Globals) getApplication()).translateErrorType(msg);
+                showAlert(msg);
             }
         });
     }
@@ -196,11 +200,9 @@ public class Work extends HelpUBaseActivity implements AdapterView.OnItemSelecte
         }
 
         if (serviceId >= 1) {
-            String url = getString(R.string.server_uri) + ((Globals) getApplication()).serviceProviderIsServiceAlreadyExistsUrl();
-            ServiceProviderManager serverRequest = new ServiceProviderManager();
-            serverRequest.isServiceProviderAlreadyExists(mUserId, serviceId, url, new GetBooleanCallback() {
+            ServiceProviderManager.isServiceProviderAlreadyExists(mUserId, serviceId, new Callback.GetBooleanCallback() {
                 @Override
-                public void done(Boolean isServiceProviderAlreadyExists) {
+                public void complete(Boolean isServiceProviderAlreadyExists) {
                     if (isServiceProviderAlreadyExists) {
                         lblType.setError(strServiceAlreadyExist);
                         mIsServiceValid = false;
@@ -208,6 +210,12 @@ public class Work extends HelpUBaseActivity implements AdapterView.OnItemSelecte
                         lblType.setError(null);
                         mIsServiceValid = true;
                     }
+                }
+
+                @Override
+                public void failure(String msg) {
+                    msg = ((Globals) getApplication()).translateErrorType(msg);
+                    showAlert(msg);
                 }
             });
         }

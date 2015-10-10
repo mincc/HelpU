@@ -2,8 +2,15 @@ package com.example.chungmin.helpu.models;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.example.chungmin.helpu.R;
+import com.example.chungmin.helpu.activities.SendLog;
+
+import java.io.IOException;
 
 /**
  * Created by Chung Min on 7/28/2015.
@@ -12,12 +19,105 @@ public class Globals extends Application {
     private CustomerRequest customerRequest;
     private ServiceProvider serviceProvider;
     private int userId;
+    private int isAdmin;
     private int mBadgeCount;
     private static Context context;
+    private Thread.UncaughtExceptionHandler defaultUEH;
+
+    public Globals() {
+        defaultUEH = Thread.getDefaultUncaughtExceptionHandler();
+    }
 
     public void onCreate() {
+        // this method fires once as well as constructor
+        // but also application has context here
+
         super.onCreate();
         Globals.context = getApplicationContext();
+
+        //clear the log
+        String cmd = "logcat -c";
+        try {
+            Process process = Runtime.getRuntime().exec(cmd);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Setup handler for uncaught exceptions.
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread thread, Throwable e) {
+                handleUncaughtException(thread, e);
+            }
+        });
+
+        firstInstall();
+    }
+
+    public void handleUncaughtException(final Thread thread, final Throwable e) {
+        e.printStackTrace(); // not all Android versions will print the stack trace automatically
+
+        if (isUIThread()) {
+            invokeLogActivity(thread, e);
+
+        } else {  //handle non UI thread throw uncaught exception
+
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    invokeLogActivity(thread, e);
+                }
+            });
+        }
+
+    }
+
+    private void firstInstall() {
+        //Will call every time reinstall
+
+        String SP_NAME = "firstStart";
+
+        SharedPreferences settings = getSharedPreferences(SP_NAME, 0);
+        boolean firstStart = settings.getBoolean("firstStart", true);
+
+        if (firstStart) {
+
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("firstStart", false);
+            editor.commit();
+        }
+    }
+
+    //Dont delete bcos need to test in future
+    public void testUncaughtExceptionhandler() {
+        Thread testThread = new Thread() {
+            public void run() {
+                throw new RuntimeException("Expected!");
+            }
+        };
+
+        testThread.start();
+        try {
+            testThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //make sure log file is send
+    }
+
+    private void invokeLogActivity(final Thread thread, final Throwable e) {
+        Intent intent = new Intent(getApplicationContext(), SendLog.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+
+//        // re-throw critical exception further to the os (important)
+//        sleep(20000);
+//        defaultUEH.uncaughtException(thread, e);
+    }
+
+    public boolean isUIThread() {
+        return Looper.getMainLooper().getThread() == Thread.currentThread();
     }
 
     public static Context getAppContext() {
@@ -38,6 +138,14 @@ public class Globals extends Application {
         this.userId = userId;
     }
 
+    public int getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(int isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+
     public int getBadgeCount() {
         if (mBadgeCount == 0) {
             //0 will remove the icon number
@@ -47,7 +155,6 @@ public class Globals extends Application {
         }
         return mBadgeCount;
     }
-
     public void setBadgeCount(int mBadgeCount) {
         this.mBadgeCount = mBadgeCount;
     }
@@ -83,131 +190,5 @@ public class Globals extends Application {
     }
 
     //Url List for easy management
-    //region Customer
-    public static String getCustomerRequestGetByUserIDUrl()
-    {
-        return "CustomerRequestGetByUserID.php";
-    }
 
-    public static String getCustomerRequestGetByIDUrl()
-    {
-        return "CustomerRequestGetByID.php";
-    }
-
-    public static String getCustomerRequestInsertUrl()
-    {
-        return "CustomerRequestInsert.php";
-    }
-
-    public static String getCustomerRequestUpdateUrl()
-    {
-        return "CustomerRequestUpdate.php";
-    }
-
-    public static String getCustomerRequestJobListGetByUserIDUrl()
-    {
-        return "CustomerRequestJobListGetByUserID.php";
-    }
-
-    public static String getCustomerRequestJobDoneListGetByUserIDUrl() {
-        return "CustomerRequestJobDoneListGetByUserID.php";
-    }
-
-    public static String getCustomerRequestNotificationTriggerUrl() {
-        return "CustomerRequestNotificationTrigger.php";
-    }
-
-    public static String getCustomerRequestJobOfferUrl() {
-        return "CustomerRequestJobOffer.php";
-    }
-    //endregion
-
-    //region Service Provider
-    public static String getServiceProviderGetByIDUrl()
-    {
-        return "ServiceProviderGetByID.php";
-    }
-
-    public static String getServiceProviderGetByUserIDUrl()
-    {
-        return "ServiceProviderGetByUserID.php";
-    }
-
-    public static String getServiceProviderGetByServiceIDUrl()
-    {
-        return "ServiceProviderGetByServiceID.php";
-    }
-
-    public static String getServiceProviderInsertUrl()
-    {
-        return "ServiceProviderInsert.php";
-    }
-
-    public static String serviceProviderDeleteUrl() {
-        return "ServiceProviderDelete.php";
-    }
-
-    public static String serviceProviderIsServiceAlreadyExistsUrl() {
-        return "ServiceProviderIsServiceAlreadyExists.php";
-    }
-    //endregion
-
-    //region User
-    public static String getUserGetByUsernameAndPasswordUrl() {
-        return "UserGetByUsernameAndPassword.php";
-    }
-
-    public static String getUserInsertUrl() {
-        return "UserInsert.php";
-    }
-
-    public static String getUserUpdateUrl() {
-        return "UserUpdate.php";
-    }
-
-    public static String getIsUsernameAlreadyExistsUrl() {
-        return "UserIsUsernameAlreadyExists.php";
-    }
-
-    public static String getUserIsCurrentPasswordValidUrl() {
-        return "UserIsCurrentPasswordValid.php";
-    }
-
-    public static String getUserPasswordUpdateUrl() {
-        return "UserUpdatePassword.php";
-    }
-
-    public static String getUserUpdatePasswordByEmailUrl() {
-        return "UserUpdatePasswordByEmail.php";
-    }
-    //endregion
-
-    //region Rating
-    public static String getRatingInsertUrl() {
-        return "RatingInsert.php";
-    }
-    //endregion
-
-    //region Tansaction
-    public static String getTransactionInsertUrl() {
-        return "TransactionInsert.php";
-    }
-    //endregion
-
-    //region Other
-    public static String getAppUrl()
-    {
-        return "app.php";
-    }
-
-    public static String getUserStatsInfoUrl() {
-        return "UserStatsInfo.php";
-    }
-
-    public static String geAppStatsInfoUrl() {
-        return "AppStatsInfo.php";
-    }
-
-
-    //endregion
 }

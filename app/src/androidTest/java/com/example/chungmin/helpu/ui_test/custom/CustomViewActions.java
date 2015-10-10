@@ -1,4 +1,4 @@
-package com.example.chungmin.helpu.custom;
+package com.example.chungmin.helpu.ui_test.custom;
 
 import android.support.test.espresso.PerformException;
 import android.support.test.espresso.UiController;

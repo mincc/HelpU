@@ -1,5 +1,7 @@
 package HelpUGenericUtilities;
 
+import android.widget.EditText;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,4 +27,20 @@ public class ValidationUtils {
         return false;
     }
 
+
+    public static boolean isEditTextFill(EditText editText) {
+        if (editText.getText().toString().equals("")) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public static boolean isSpinnerSelected(int value) {
+        if (value == 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

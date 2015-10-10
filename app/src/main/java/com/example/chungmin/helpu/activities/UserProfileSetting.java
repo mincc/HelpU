@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.chungmin.helpu.callback.GetUserCallback;
+import com.example.chungmin.helpu.callback.Callback;
 import com.example.chungmin.helpu.models.Globals;
 import com.example.chungmin.helpu.R;
 import com.example.chungmin.helpu.models.User;
@@ -92,11 +92,10 @@ public class UserProfileSetting extends HelpUBaseActivity implements View.OnClic
     }
 
     private void updateUser(final User user) {
-        String url = getString(R.string.server_uri) + ((Globals) getApplication()).getUserUpdateUrl();
         UserManager serverRequest = new UserManager(this);
-        serverRequest.update(user, url, new GetUserCallback() {
+        serverRequest.update(user, new Callback.GetUserCallback() {
             @Override
-            public void done(User returnedUser) {
+            public void complete(User returnedUser) {
                 userLocalStore.storeUserData(user);
                 Intent redirect = new Intent(UserProfileSetting.this, MainActivity.class);
                 redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -105,8 +104,9 @@ public class UserProfileSetting extends HelpUBaseActivity implements View.OnClic
             }
 
             @Override
-            public void fail(String msg) {
-
+            public void failure(String msg) {
+                msg = ((Globals) getApplication()).translateErrorType(msg);
+                showAlert(msg);
             }
         });
     }

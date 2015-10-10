@@ -8,7 +8,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.example.chungmin.helpu.callback.GetUserCallback;
+import com.example.chungmin.helpu.callback.Callback;
 import com.example.chungmin.helpu.models.Globals;
 import com.example.chungmin.helpu.R;
 import com.example.chungmin.helpu.models.User;
@@ -63,12 +63,11 @@ public class ServerInfo extends HelpUBaseActivity implements View.OnClickListene
         mUsername = etUsername.getText().toString();
         mPassword = etPassword.getText().toString();
 
-        String url = rbServer.getText().toString() + ((Globals) getApplication()).getUserGetByUsernameAndPasswordUrl();
+        User user = new User(0, "", mUsername, mPassword, "", "", 0);
         UserManager serverRequest = new UserManager(this);
-        User user = new User(0, "", mUsername, mPassword, "", "");
-        serverRequest.login(user, url, new GetUserCallback() {
+        serverRequest.login(user, new Callback.GetUserCallback() {
             @Override
-            public void done(User returnedUser) {
+            public void complete(User returnedUser) {
                 if (returnedUser == null) {
                     tvResult.setText("Retrieve Fail");
                 } else {
@@ -77,8 +76,9 @@ public class ServerInfo extends HelpUBaseActivity implements View.OnClickListene
             }
 
             @Override
-            public void fail(String msg) {
-
+            public void failure(String msg) {
+                msg = ((Globals) getApplication()).translateErrorType(msg);
+                showAlert(msg);
             }
         });
     }

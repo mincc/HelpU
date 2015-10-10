@@ -17,11 +17,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.chungmin.helpu.callback.Callback;
 import com.example.chungmin.helpu.models.CustomerRequest;
 import com.example.chungmin.helpu.serverrequest.CustomerRequestManager;
-import com.example.chungmin.helpu.callback.GetCustomerRequestCallback;
-import com.example.chungmin.helpu.callback.GetServiceProviderCallback;
-import com.example.chungmin.helpu.callback.GetTransactionCallback;
 import com.example.chungmin.helpu.models.Globals;
 import com.example.chungmin.helpu.models.PaymentInfo;
 import com.example.chungmin.helpu.models.PaymentResultDelegate;
@@ -270,11 +268,15 @@ public class ProjectMessages extends HelpUBaseActivity implements View.OnClickLi
 
             }
 
-            String url = getString(R.string.server_uri) + ((Globals) getApplicationContext()).getCustomerRequestUpdateUrl();
-            CustomerRequestManager serverRequest = new CustomerRequestManager();
-            serverRequest.update(mCustomerRequest, url, new GetCustomerRequestCallback() {
+            CustomerRequestManager.update(mCustomerRequest, new Callback.GetCustomerRequestCallback() {
                 @Override
-                public void done(CustomerRequest returnedCustomerRequest) {
+                public void complete(CustomerRequest returnedCustomerRequest) {
+                }
+
+                @Override
+                public void failure(String msg) {
+                    msg = ((Globals) getApplication()).translateErrorType(msg);
+                    showAlert(msg);
                 }
             });
 
@@ -300,11 +302,15 @@ public class ProjectMessages extends HelpUBaseActivity implements View.OnClickLi
 //                    Toast.makeText(getBaseContext(), "OK Button is press", Toast.LENGTH_SHORT).show();
 
                     mCustomerRequest.setProjectStatusId(ProjectStatus.New.getId());
-                    String url = getString(R.string.server_uri) + ((Globals) getApplicationContext()).getCustomerRequestUpdateUrl();
-                    CustomerRequestManager serverRequest = new CustomerRequestManager();
-                    serverRequest.update(mCustomerRequest, url, new GetCustomerRequestCallback() {
+                    CustomerRequestManager.update(mCustomerRequest, new Callback.GetCustomerRequestCallback() {
                         @Override
-                        public void done(CustomerRequest returnedCustomerRequest) {
+                        public void complete(CustomerRequest returnedCustomerRequest) {
+                        }
+
+                        @Override
+                        public void failure(String msg) {
+                            msg = ((Globals) getApplication()).translateErrorType(msg);
+                            showAlert(msg);
                         }
                     });
 
@@ -394,11 +400,15 @@ public class ProjectMessages extends HelpUBaseActivity implements View.OnClickLi
             txtResultDetails.setVisibility(View.GONE);
 
             mCustomerRequest.setProjectStatusId(ProjectStatus.Deal.getId());
-            String url = getString(R.string.server_uri) + ((Globals) getApplicationContext()).getCustomerRequestUpdateUrl();
-            CustomerRequestManager serverRequest = new CustomerRequestManager();
-            serverRequest.update(mCustomerRequest, url, new GetCustomerRequestCallback() {
+            CustomerRequestManager.update(mCustomerRequest, new Callback.GetCustomerRequestCallback() {
                 @Override
-                public void done(CustomerRequest returnedCustomerRequest) {
+                public void complete(CustomerRequest returnedCustomerRequest) {
+                }
+
+                @Override
+                public void failure(String msg) {
+                    msg = ((Globals) getApplication()).translateErrorType(msg);
+                    showAlert(msg);
                 }
             });
 
@@ -420,21 +430,23 @@ public class ProjectMessages extends HelpUBaseActivity implements View.OnClickLi
     }
 
     private void storeTransactionInfo(Transaction transaction) {
-        String requestUrl = getString(R.string.server_uri) + ((Globals) getApplicationContext()).getTransactionInsertUrl();
-        TransactionManager serverRequest = new TransactionManager();
-        serverRequest.insert(transaction, requestUrl, new GetTransactionCallback() {
+        TransactionManager.insert(transaction, new Callback.GetTransactionCallback() {
             @Override
-            public void done(Transaction returnedTransaction) {
+            public void complete(Transaction returnedTransaction) {
+            }
+
+            @Override
+            public void failure(String msg) {
+                msg = ((Globals) getApplication()).translateErrorType(msg);
+                showAlert(msg);
             }
         });
     }
 
     public void getCustomerRequestInfo() {
-        String url = getString(R.string.server_uri) + ((Globals) getApplicationContext()).getCustomerRequestGetByIDUrl();
-        CustomerRequestManager serverRequest = new CustomerRequestManager();
-        serverRequest.getByID(mCustomerRequestId, url, new GetCustomerRequestCallback() {
+        CustomerRequestManager.getByID(mCustomerRequestId, new Callback.GetCustomerRequestCallback() {
             @Override
-            public void done(CustomerRequest returnedCustomerRequest) {
+            public void complete(CustomerRequest returnedCustomerRequest) {
                 if (returnedCustomerRequest != null) {
                     mCustomerRequest = returnedCustomerRequest;
                     //Need to for Rating to get more current status instead of the status when notification trigger
@@ -446,15 +458,19 @@ public class ProjectMessages extends HelpUBaseActivity implements View.OnClickLi
                     getServiceProviderInfo();
                 }
             }
+
+            @Override
+            public void failure(String msg) {
+                msg = ((Globals) getApplication()).translateErrorType(msg);
+                showAlert(msg);
+            }
         });
     }
 
     public void getServiceProviderInfo() {
-        String url = getString(R.string.server_uri) + ((Globals) getApplication()).getServiceProviderGetByIDUrl();
-        ServiceProviderManager serverRequest = new ServiceProviderManager();
-        serverRequest.getByID(mCustomerRequest.getServiceProviderId(), url, new GetServiceProviderCallback() {
+        ServiceProviderManager.getByID(mCustomerRequest.getServiceProviderId(), new Callback.GetServiceProviderCallback() {
             @Override
-            public void done(ServiceProvider returnedServiceProvider) {
+            public void complete(ServiceProvider returnedServiceProvider) {
                 if (returnedServiceProvider == null) {
                     showAlert("Get Service Provider By ID Fail!!");
                 } else {
@@ -462,6 +478,12 @@ public class ProjectMessages extends HelpUBaseActivity implements View.OnClickLi
                     getDisplayFragmentDetail();
                     getProjectStatusChecking();
                 }
+            }
+
+            @Override
+            public void failure(String msg) {
+                msg = ((Globals) getApplication()).translateErrorType(msg);
+                showAlert(msg);
             }
         });
     }
@@ -668,12 +690,16 @@ public class ProjectMessages extends HelpUBaseActivity implements View.OnClickLi
     }
 
     public void setAlreadyReadNotification() {
-        String url = getString(R.string.server_uri) + ((Globals) getApplicationContext()).getCustomerRequestUpdateUrl();
-        CustomerRequestManager serverRequest = new CustomerRequestManager();
         mCustomerRequest.setAlreadyReadNotification(1); //already read
-        serverRequest.update(mCustomerRequest, url, new GetCustomerRequestCallback() {
+        CustomerRequestManager.update(mCustomerRequest, new Callback.GetCustomerRequestCallback() {
             @Override
-            public void done(CustomerRequest returnedCustomerRequest) {
+            public void complete(CustomerRequest returnedCustomerRequest) {
+            }
+
+            @Override
+            public void failure(String msg) {
+                msg = ((Globals) getApplication()).translateErrorType(msg);
+                showAlert(msg);
             }
         });
 

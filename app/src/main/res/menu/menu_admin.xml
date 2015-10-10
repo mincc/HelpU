@@ -39,6 +39,12 @@
         android:orderInCategory="100"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_customercare"
+        android:title="@string/strCustomerCare"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
     <!--<item-->
     <!--android:id="@+id/action_project_status_flow"-->
     <!--android:title="@string/action_project_status_flow"-->
@@ -51,4 +57,18 @@
         app:showAsAction="always"
         app:actionLayout="@layout/progress_indeterminate"
         tools:ignore="AlwaysShowAction,UnusedAttribute" />
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_action_search"
+        android:title="@string/strSearch"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_refresh"
+        app:showAsAction="always"
+        android:orderInCategory="100"
+        android:title="@string/strRefresh"
+        android:icon="@drawable/ic_action_refresh" />
 </menu>

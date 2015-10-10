@@ -20,7 +20,12 @@ public class Task {
 
     public void sendEmail(String gmailUsername, String gmailPassword, String emailRecipients,
                           String emailSender, String emailSubject, String emailBody) {
-        new SendEmailAsyncTask(gmailUsername, gmailPassword, emailRecipients, emailSender, emailSubject, emailBody).execute();
+        new SendEmailAsyncTask(gmailUsername, gmailPassword, emailRecipients, emailSender, emailSubject, emailBody, "text/html").execute();
+    }
+
+    public void sendEmail(String gmailUsername, String gmailPassword, String emailRecipients,
+                          String emailSender, String emailSubject, String emailBody, String type) {
+        new SendEmailAsyncTask(gmailUsername, gmailPassword, emailRecipients, emailSender, emailSubject, emailBody, type).execute();
     }
 
     class SendEmailAsyncTask extends AsyncTask<Void, Void, Boolean> {
@@ -32,15 +37,17 @@ public class Task {
         private String emailSender;
         private String emailSubject;
         private String emailBody;
+        private String type;
 
         public SendEmailAsyncTask(String gmailUsername, String gmailPassword, String emailRecipients,
-                                  String emailSender, String emailSubject, String emailBody) {
+                                  String emailSender, String emailSubject, String emailBody, String type) {
             this.gmailUsername = gmailUsername;
             this.gmailPassword = gmailPassword;
             this.emailRecipients = emailRecipients;
             this.emailSender = emailSender;
             this.emailSubject = emailSubject;
             this.emailBody = emailBody;
+            this.type = type;
         }
 
         @Override
@@ -50,7 +57,7 @@ public class Task {
             try {
                 sender = new GMailSender(gmailUsername, gmailPassword);
 //                        sender.addAttachment("/storage/emulated/0/Samsung/Image/010.jpg","My Picture");
-                sender.sendMail(emailSubject, emailBody, emailSender, emailRecipients);
+                sender.sendMail(emailSubject, emailBody, emailSender, emailRecipients, type);
                 return true;
             } catch (AuthenticationFailedException e) {
                 //need to set the account to https://www.google.com/settings/security/lesssecureapps "TURN OFF

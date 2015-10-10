@@ -12,16 +12,15 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.chungmin.helpu.serverrequest.ServiceProviderDataTask;
+import com.example.chungmin.helpu.callback.Callback;
 import com.example.chungmin.helpu.models.Globals;
 import com.example.chungmin.helpu.R;
 import com.example.chungmin.helpu.adapter.ServiceProviderAdapter;
 import com.example.chungmin.helpu.models.UserLocalStore;
-import com.example.chungmin.helpu.callback.FetchServiceProviderDataListener;
 import com.example.chungmin.helpu.models.ServiceProvider;
 import com.example.chungmin.helpu.models.User;
+import com.example.chungmin.helpu.serverrequest.ServiceProviderManager;
 
 import java.util.List;
 
@@ -46,7 +45,7 @@ public class ServiceProviderList extends HelpUBaseActivity {
         isAllowMenuProgressBar = false;
     }
 
-    public static class ServiceProviderListFragment extends ListFragment implements FetchServiceProviderDataListener {
+    public static class ServiceProviderListFragment extends ListFragment {
         private Context mContext;
 
         @Override
@@ -97,31 +96,26 @@ public class ServiceProviderList extends HelpUBaseActivity {
         }
 
         private void initView() {
-
-            String url = getString(R.string.server_uri) + ((Globals) getActivity().getApplication()).getServiceProviderGetByUserIDUrl();
-
             UserLocalStore userLocalStore = new UserLocalStore(mContext);
             User user = userLocalStore.getLoggedInUser();
-            String userId = String.valueOf(user.getUserId());
+            int userId = user.getUserId();
 
-            ServiceProviderDataTask task = new ServiceProviderDataTask(this);
-            task.execute(url, userId);
-        }
+            ServiceProviderManager.getListByUserId(userId, new Callback.GetServiceProviderListCallback() {
 
+                @Override
+                public void complete(List<ServiceProvider> data) {
+                    // create new adapter
+                    ServiceProviderAdapter adapter = new ServiceProviderAdapter(mContext, data, true);
+                    // set the adapter to list
+                    setListAdapter(adapter);
+                }
 
-        @Override
-        public void Complete(List<ServiceProvider> data) {
-            // create new adapter
-            ServiceProviderAdapter adapter = new ServiceProviderAdapter(mContext, data, true);
-            // set the adapter to list
-            setListAdapter(adapter);
-        }
-
-        @Override
-        public void Failure(String msg) {
-
-            // show failure message
-            Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();
+                @Override
+                public void failure(String msg) {
+                    msg = ((Globals) mContext.getApplicationContext()).translateErrorType(msg);
+                    ((HelpUBaseActivity) mContext).showAlert(msg);
+                }
+            });
         }
     }
 }

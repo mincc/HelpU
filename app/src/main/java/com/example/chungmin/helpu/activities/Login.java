@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.chungmin.helpu.callback.GetUserCallback;
+import com.example.chungmin.helpu.callback.Callback;
 import com.example.chungmin.helpu.models.Globals;
 import com.example.chungmin.helpu.R;
 import com.example.chungmin.helpu.models.User;
@@ -91,18 +91,18 @@ public class Login extends ActionBarActivity implements View.OnClickListener, Vi
     }
 
     private void authenticate(User user) {
-        String url = getString(R.string.server_uri) + ((Globals) getApplication()).getUserGetByUsernameAndPasswordUrl();
         UserManager serverRequest = new UserManager(this);
-        serverRequest.login(user, url, new GetUserCallback() {
+        serverRequest.login(user, new Callback.GetUserCallback() {
             @Override
-            public void done(User returnedUser) {
+            public void complete(User returnedUser) {
                 if (returnedUser != null) {
                     logUserIn(returnedUser);
+                    ((Globals) getApplication()).setIsAdmin(returnedUser.getIsAdmin());
                 }
             }
 
             @Override
-            public void fail(String msg) {
+            public void failure(String msg) {
                 msg = ((Globals) getApplication()).translateErrorType(msg);
                 showErrorMessage(msg);
             }

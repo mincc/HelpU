@@ -2,7 +2,8 @@ package com.example.chungmin.helpu.serverrequest;
 
 import android.os.AsyncTask;
 
-import com.example.chungmin.helpu.callback.GetRatingCallback;
+import com.example.chungmin.helpu.callback.Callback;
+import com.example.chungmin.helpu.models.AppLink;
 import com.example.chungmin.helpu.models.Rating;
 import com.example.chungmin.helpu.serverrequest.common.ServerUtils;
 
@@ -10,12 +11,13 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.json.JSONException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -23,11 +25,13 @@ import java.util.ArrayList;
  */
 public class RatingManager {
 
+    private static String mMsg = "";
+
     public RatingManager() {
     }
 
-    public void insert(Rating rating, String url, GetRatingCallback ratingCallback) {
-        new Insert(rating, ratingCallback).execute(url);
+    public static void insert(Rating rating, Callback.GetRatingCallback ratingCallback) {
+        new Insert(rating, ratingCallback).execute();
     }
 
     /**
@@ -35,22 +39,23 @@ public class RatingManager {
      * ===========================================================================================
      */
 
-    public class Insert extends AsyncTask<String, Void, Void> {
+    public static class Insert extends AsyncTask<String, Void, Void> {
         Rating rating;
-        GetRatingCallback ratingCallBack;
+        Callback.GetRatingCallback ratingCallBack;
 
-        public Insert(Rating rating, GetRatingCallback ratingCallBack) {
+        public Insert(Rating rating, Callback.GetRatingCallback ratingCallBack) {
             this.rating = rating;
             this.ratingCallBack = ratingCallBack;
         }
 
         @Override
         protected Void doInBackground(String... params) {
+            mMsg = "";
             if(params == null)
                 return null;
 
             // get url from params
-            String url = params[0];
+            String url = AppLink.getRatingInsertUrl();
 
             ArrayList<NameValuePair> dataToSend = new ArrayList<>();
             dataToSend.add(new BasicNameValuePair("voterId", rating.getVoterId() + ""));
@@ -66,7 +71,12 @@ public class RatingManager {
             try {
                 post.setEntity(new UrlEncodedFormEntity(dataToSend));
                 client.execute(post);
+            } catch (ConnectTimeoutException cte) {
+                mMsg = "Connection Timeout";
+            } catch (IOException e) {
+                mMsg = "No Network Connection";
             } catch (Exception e) {
+                mMsg = e.toString();
                 e.printStackTrace();
             }
 
@@ -76,7 +86,13 @@ public class RatingManager {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            ratingCallBack.done(null);
+            if (ratingCallBack != null) {
+                if (mMsg.equals("")) {
+                    ratingCallBack.complete(null);
+                } else {
+                    ratingCallBack.failure(mMsg);
+                }
+            }
         }
     }
 }

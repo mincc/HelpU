@@ -3,9 +3,9 @@ package com.example.chungmin.helpu.serverrequest;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.chungmin.helpu.callback.GetCustomerRequestCallback;
-import com.example.chungmin.helpu.callback.GetCustomerRequestListCallback;
+import com.example.chungmin.helpu.callback.Callback;
 import com.example.chungmin.helpu.enumeration.ProjectStatus;
+import com.example.chungmin.helpu.models.AppLink;
 import com.example.chungmin.helpu.models.CustomerRequest;
 import com.example.chungmin.helpu.serverrequest.common.ServerUtils;
 
@@ -15,24 +15,29 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import HelpUGenericUtilities.StringUtils;
 
 /**
  * Created by Chung Min on 7/19/2015.
  * 09 Sep 2015 cm.choong : add customerRatingValue, serviceProviderRatingValue, alreadyReadNotification;
  */
 public class CustomerRequestManager {
+
+    private static String mMsg = "";
 
     public CustomerRequestManager() {
     }
@@ -80,46 +85,50 @@ public class CustomerRequestManager {
         return list;
     }
 
-    public void insert(CustomerRequest customerRequest, String url, GetCustomerRequestCallback customerRequestCallback) {
-        new Insert(customerRequest, customerRequestCallback).execute(url);
+    public static void insert(CustomerRequest customerRequest, Callback.GetCustomerRequestCallback customerRequestCallback) {
+        new Insert(customerRequest, customerRequestCallback).execute();
     }
 
-    public void getByID(int customerRequestId, String url, GetCustomerRequestCallback customerRequestCallBack) {
-        new GetByID(customerRequestId, customerRequestCallBack).execute(url);
+    public static void getByID(int customerRequestId, Callback.GetCustomerRequestCallback customerRequestCallBack) {
+        new GetByID(customerRequestId, customerRequestCallBack).execute();
     }
 
-    public void update(CustomerRequest customerRequest, String url, GetCustomerRequestCallback customerRequestCallBack) {
-        new Update(customerRequest, customerRequestCallBack).execute(url);
+    public static void update(CustomerRequest customerRequest, Callback.GetCustomerRequestCallback customerRequestCallBack) {
+        new Update(customerRequest, customerRequestCallBack).execute();
     }
 
-    public void getCustomerRequestNotificationTrigger(int userId, String url, GetCustomerRequestListCallback customerRequestListCallBack) {
-        new CustomerRequestNotificationTrigger(userId, customerRequestListCallBack).execute(url);
+    public static void getCustomerRequestNotificationTrigger(int userId, Callback.GetCustomerRequestListCallback customerRequestListCallBack) {
+        new CustomerRequestNotificationTrigger(userId, customerRequestListCallBack).execute();
     }
 
-    public void getCustomerRequestJobOffer(int userId, String url, GetCustomerRequestCallback customerRequestCallback) {
+    public static void getCustomerRequestJobOffer(int userId, String url, Callback.GetCustomerRequestCallback customerRequestCallback) {
         new CustomerRequestJobOffer(userId, customerRequestCallback).execute(url);
     }
+
+    public static void getListByUserId(int userId, String type, Callback.GetCustomerRequestListCallback customerRequestListCallBack) {
+        new GetListByUserId(userId, type, customerRequestListCallBack).execute();
+    }
+
     /**
      * ===========================================================================================
      * ===========================================================================================
      */
 
-    public class Insert extends AsyncTask<String, Void, CustomerRequest> {
+    public static class Insert extends AsyncTask<String, Void, CustomerRequest> {
         CustomerRequest customerRequest;
-        GetCustomerRequestCallback customerRequestCallBack;
+        Callback.GetCustomerRequestCallback customerRequestCallBack;
 
-        public Insert(CustomerRequest customerRequest, GetCustomerRequestCallback customerRequestCallBack) {
+        public Insert(CustomerRequest customerRequest, Callback.GetCustomerRequestCallback customerRequestCallBack) {
             this.customerRequest = customerRequest;
             this.customerRequestCallBack = customerRequestCallBack;
         }
 
         @Override
         protected CustomerRequest doInBackground(String... params) {
+            mMsg = "";
             if(params == null)
                 return null;
-
-            // get url from params
-            String url = params[0];
+            String url = AppLink.getCustomerRequestInsertUrl();
 
             ArrayList<NameValuePair> dataToSend = new ArrayList<>();
             dataToSend.add(new BasicNameValuePair("userId", customerRequest.getUserId()+ ""));
@@ -138,11 +147,23 @@ public class CustomerRequestManager {
                 HttpResponse httpResponse = client.execute(post);
 
                 HttpEntity entity = httpResponse.getEntity();
+                if (entity == null) {
+                    mMsg = "No Response From Server";
+                    return null;
+                }
+
                 String result = EntityUtils.toString(entity);
                 Log.v("happened", "Insert");
                 returnedCustomerRequest = buildRecord(result);
 
+            } catch (JSONException e) {
+                mMsg = "Invalid Response";
+            } catch (ConnectTimeoutException cte) {
+                mMsg = "Connection Timeout";
+            } catch (IOException e) {
+                mMsg = "No Network Connection";
             } catch (Exception e) {
+                mMsg = e.toString();
                 e.printStackTrace();
             }
 
@@ -152,27 +173,32 @@ public class CustomerRequestManager {
         @Override
         protected void onPostExecute(CustomerRequest returnedCustomerRequest) {
             super.onPostExecute(returnedCustomerRequest);
-            customerRequestCallBack.done(returnedCustomerRequest);
+            if (customerRequestCallBack != null) {
+                if (mMsg.equals("")) {
+                    customerRequestCallBack.complete(returnedCustomerRequest);
+                } else {
+                    customerRequestCallBack.failure(mMsg);
+                }
+            }
         }
 
     }
 
-    public class GetByID extends AsyncTask<String, Void, CustomerRequest> {
+    public static class GetByID extends AsyncTask<String, Void, CustomerRequest> {
         int customerRequestId;
-        GetCustomerRequestCallback customerRequestCallBack;
+        Callback.GetCustomerRequestCallback customerRequestCallBack;
 
-        public GetByID(int customerRequestId, GetCustomerRequestCallback customerRequestCallBack) {
+        public GetByID(int customerRequestId, Callback.GetCustomerRequestCallback customerRequestCallBack) {
             this.customerRequestId = customerRequestId;
             this.customerRequestCallBack = customerRequestCallBack;
         }
 
         @Override
         protected CustomerRequest doInBackground(String... params) {
+            mMsg = "";
             if(params == null)
                 return null;
-
-            // get url from params
-            String url = params[0];
+            String url = AppLink.getCustomerRequestGetByIDUrl();
 
             ArrayList<NameValuePair> dataToSend = new ArrayList<>();
             dataToSend.add(new BasicNameValuePair("customerRequestId", this.customerRequestId + ""));
@@ -188,11 +214,28 @@ public class CustomerRequestManager {
                 HttpResponse httpResponse = client.execute(post);
 
                 HttpEntity entity = httpResponse.getEntity();
+                if (entity == null) {
+                    mMsg = "No Response From Server";
+                    return null;
+                }
+
                 String result = EntityUtils.toString(entity);
+                if (result.equals("null")) {
+                    mMsg = "No Item Found";
+                    return null;
+                }
+
                 Log.v("happened", "GetByID");
                 returnedCustomerRequest = buildRecord(result);
 
+            } catch (JSONException e) {
+                mMsg = "Invalid Response";
+            } catch (ConnectTimeoutException cte) {
+                mMsg = "Connection Timeout";
+            } catch (IOException e) {
+                mMsg = "No Network Connection";
             } catch (Exception e) {
+                mMsg = e.toString();
                 e.printStackTrace();
             }
 
@@ -202,26 +245,31 @@ public class CustomerRequestManager {
         @Override
         protected void onPostExecute(CustomerRequest returnedCustomerRequest) {
             super.onPostExecute(returnedCustomerRequest);
-            customerRequestCallBack.done(returnedCustomerRequest);
+            if (customerRequestCallBack != null) {
+                if (mMsg.equals("")) {
+                    customerRequestCallBack.complete(returnedCustomerRequest);
+                } else {
+                    customerRequestCallBack.failure(mMsg);
+                }
+            }
         }
     }
 
-    public class Update extends AsyncTask<String, Void, Void> {
+    public static class Update extends AsyncTask<String, Void, Void> {
         CustomerRequest customerRequest;
-        GetCustomerRequestCallback customerRequestCallBack;
+        Callback.GetCustomerRequestCallback customerRequestCallBack;
 
-        public Update(CustomerRequest customerRequest, GetCustomerRequestCallback customerRequestCallBack) {
+        public Update(CustomerRequest customerRequest, Callback.GetCustomerRequestCallback customerRequestCallBack) {
             this.customerRequest=customerRequest;
             this.customerRequestCallBack = customerRequestCallBack;
         }
 
         @Override
         protected Void doInBackground(String... params) {
+            mMsg = "";
             if(params == null)
                 return null;
-
-            // get url from params
-            String url = params[0];
+            String url = AppLink.getCustomerRequestUpdateUrl();
 
             ArrayList<NameValuePair> dataToSend = new ArrayList<>();
             dataToSend.add(new BasicNameValuePair("customerRequestId", customerRequest.getCustomerRequestId() + ""));
@@ -243,7 +291,12 @@ public class CustomerRequestManager {
                 post.setEntity(new UrlEncodedFormEntity(dataToSend));
                 client.execute(post);
 
+            } catch (ConnectTimeoutException cte) {
+                mMsg = "Connection Timeout";
+            } catch (IOException e) {
+                mMsg = "No Network Connection";
             } catch (Exception e) {
+                mMsg = e.toString();
                 e.printStackTrace();
             }
 
@@ -253,26 +306,33 @@ public class CustomerRequestManager {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            customerRequestCallBack.done(null);
+            if (customerRequestCallBack != null) {
+                if (mMsg.equals("")) {
+                    customerRequestCallBack.complete(null);
+                } else {
+                    customerRequestCallBack.failure(mMsg);
+                }
+            }
         }
     }
 
-    public class CustomerRequestNotificationTrigger extends AsyncTask<String, Void, List<CustomerRequest>> {
+    public static class CustomerRequestNotificationTrigger extends AsyncTask<String, Void, List<CustomerRequest>> {
         int userId;
-        GetCustomerRequestListCallback customerRequestListCallBack;
+        Callback.GetCustomerRequestListCallback customerRequestListCallBack;
 
-        public CustomerRequestNotificationTrigger(int userId, GetCustomerRequestListCallback customerRequestListCallBack) {
+        public CustomerRequestNotificationTrigger(int userId, Callback.GetCustomerRequestListCallback customerRequestListCallBack) {
             this.userId = userId;
             this.customerRequestListCallBack = customerRequestListCallBack;
         }
 
         @Override
         protected List<CustomerRequest> doInBackground(String... params) {
+            mMsg = "";
             if (params == null)
                 return null;
 
             // get url from params
-            String url = params[0];
+            String url = AppLink.getCustomerRequestNotificationTriggerUrl();
 
             ArrayList<NameValuePair> dataToSend = new ArrayList<>();
             dataToSend.add(new BasicNameValuePair("userId", this.userId + ""));
@@ -289,10 +349,22 @@ public class CustomerRequestManager {
                 HttpResponse httpResponse = client.execute(post);
 
                 HttpEntity entity = httpResponse.getEntity();
+                if (entity == null) {
+                    mMsg = "No Response From Server";
+                    return null;
+                }
+
                 String result = EntityUtils.toString(entity);
                 customerRequestList = buildList(result);
 
+            } catch (JSONException e) {
+                mMsg = "Invalid Response";
+            } catch (ConnectTimeoutException cte) {
+                mMsg = "Connection Timeout";
+            } catch (IOException e) {
+                mMsg = "No Network Connection";
             } catch (Exception e) {
+                mMsg = e.toString();
                 e.printStackTrace();
             }
 
@@ -302,21 +374,28 @@ public class CustomerRequestManager {
         @Override
         protected void onPostExecute(List<CustomerRequest> returnedCustomerListRequest) {
             super.onPostExecute(returnedCustomerListRequest);
-            customerRequestListCallBack.Complete(returnedCustomerListRequest);
+            if (customerRequestListCallBack != null) {
+                if (mMsg.equals("")) {
+                    customerRequestListCallBack.complete(returnedCustomerListRequest);
+                } else {
+                    customerRequestListCallBack.failure(mMsg);
+                }
+            }
         }
     }
 
-    public class CustomerRequestJobOffer extends AsyncTask<String, Void, CustomerRequest> {
+    public static class CustomerRequestJobOffer extends AsyncTask<String, Void, CustomerRequest> {
         int userId;
-        GetCustomerRequestCallback consumerRequestCallBack;
+        Callback.GetCustomerRequestCallback customerRequestCallBack;
 
-        public CustomerRequestJobOffer(int userId, GetCustomerRequestCallback consumerRequestCallBack) {
+        public CustomerRequestJobOffer(int userId, Callback.GetCustomerRequestCallback customerRequestCallBack) {
             this.userId = userId;
-            this.consumerRequestCallBack = consumerRequestCallBack;
+            this.customerRequestCallBack = customerRequestCallBack;
         }
 
         @Override
         protected CustomerRequest doInBackground(String... params) {
+            mMsg = "";
             boolean isTrigger = false;
             if (params == null)
                 return null;
@@ -337,11 +416,23 @@ public class CustomerRequestManager {
                 HttpResponse httpResponse = client.execute(post);
 
                 HttpEntity entity = httpResponse.getEntity();
+                if (entity == null) {
+                    mMsg = "No Response From Server";
+                    return null;
+                }
+
                 String result = EntityUtils.toString(entity);
                 Log.v("happened", "CustomerRequestJobOffer");
                 returnedCustomerRequest = buildRecord(result);
 
+            } catch (JSONException e) {
+                mMsg = "Invalid Response";
+            } catch (ConnectTimeoutException cte) {
+                mMsg = "Connection Timeout";
+            } catch (IOException e) {
+                mMsg = "No Network Connection";
             } catch (Exception e) {
+                mMsg = e.toString();
                 e.printStackTrace();
             }
 
@@ -351,8 +442,91 @@ public class CustomerRequestManager {
         @Override
         protected void onPostExecute(CustomerRequest returnedCustomerRequest) {
             super.onPostExecute(returnedCustomerRequest);
-            consumerRequestCallBack.done(returnedCustomerRequest);
+            if (customerRequestCallBack != null) {
+                if (mMsg.equals("")) {
+                    customerRequestCallBack.complete(returnedCustomerRequest);
+                } else {
+                    customerRequestCallBack.failure(mMsg);
+                }
+            }
         }
     }
 
+    public static class GetListByUserId extends AsyncTask<String, Void, List<CustomerRequest>> {
+        private final Callback.GetCustomerRequestListCallback listener;
+        private final int userId;
+        private final String type;
+
+        public GetListByUserId(int userId, String type, Callback.GetCustomerRequestListCallback listener) {
+            this.userId = userId;
+            this.type = type;
+            this.listener = listener;
+        }
+
+        @Override
+        protected List<CustomerRequest> doInBackground(String... params) {
+            mMsg = "";
+            List<CustomerRequest> customerRequestList = new ArrayList<CustomerRequest>();
+            ;
+
+            if (params == null) return null;
+            String url = "";
+            if (type.equals("JobOfferList")) {
+                url = AppLink.getCustomerRequestJobListGetByUserIDUrl();
+            } else if (type.equals("JobDoneList")) {
+                url = AppLink.getCustomerRequestJobDoneListGetByUserIDUrl();
+            } else if (type.equals("HireList")) {
+                url = AppLink.getCustomerRequestHireListGetByUserIDUrl();
+            }
+
+            ArrayList<NameValuePair> dataToSend = new ArrayList<>();
+            dataToSend.add(new BasicNameValuePair("userId", userId + ""));
+
+            try {
+                HttpParams httpRequestParams = ServerUtils.getHttpRequestParams();
+                HttpClient client = new DefaultHttpClient(httpRequestParams);
+                HttpPost post = new HttpPost(url);
+
+                // connect
+                post.setEntity(new UrlEncodedFormEntity(dataToSend));
+                HttpResponse response = client.execute(post);
+
+                // get response
+                HttpEntity entity = response.getEntity();
+
+                if (entity == null) {
+                    mMsg = "No Response From Server";
+                    return null;
+                }
+
+                String result = EntityUtils.toString(entity);
+                customerRequestList = buildList(result);
+
+            } catch (JSONException e) {
+                mMsg = "Invalid Response";
+            } catch (ConnectTimeoutException cte) {
+                mMsg = "Connection Timeout";
+            } catch (IOException e) {
+                mMsg = "No Network Connection";
+            } catch (Exception e) {
+                mMsg = e.toString();
+                e.printStackTrace();
+            }
+
+            return customerRequestList;
+        }
+
+        @Override
+        protected void onPostExecute(List<CustomerRequest> returnedCustomerListRequest) {
+            super.onPostExecute(returnedCustomerListRequest);
+            if (listener != null) {
+                if (mMsg.equals("")) {
+                    listener.complete(returnedCustomerListRequest);
+                } else {
+                    listener.failure(mMsg);
+                }
+            }
+        }
+
+    }
 }

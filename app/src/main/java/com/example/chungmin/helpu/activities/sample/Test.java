@@ -1,55 +1,74 @@
 package com.example.chungmin.helpu.activities.sample;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.ProgressBar;
+import android.support.v7.app.AppCompatActivity;
+import android.text.format.DateUtils;
+import android.widget.TextView;
 
 import com.example.chungmin.helpu.R;
-import com.readystatesoftware.viewbadger.BadgeView;
 
-import fragments.UserInfoFragment;
+import org.joda.time.DateTime;
 
-public class Test extends Activity {
-//    private ProgressBar bar;
-//    private AlarmManagerBroadcastReceiver alarm;
-//    UserLocalStore userLocalStore;
+import java.text.SimpleDateFormat;
 
-    Button btnTest;
-    BadgeView badge;
+import HelpUGenericUtilities.DateTimeUtils;
+import HelpUGenericUtilities.Enumerations;
+
+import static android.text.format.DateUtils.getRelativeTimeSpanString;
+
+public class Test extends AppCompatActivity {
+
+    private TextView tvCurrentDateTime;
+    private TextView tvResultSec, tvResultMin, tvResultHour, tvResultDay, tvResultWeek, tvResultYear;
+    private TextView tvCurrentDateTimeMilis;
+    private TextView tvItemDateTimeMilis;
+    private TextView tvItemDate;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
-//        userLocalStore = new UserLocalStore(this);
-//        User user = userLocalStore.getLoggedInUser();
-//
-//        if (savedInstanceState == null) {
-//            FragmentManager fm = getFragmentManager();
-//            FragmentTransaction ft = fm.beginTransaction();
-//            Fragment frag = new UserInfoFragment().newInstance(user.getUserName(), null, 0, 0);
-//            ft.add(R.id.llDisplaySection, frag);
-//            ft.commit();
-//        }
+        tvCurrentDateTime = (TextView) findViewById(R.id.tvCurrentDateTime);
+        tvCurrentDateTimeMilis = (TextView) findViewById(R.id.tvCurrentDateTimeMilis);
+        tvItemDate = (TextView) findViewById(R.id.tvItemDate);
+        tvItemDateTimeMilis = (TextView) findViewById(R.id.tvItemDateTimeMilis);
+        tvResultSec = (TextView) findViewById(R.id.tvResultSec);
+        tvResultMin = (TextView) findViewById(R.id.tvResultMin);
+        tvResultHour = (TextView) findViewById(R.id.tvResultHour);
+        tvResultDay = (TextView) findViewById(R.id.tvResultDay);
+        tvResultWeek = (TextView) findViewById(R.id.tvResultWeek);
+        tvResultYear = (TextView) findViewById(R.id.tvResultYear);
 
-        btnTest = (Button) findViewById(R.id.btnTest);
-        badge = new BadgeView(this, btnTest);
-        badge.setText("New!");
-        badge.setTextColor(Color.BLUE);
-        badge.setBadgeBackgroundColor(Color.YELLOW);
-        badge.setTextSize(12);
-        badge.show();
-    }
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+        DateTime currentDate = DateTime.now();
+        long currentDateLong = currentDate.getMillis();
+        String formattedCurrDate = df.format(currentDateLong);
+
+        DateTime itemDate = new DateTime(2015, 10, 5, 13, 22, 10);
+        long itemDateLong = itemDate.getMillis();
+        String formattedItemDate = df.format(itemDateLong);
+
+        tvCurrentDateTime.setText(formattedCurrDate);
+        tvCurrentDateTimeMilis.setText(Long.toString(currentDateLong));
+        tvItemDate.setText(formattedItemDate);
+        tvItemDateTimeMilis.setText(Long.toString(itemDateLong));
+
+        String resultSecInMillis = getRelativeTimeSpanString(itemDateLong, currentDateLong, DateUtils.SECOND_IN_MILLIS).toString();
+        String resultMinInMillis = getRelativeTimeSpanString(itemDateLong, currentDateLong, DateUtils.MINUTE_IN_MILLIS).toString();
+        String resultHourInMillis = getRelativeTimeSpanString(itemDateLong, currentDateLong, DateUtils.HOUR_IN_MILLIS).toString();
+        String resultDayInMillis = getRelativeTimeSpanString(itemDateLong, currentDateLong, DateUtils.DAY_IN_MILLIS).toString();
+        String resultWeekInMillis = DateTimeUtils.ToHuman(itemDate, Enumerations.DateStyle.HowLong, this);
+        String resultYearInMillis = getRelativeTimeSpanString(itemDateLong, currentDateLong, DateUtils.YEAR_IN_MILLIS).toString();
+
+        tvResultSec.setText(resultSecInMillis);
+        tvResultMin.setText(resultMinInMillis);
+        tvResultHour.setText(resultHourInMillis);
+        tvResultDay.setText(resultDayInMillis);
+        tvResultWeek.setText(resultWeekInMillis);
+        tvResultYear.setText(resultYearInMillis);
     }
 
 }

@@ -15,11 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.chungmin.helpu.R;
+import com.example.chungmin.helpu.callback.Callback;
 import com.example.chungmin.helpu.serverrequest.ServiceProviderManager;
 import com.example.chungmin.helpu.adapter.ServiceProviderAdapter;
-import com.example.chungmin.helpu.callback.FetchServiceProviderDataListener;
-import com.example.chungmin.helpu.callback.GetCustomerRequestCallback;
-import com.example.chungmin.helpu.callback.GetServiceProviderListCallback;
 import com.example.chungmin.helpu.enumeration.ProjectStatus;
 import com.example.chungmin.helpu.models.CustomerRequest;
 import com.example.chungmin.helpu.models.Globals;
@@ -47,7 +45,7 @@ public class ServiceProviderListByServiceID extends HelpUBaseActivity {
         isAllowMenuProgressBar = false;
     }
 
-    public static class ServiceProviderListFragment extends ListFragment implements FetchServiceProviderDataListener, View.OnClickListener {
+    public static class ServiceProviderListFragment extends ListFragment implements Callback.GetServiceProviderListCallback, View.OnClickListener {
         private Context mContext;
 
         @Override
@@ -76,11 +74,9 @@ public class ServiceProviderListByServiceID extends HelpUBaseActivity {
                     final CustomerRequest customerRequest = ((Globals) mContext.getApplicationContext()).getCustomerRequest();
                     customerRequest.setServiceProviderId(serviceProviderId);
                     customerRequest.setProjectStatusId(projectStatusId);
-                    String url = getString(R.string.server_uri) + ((Globals) mContext.getApplicationContext()).getCustomerRequestUpdateUrl();
-                    CustomerRequestManager serverRequest = new CustomerRequestManager();
-                    serverRequest.update(customerRequest, url, new GetCustomerRequestCallback() {
+                    CustomerRequestManager.update(customerRequest, new Callback.GetCustomerRequestCallback() {
                         @Override
-                        public void done(CustomerRequest returnedCustomerRequest) {
+                        public void complete(CustomerRequest returnedCustomerRequest) {
                             Intent redirect = new Intent(mContext, ProjectMessages.class);
                             Bundle b = new Bundle();
                             b.putInt("projectStatusId", customerRequest.getProjectStatusId());
@@ -89,6 +85,12 @@ public class ServiceProviderListByServiceID extends HelpUBaseActivity {
                             redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(redirect);
                             getActivity().finish();
+                        }
+
+                        @Override
+                        public void failure(String msg) {
+                            msg = ((Globals) mContext.getApplicationContext()).translateErrorType(msg);
+                            ((HelpUBaseActivity) mContext).showAlert(msg);
                         }
                     });
                 }
@@ -102,11 +104,9 @@ public class ServiceProviderListByServiceID extends HelpUBaseActivity {
             int serviceId = b.getInt("serviceId", 0);
             int userId = ((Globals) mContext.getApplicationContext()).getUserId();
 
-            String url = getString(R.string.server_uri) + ((Globals) mContext.getApplicationContext()).getServiceProviderGetByServiceIDUrl();
-            ServiceProviderManager serverRequest = new ServiceProviderManager();
-            serverRequest.getByServiceID(serviceId, userId, url, new GetServiceProviderListCallback() {
+            ServiceProviderManager.getByServiceID(serviceId, userId, new Callback.GetServiceProviderListCallback() {
                 @Override
-                public void done(List<ServiceProvider> returnedServiceProviderList) {
+                public void complete(List<ServiceProvider> returnedServiceProviderList) {
                     if (returnedServiceProviderList == null) {
                         showErrorMessage();
                     } else {
@@ -115,6 +115,12 @@ public class ServiceProviderListByServiceID extends HelpUBaseActivity {
                         // set the adapter to list
                         setListAdapter(adapter);
                     }
+                }
+
+                @Override
+                public void failure(String msg) {
+                    msg = ((Globals) mContext.getApplicationContext()).translateErrorType(msg);
+                    ((HelpUBaseActivity) mContext).showAlert(msg);
                 }
             });
         }
@@ -128,7 +134,7 @@ public class ServiceProviderListByServiceID extends HelpUBaseActivity {
         }
 
         @Override
-        public void Complete(List<ServiceProvider> data) {
+        public void complete(List<ServiceProvider> data) {
 
             // create new adapter
             ServiceProviderAdapter adapter = new ServiceProviderAdapter(mContext, data, false);
@@ -137,10 +143,9 @@ public class ServiceProviderListByServiceID extends HelpUBaseActivity {
         }
 
         @Override
-        public void Failure(String msg) {
-
-            // show failure message
-            Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();
+        public void failure(String msg) {
+            msg = ((Globals) mContext.getApplicationContext()).translateErrorType(msg);
+            ((HelpUBaseActivity) mContext).showAlert(msg);
         }
 
         @Override
