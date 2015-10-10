@@ -7,7 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.chungmin.helpu.R;
-import com.example.chungmin.helpu.callback.GetBooleanCallback;
+import com.example.chungmin.helpu.callback.Callback;
 import com.example.chungmin.helpu.models.Globals;
 import com.example.chungmin.helpu.serverrequest.UserManager;
 
@@ -88,15 +88,20 @@ public class ChangePasswordActivity extends HelpUBaseActivity implements View.On
         if (mIsValid) {
             //to prevent execute multiple time
             btnSave.setEnabled(false);
-            String url = getString(R.string.server_uri) + ((Globals) getApplication()).getUserPasswordUpdateUrl();
             UserManager serverRequest = new UserManager(this);
-            serverRequest.updatePassword(mUserId, currentPassword, newPassword, url, new GetBooleanCallback() {
+            serverRequest.updatePassword(mUserId, currentPassword, newPassword, new Callback.GetBooleanCallback() {
 
                 @Override
-                public void done(Boolean isTrigger) {
+                public void complete(Boolean isTrigger) {
                     Intent loginIntent = new Intent(ChangePasswordActivity.this, MainActivity.class);
                     startActivity(loginIntent);
                     finish();
+                }
+
+                @Override
+                public void failure(String msg) {
+                    msg = ((Globals) getApplication()).translateErrorType(msg);
+                    showAlert(msg);
                 }
             });
         }
@@ -104,17 +109,22 @@ public class ChangePasswordActivity extends HelpUBaseActivity implements View.On
 
     private void validateCurrentPassword() {
         String password = etCurrentPassword.getText().toString();
-        String url = getString(R.string.server_uri) + ((Globals) getApplication()).getUserIsCurrentPasswordValidUrl();
         UserManager serverRequest = new UserManager(this);
-        serverRequest.isCurrentPasswordValid(mUserId, password, url, new GetBooleanCallback() {
+        serverRequest.isCurrentPasswordValid(mUserId, password, new Callback.GetBooleanCallback() {
             @Override
-            public void done(Boolean isValid) {
+            public void complete(Boolean isValid) {
                 if (isValid) {
                     mIsPasswordValid = true;
                 } else {
                     etCurrentPassword.setError(strInvalidPassword);
                     mIsPasswordValid = false;
                 }
+            }
+
+            @Override
+            public void failure(String msg) {
+                msg = ((Globals) getApplication()).translateErrorType(msg);
+                showAlert(msg);
             }
         });
     }
