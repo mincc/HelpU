@@ -314,6 +314,8 @@
     <string name="strHowLongToGoYear">1年后</string>
     <string name="strHowLongToGoYears">%1$s年后</string>
     <string name="strIgnoredIssue">把问题忽略</string>
+    <string name="title_activity_location">位置</string>
+    <string name="title_activity_maps">地图</string>
 
 
 </resources>
