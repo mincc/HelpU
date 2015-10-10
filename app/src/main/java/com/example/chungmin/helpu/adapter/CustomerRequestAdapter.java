@@ -20,11 +20,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.chungmin.helpu.R;
+import com.example.chungmin.helpu.activities.HelpUBaseActivity;
 import com.example.chungmin.helpu.activities.ServiceProviderListByServiceID;
 import com.example.chungmin.helpu.activities.CustomerRequestList;
 import com.example.chungmin.helpu.activities.MainActivity;
 import com.example.chungmin.helpu.activities.ProjectMessages;
-import com.example.chungmin.helpu.callback.GetCustomerRequestCallback;
+import com.example.chungmin.helpu.callback.Callback;
 import com.example.chungmin.helpu.enumeration.ProjectStatus;
 import com.example.chungmin.helpu.enumeration.ServiceType;
 import com.example.chungmin.helpu.models.CustomerRequest;
@@ -235,26 +236,34 @@ public class CustomerRequestAdapter extends ArrayAdapter<CustomerRequest> {
                     TextView tvCustomerRequestId = (TextView) superView.findViewById(R.id.tvCustomerRequestId);
 
                     int customerRequestId = Integer.parseInt(tvCustomerRequestId.getText().toString());
-                    CustomerRequestManager serverRequest = new CustomerRequestManager();
-                    String url = mContext.getString(R.string.server_uri) + ((Globals) mContext.getApplicationContext()).getCustomerRequestGetByIDUrl();
-                    serverRequest.getByID(customerRequestId, url, new GetCustomerRequestCallback() {
+                    CustomerRequestManager.getByID(customerRequestId, new Callback.GetCustomerRequestCallback() {
                         @Override
-                        public void done(final CustomerRequest returnedCustomerRequest) {
+                        public void complete(final CustomerRequest returnedCustomerRequest) {
                             if (returnedCustomerRequest != null) {
                                 final CustomerRequest customerRequest = returnedCustomerRequest;
                                 customerRequest.setProjectStatusId(ProjectStatus.RemoveFromView.getId());
-                                String url = mContext.getString(R.string.server_uri) + ((Globals) mContext.getApplicationContext()).getCustomerRequestUpdateUrl();
-                                CustomerRequestManager serverRequest = new CustomerRequestManager();
-                                serverRequest.update(customerRequest, url, new GetCustomerRequestCallback() {
+                                CustomerRequestManager.update(customerRequest, new Callback.GetCustomerRequestCallback() {
                                     @Override
-                                    public void done(CustomerRequest returnedCustomerRequest) {
+                                    public void complete(CustomerRequest returnedCustomerRequest) {
                                         Intent redirect = new Intent(mContext, CustomerRequestList.class);
                                         redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                         mContext.startActivity(redirect);
                                         ((Activity) mContext).finish();
                                     }
+
+                                    @Override
+                                    public void failure(String msg) {
+                                        msg = ((Globals) mContext.getApplicationContext()).translateErrorType(msg);
+                                        ((HelpUBaseActivity) mContext).showAlert(msg);
+                                    }
                                 });
                             }
+                        }
+
+                        @Override
+                        public void failure(String msg) {
+                            msg = ((Globals) mContext.getApplicationContext()).translateErrorType(msg);
+                            ((HelpUBaseActivity) mContext).showAlert(msg);
                         }
                     });
 
@@ -269,11 +278,9 @@ public class CustomerRequestAdapter extends ArrayAdapter<CustomerRequest> {
                 TextView tvCustomerRequestId = (TextView) superView.findViewById(R.id.tvCustomerRequestId);
                 int mCustomerRequestId = Integer.parseInt(tvCustomerRequestId.getText().toString());
 
-                CustomerRequestManager serverRequest = new CustomerRequestManager();
-                String url = mContext.getString(R.string.server_uri) + ((Globals) mContext.getApplicationContext()).getCustomerRequestGetByIDUrl();
-                serverRequest.getByID(mCustomerRequestId, url, new GetCustomerRequestCallback() {
+                CustomerRequestManager.getByID(mCustomerRequestId, new Callback.GetCustomerRequestCallback() {
                     @Override
-                    public void done(final CustomerRequest returnedCustomerRequest) {
+                    public void complete(final CustomerRequest returnedCustomerRequest) {
                         if (returnedCustomerRequest != null) {
                             Intent redirect;
                             ((Globals) mContext.getApplicationContext()).setCustomerRequest(returnedCustomerRequest);
@@ -322,6 +329,12 @@ public class CustomerRequestAdapter extends ArrayAdapter<CustomerRequest> {
                             mContext.startActivity(redirect);
                             ((Activity) mContext).finish();
                         }
+                    }
+
+                    @Override
+                    public void failure(String msg) {
+                        msg = ((Globals) mContext.getApplicationContext()).translateErrorType(msg);
+                        ((HelpUBaseActivity) mContext).showAlert(msg);
                     }
                 });
             }
