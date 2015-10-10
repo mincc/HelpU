@@ -1,9 +1,9 @@
 <resources>
-    <string name="server_uri">http://192.168.1.8/HelpU/</string>
+    <!--<string name="server_uri">http://192.168.1.8/HelpU/</string>-->
     <!--<string name="server_uri">http://helpu.hostei.com/</string>-->
     <!--<string name="server_uri">http://helpu.comuf.com/</string>-->
     <!--<string name="server_uri">http://helpu.byethost33.com/</string> (dun use because not allow call the http from app and just allow using browser) -->
-    <!--<string name="server_uri">http://helpu.hostingsiteforfree.com/</string>-->
+    <string name="server_uri">http://helpu.hostingsiteforfree.com/</string>
 
     <string-array name="hire_list">
         <item>0|Please Select...</item>
