@@ -3,10 +3,9 @@ package com.example.chungmin.helpu.serverrequest;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.chungmin.helpu.callback.GetAppStatsCallback;
-import com.example.chungmin.helpu.enumeration.ProjectStatus;
+import com.example.chungmin.helpu.callback.Callback;
+import com.example.chungmin.helpu.models.AppLink;
 import com.example.chungmin.helpu.models.AppStats;
-import com.example.chungmin.helpu.models.CustomerRequest;
 import com.example.chungmin.helpu.serverrequest.common.ServerUtils;
 
 import org.apache.http.HttpEntity;
@@ -15,21 +14,22 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
  * Created by Chung Min on 7/19/2015.
  */
 public class AppStatsManager {
+
+    private static String mMsg = "";
 
     public AppStatsManager() {
     }
@@ -64,8 +64,8 @@ public class AppStatsManager {
         return target;
     }
 
-    public void getAppStats(String url, GetAppStatsCallback appStatsCallBack) {
-        new AppStatistic(appStatsCallBack).execute(url);
+    public static void getAppStats(Callback.GetAppStatsCallback appStatsCallBack) {
+        new AppStatistic(appStatsCallBack).execute();
     }
 
     /**
@@ -73,21 +73,22 @@ public class AppStatsManager {
      * background computation
      */
 
-    public class AppStatistic extends AsyncTask<String, Void, AppStats> {
+    public static class AppStatistic extends AsyncTask<String, Void, AppStats> {
 
-        GetAppStatsCallback appStatsCallBack;
+        Callback.GetAppStatsCallback appStatsCallBack;
 
-        public AppStatistic(GetAppStatsCallback appStatsCallBack) {
+        public AppStatistic(Callback.GetAppStatsCallback appStatsCallBack) {
             this.appStatsCallBack = appStatsCallBack;
         }
 
         @Override
         protected AppStats doInBackground(String... params) {
+            mMsg = "";
             if (params == null)
                 return null;
 
             // get url from params
-            String url = params[0];
+            String url = AppLink.geAppStatsInfoUrl();
 
             ArrayList<NameValuePair> dataToSend = new ArrayList<>();
             HttpParams httpRequestParams = ServerUtils.getHttpRequestParams();
@@ -101,11 +102,23 @@ public class AppStatsManager {
                 HttpResponse httpResponse = client.execute(post);
 
                 HttpEntity entity = httpResponse.getEntity();
+                if (entity == null) {
+                    mMsg = "No Response From Server";
+                    return null;
+                }
+
                 String result = EntityUtils.toString(entity);
                 Log.v("happened", "AppStats");
                 returnedAppStats = buildRecord(result);
 
+            } catch (JSONException e) {
+                mMsg = "Invalid Response";
+            } catch (ConnectTimeoutException cte) {
+                mMsg = "Connection Timeout";
+            } catch (IOException e) {
+                mMsg = "No Network Connection";
             } catch (Exception e) {
+                mMsg = e.toString();
                 e.printStackTrace();
             }
 
@@ -115,7 +128,14 @@ public class AppStatsManager {
         @Override
         protected void onPostExecute(AppStats returnedAppStats) {
             super.onPostExecute(returnedAppStats);
-            appStatsCallBack.done(returnedAppStats);
+
+            if (appStatsCallBack != null) {
+                if (mMsg.equals("")) {
+                    appStatsCallBack.complete(returnedAppStats);
+                } else {
+                    appStatsCallBack.failure(mMsg);
+                }
+            }
         }
     }
 
