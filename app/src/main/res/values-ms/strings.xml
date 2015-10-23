@@ -314,6 +314,9 @@
     <string name="strHowLongToGoYears">dalam %1$s tahun</string>
     <string name="title_activity_location">Lokasi</string>
     <string name="title_activity_maps">Peta</string>
+    <string name="strProjectDiscussion">Perbincangan Projek</string>
+    <string name="title_activity_chat">Aktiviti Chat</string>
+    <string name="title_activity_chat_user_list">Chat Senarai Pengguna</string>
 
 
 </resources>

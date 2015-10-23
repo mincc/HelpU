@@ -316,6 +316,9 @@
     <string name="strIgnoredIssue">把问题忽略</string>
     <string name="title_activity_location">位置</string>
     <string name="title_activity_maps">地图</string>
+    <string name="strProjectDiscussion">方案探讨</string>
+    <string name="title_activity_chat">聊天活动</string>
+    <string name="title_activity_chat_user_list">聊天室用户列表</string>
 
 
 </resources>
