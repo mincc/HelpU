@@ -128,7 +128,7 @@ public class CustomerIssueManager {
                 HttpEntity entity = httpResponse.getEntity();
                 String result = EntityUtils.toString(entity);
 
-                Log.v("happened", "Get Customer Request By ID");
+                Log.v("happened", "Get Customer Issue Insert");
                 returnedCustomerIssue = buildRecord(result);
             } catch (ConnectTimeoutException cte) {
                 mMsg = "Connection Timeout";

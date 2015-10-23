@@ -24,6 +24,8 @@ import android.widget.Toast;
 import com.example.chungmin.helpu.models.Globals;
 import com.example.chungmin.helpu.R;
 
+import HelpUGenericUtilities.ConnectionDetector;
+
 //https://tausiq.wordpress.com/2013/01/18/android-base-activity-class-example/
 public abstract class HelpUBaseActivity extends ActionBarActivity {
     private MenuItem mProgressMenu = null;
@@ -32,11 +34,15 @@ public abstract class HelpUBaseActivity extends ActionBarActivity {
     public boolean mIsNetworkAvailable = true;
     private Menu mMenu;
 
+    // Connection detector
+    ConnectionDetector cd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        cd = new ConnectionDetector(getApplicationContext());
 
-        if (!this.isNetworkAvailable()) {
+        if (!cd.isConnectingToInternet()) {
             this.errorDialogExit(getString(R.string.strNetworkIssue), getString(R.string.strMakeSureGotInternet));
             mIsNetworkAvailable = false;
         }
@@ -97,6 +103,9 @@ public abstract class HelpUBaseActivity extends ActionBarActivity {
 //                break;
             case R.id.action_customercare:
                 redirect = new Intent(this, CustomerCareActivity.class);
+                break;
+            case R.id.action_projectdiscussion:
+                redirect = new Intent(this, ChatUserListActivity.class);
                 break;
             case R.id.action_refresh:
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -193,12 +202,6 @@ public abstract class HelpUBaseActivity extends ActionBarActivity {
         redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(redirect);
         finish();
-    }
-
-    public boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     public class UpdateTask extends AsyncTask<Void, Void, Void> {

@@ -98,6 +98,7 @@ public class CustomerIssueTest {
     }
 
     private void Read(CustomerIssue customerIssue) {
+        mReadCustomerIssue = null;
         CustomerIssueManager.getByID(customerIssue.getCustomerIssueId(), new Callback.GetCustomerIssueCallback() {
             @Override
             public void complete(CustomerIssue returnedCustomerIssue) {

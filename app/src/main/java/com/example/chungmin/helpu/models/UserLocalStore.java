@@ -26,6 +26,7 @@ public class UserLocalStore {
         userLocalDatabaseEditor.putString("userContact", user.getUserContact());
         userLocalDatabaseEditor.putString("userEmail", user.getUserEmail());
         userLocalDatabaseEditor.putInt("isAdmin", user.getIsAdmin());
+        userLocalDatabaseEditor.putString("gcmRegId", user.getGcmRegId());
         userLocalDatabaseEditor.commit();
     }
 
@@ -53,8 +54,9 @@ public class UserLocalStore {
         String userContact = userLocalDatabase.getString("userContact", "");
         String userEmail = userLocalDatabase.getString("userEmail", "");
         int isAdmin = userLocalDatabase.getInt("isAdmin", 0);
+        String gcmRegId = userLocalDatabase.getString("gcmRegId", "");
 
-        User user = new User(userId, name, username, password, userContact, userEmail, isAdmin);
+        User user = new User(userId, name, username, password, userContact, userEmail, isAdmin, gcmRegId);
         return user;
     }
 }

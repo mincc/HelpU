@@ -73,14 +73,25 @@ public class CreateQuotationFragment extends Fragment {
                 CustomerRequestManager.update(mCustomerRequest, new Callback.GetCustomerRequestCallback() {
                     @Override
                     public void complete(CustomerRequest returnedCustomerRequest) {
-                        Intent redirect = new Intent(getActivity(), ProjectMessages.class);
-                        Bundle b = new Bundle();
-                        b.putInt("projectStatusId", mCustomerRequest.getProjectStatusId());
-                        b.putInt("customerRequestId", mCustomerRequest.getCustomerRequestId());
-                        redirect.putExtras(b);
-                        redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(redirect);
-                        getActivity().finish();
+                        CustomerRequestManager.sendPushNotification(mCustomerRequest.getCustomerRequestId(), new Callback.GetCustomerRequestCallback() {
+                            @Override
+                            public void complete(CustomerRequest data) {
+                                Intent redirect = new Intent(getActivity(), ProjectMessages.class);
+                                Bundle b = new Bundle();
+                                b.putInt("projectStatusId", mCustomerRequest.getProjectStatusId());
+                                b.putInt("customerRequestId", mCustomerRequest.getCustomerRequestId());
+                                redirect.putExtras(b);
+                                redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(redirect);
+                                getActivity().finish();
+                            }
+
+                            @Override
+                            public void failure(String msg) {
+                                msg = ((Globals) getActivity().getApplicationContext()).translateErrorType(msg);
+                                ((HelpUBaseActivity) getActivity()).showAlert(msg);
+                            }
+                        });
                     }
 
                     @Override

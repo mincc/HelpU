@@ -109,6 +109,14 @@ public class CustomerRequestManager {
         new GetListByUserId(userId, type, customerRequestListCallBack).execute();
     }
 
+    public static void sendPushNotification(int customerRequestId, Callback.GetCustomerRequestCallback customerRequestCallBack) {
+        new SendPushNotification(customerRequestId, customerRequestCallBack).execute();
+    }
+
+    public static void delete(int customerRequestId, int isLogicalDelete, Callback.GetCustomerRequestCallback customerRequestCallback) {
+        new Delete(customerRequestId, isLogicalDelete, customerRequestCallback).execute();
+    }
+
     /**
      * ===========================================================================================
      * ===========================================================================================
@@ -467,7 +475,6 @@ public class CustomerRequestManager {
         protected List<CustomerRequest> doInBackground(String... params) {
             mMsg = "";
             List<CustomerRequest> customerRequestList = new ArrayList<CustomerRequest>();
-            ;
 
             if (params == null) return null;
             String url = "";
@@ -528,5 +535,129 @@ public class CustomerRequestManager {
             }
         }
 
+    }
+
+    private static class SendPushNotification extends AsyncTask<String, Void, CustomerRequest> {
+        int customerRequestId;
+        Callback.GetCustomerRequestCallback customerRequestCallBack;
+
+        public SendPushNotification(int customerRequestId, Callback.GetCustomerRequestCallback customerRequestCallBack) {
+            this.customerRequestId = customerRequestId;
+            this.customerRequestCallBack = customerRequestCallBack;
+        }
+
+        @Override
+        protected CustomerRequest doInBackground(String... params) {
+            mMsg = "";
+            if (params == null)
+                return null;
+
+            // get url from params
+            String url = AppLink.getCustomerRequestPushNotificationUrl();
+
+            ArrayList<NameValuePair> dataToSend = new ArrayList<>();
+            dataToSend.add(new BasicNameValuePair("customerRequestId", this.customerRequestId + ""));
+
+            HttpParams httpRequestParams = ServerUtils.getHttpRequestParams();
+            HttpClient client = new DefaultHttpClient(httpRequestParams);
+            HttpPost post = new HttpPost(url);
+
+            // create customerRequests list
+            CustomerRequest customerRequest = new CustomerRequest();
+
+            try {
+                post.setEntity(new UrlEncodedFormEntity(dataToSend));
+                HttpResponse httpResponse = client.execute(post);
+
+                HttpEntity entity = httpResponse.getEntity();
+                if (entity == null) {
+                    mMsg = "No Response From Server";
+                    return null;
+                }
+
+                String result = EntityUtils.toString(entity);
+                customerRequest = buildRecord(result);
+
+            } catch (JSONException e) {
+                mMsg = "Invalid Response";
+            } catch (ConnectTimeoutException cte) {
+                mMsg = "Connection Timeout";
+            } catch (IOException e) {
+                mMsg = "No Network Connection";
+            } catch (Exception e) {
+                mMsg = e.toString();
+                e.printStackTrace();
+            }
+
+            return customerRequest;
+        }
+
+        @Override
+        protected void onPostExecute(CustomerRequest returnedCustomerRequest) {
+            super.onPostExecute(returnedCustomerRequest);
+            if (customerRequestCallBack != null) {
+                if (mMsg.equals("")) {
+                    customerRequestCallBack.complete(returnedCustomerRequest);
+                } else {
+                    customerRequestCallBack.failure(mMsg);
+                }
+            }
+        }
+    }
+
+    private static class Delete extends AsyncTask<String, Void, Void> {
+        int customerRequestId;
+        Callback.GetCustomerRequestCallback customerRequestCallback;
+        int isLogicalDelete;
+
+        public Delete(int customerRequestId, int isLogicalDelete, Callback.GetCustomerRequestCallback customerRequestCallback) {
+            this.customerRequestId = customerRequestId;
+            this.customerRequestCallback = customerRequestCallback;
+            this.isLogicalDelete = isLogicalDelete;
+        }
+
+        @Override
+        protected Void doInBackground(String... params) {
+            mMsg = "";
+            if (params == null)
+                return null;
+
+            // get url from params
+            String url = AppLink.getCustomerRequestDeleteUrl();
+
+            ArrayList<NameValuePair> dataToSend = new ArrayList<>();
+            dataToSend.add(new BasicNameValuePair("customerRequestId", customerRequestId + ""));
+            dataToSend.add(new BasicNameValuePair("isLogicalDelete", isLogicalDelete + ""));
+
+            HttpParams httpRequestParams = ServerUtils.getHttpRequestParams();
+            HttpClient client = new DefaultHttpClient(httpRequestParams);
+            HttpPost post = new HttpPost(url);
+
+            try {
+                post.setEntity(new UrlEncodedFormEntity(dataToSend));
+                client.execute(post);
+            } catch (ConnectTimeoutException cte) {
+                mMsg = "Connection Timeout";
+            } catch (IOException e) {
+                mMsg = "No Network Connection";
+            } catch (Exception e) {
+                mMsg = e.toString();
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            if (customerRequestCallback != null) {
+                if (mMsg.equals("")) {
+                    customerRequestCallback.complete(null);
+                } else {
+                    customerRequestCallback.failure(mMsg);
+                }
+            }
+        }
     }
 }

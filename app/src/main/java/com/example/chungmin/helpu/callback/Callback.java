@@ -1,6 +1,8 @@
 package com.example.chungmin.helpu.callback;
 
 import com.example.chungmin.helpu.models.AppStats;
+import com.example.chungmin.helpu.models.ChatMessage;
+import com.example.chungmin.helpu.models.ChatTopic;
 import com.example.chungmin.helpu.models.CustomerIssue;
 import com.example.chungmin.helpu.models.CustomerRequest;
 import com.example.chungmin.helpu.models.Rating;
@@ -83,6 +85,24 @@ public class Callback {
 
     public interface GetCustomerIssueCallback {
         void complete(CustomerIssue returnedCustomerIssue);
+
+        void failure(String msg);
+    }
+
+    public interface GetChatMessageCallback {
+        void complete(ChatMessage returnedChatMessage);
+
+        void failure(String msg);
+    }
+
+    public interface GetChatTopicListCallback {
+        void complete(List<ChatTopic> returnedChatTopicList);
+
+        void failure(String msg);
+    }
+
+    public interface GetIntCallback {
+        void complete(int result);
 
         void failure(String msg);
     }

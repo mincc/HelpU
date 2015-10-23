@@ -12,8 +12,11 @@ import android.widget.TextView;
 
 import com.example.chungmin.helpu.activities.HelpUBaseActivity;
 import com.example.chungmin.helpu.activities.MainActivity;
+import com.example.chungmin.helpu.activities.ProjectMessages;
 import com.example.chungmin.helpu.callback.Callback;
+import com.example.chungmin.helpu.models.CustomerRequest;
 import com.example.chungmin.helpu.models.Rating;
+import com.example.chungmin.helpu.serverrequest.CustomerRequestManager;
 import com.example.chungmin.helpu.serverrequest.RatingManager;
 import com.example.chungmin.helpu.models.Globals;
 import com.example.chungmin.helpu.R;
@@ -81,10 +84,24 @@ public class RatingFragment extends Fragment {
                     rating.setRatingType("s");
                 }
                 rating.setCustomerRequestId(mCustomerRequestId);
-                //Toast.makeText(getActivity(), String.valueOf(ratingBar.getRating()), Toast.LENGTH_SHORT).show();
                 RatingManager.insert(rating, new Callback.GetRatingCallback() {
                     @Override
                     public void complete(Rating returnedRating) {
+                        CustomerRequestManager.sendPushNotification(mCustomerRequestId, new Callback.GetCustomerRequestCallback() {
+                            @Override
+                            public void complete(CustomerRequest data) {
+                                Intent redirect = new Intent(getActivity(), MainActivity.class);
+                                redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(redirect);
+                                getActivity().finish();
+                            }
+
+                            @Override
+                            public void failure(String msg) {
+                                msg = ((Globals) getActivity().getApplicationContext()).translateErrorType(msg);
+                                ((HelpUBaseActivity) getActivity()).showAlert(msg);
+                            }
+                        });
                     }
 
                     @Override
@@ -93,11 +110,6 @@ public class RatingFragment extends Fragment {
                         ((HelpUBaseActivity) getActivity()).showAlert(msg);
                     }
                 });
-
-                Intent redirect = new Intent(getActivity(), MainActivity.class);
-                redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(redirect);
-                getActivity().finish();
             }
 
         });

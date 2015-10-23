@@ -77,14 +77,25 @@ public class ServiceProviderListByServiceID extends HelpUBaseActivity {
                     CustomerRequestManager.update(customerRequest, new Callback.GetCustomerRequestCallback() {
                         @Override
                         public void complete(CustomerRequest returnedCustomerRequest) {
-                            Intent redirect = new Intent(mContext, ProjectMessages.class);
-                            Bundle b = new Bundle();
-                            b.putInt("projectStatusId", customerRequest.getProjectStatusId());
-                            b.putInt("customerRequestId", customerRequest.getCustomerRequestId());
-                            redirect.putExtras(b);
-                            redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(redirect);
-                            getActivity().finish();
+                            CustomerRequestManager.sendPushNotification(customerRequest.getCustomerRequestId(), new Callback.GetCustomerRequestCallback() {
+                                @Override
+                                public void complete(CustomerRequest data) {
+                                    Intent redirect = new Intent(mContext, ProjectMessages.class);
+                                    Bundle b = new Bundle();
+                                    b.putInt("projectStatusId", customerRequest.getProjectStatusId());
+                                    b.putInt("customerRequestId", customerRequest.getCustomerRequestId());
+                                    redirect.putExtras(b);
+                                    redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(redirect);
+                                    getActivity().finish();
+                                }
+
+                                @Override
+                                public void failure(String msg) {
+                                    msg = ((Globals) mContext.getApplicationContext()).translateErrorType(msg);
+                                    ((HelpUBaseActivity) mContext).showAlert(msg);
+                                }
+                            });
                         }
 
                         @Override

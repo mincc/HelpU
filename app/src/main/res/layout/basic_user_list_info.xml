@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Creator : "
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:id="@+id/lblCreator"
+        android:layout_alignTop="@+id/tvUserName"
+        android:layout_toRightOf="@+id/tvCustUserId"
+        android:layout_toEndOf="@+id/tvCustUserId"
+        android:layout_marginLeft="21dp"
+        android:layout_marginStart="21dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="User Name"
+        android:id="@+id/tvUserName"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/lblCreator"
+        android:layout_toEndOf="@+id/lblCreator" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Project ID"
+        android:id="@+id/tvCustomerRequestId"
+        android:layout_below="@+id/lblServiceProvider"
+        android:layout_alignLeft="@+id/lblServiceProvider"
+        android:layout_alignStart="@+id/lblServiceProvider" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chat"
+        android:id="@+id/btnChat"
+        style="@style/btnStyleBeige"
+        android:layout_alignTop="@+id/tvUserName"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="41dp"
+        android:layout_marginEnd="41dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Serv. Pdr Name"
+        android:id="@+id/tvServiceProvider"
+        android:layout_alignTop="@+id/lblServiceProvider"
+        android:layout_toRightOf="@+id/lblServiceProvider"
+        android:layout_toEndOf="@+id/lblServiceProvider" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvSpdrUserId"
+        android:layout_above="@+id/tvCustomerRequestId"
+        android:layout_alignLeft="@+id/tvCustUserId"
+        android:layout_alignStart="@+id/tvCustUserId"
+        android:visibility="gone" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvCustUserId"
+        android:layout_above="@+id/tvServiceProvider"
+        android:layout_toLeftOf="@+id/btnChat"
+        android:layout_toStartOf="@+id/btnChat"
+        android:layout_marginRight="14dp"
+        android:layout_marginEnd="14dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Serv. Pdr : "
+        android:id="@+id/lblServiceProvider"
+        android:layout_below="@+id/lblCreator"
+        android:layout_toLeftOf="@+id/tvUserName"
+        android:layout_toStartOf="@+id/tvUserName" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Project Description"
+        android:id="@+id/tvProjectDescription"
+        android:layout_below="@+id/tvCustomerRequestId"
+        android:layout_alignLeft="@+id/tvCustomerRequestId"
+        android:layout_alignStart="@+id/tvCustomerRequestId"
+        android:layout_marginBottom="10dp" />
+
+</RelativeLayout>

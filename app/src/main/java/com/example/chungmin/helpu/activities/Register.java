@@ -12,6 +12,7 @@ import com.example.chungmin.helpu.R;
 import com.example.chungmin.helpu.models.User;
 import com.example.chungmin.helpu.serverrequest.UserManager;
 
+import HelpUGenericUtilities.GCMUtils;
 import HelpUGenericUtilities.ValidationUtils;
 
 
@@ -80,8 +81,9 @@ public class Register extends HelpUBaseActivity implements View.OnClickListener,
                 String password = etPassword.getText().toString();
                 String userContact = etUserContact.getText().toString();
                 String userEmail = etUserEmail.getText().toString();
+                String gcmRegId = GCMUtils.getRegistrationId(this);
 
-                User user = new User(-1, name, username, password, userContact, userEmail, 0);
+                User user = new User(-1, name, username, password, userContact, userEmail, 0, gcmRegId);
                 registerUser(user);
                 break;
         }

@@ -45,6 +45,12 @@
         android:orderInCategory="100"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_projectdiscussion"
+        android:title="@string/strProjectDiscussion"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
     <!--<item-->
     <!--android:id="@+id/action_project_status_flow"-->
     <!--android:title="@string/action_project_status_flow"-->

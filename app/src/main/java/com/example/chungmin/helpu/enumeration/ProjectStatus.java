@@ -26,7 +26,7 @@ public enum ProjectStatus {
     CustomerRating(Globals.getAppContext().getString(R.string.strCustRtg), 13),              //Customer give service provider rating
     ServiceProvRating(Globals.getAppContext().getString(R.string.strSPdrRtg), 14),   //Provider service give customer rating
     ProjectClose(Globals.getAppContext().getString(R.string.strPrjClose), 15),
-    RemoveFromView(Globals.getAppContext().getString(R.string.strRmvFrmView), 16),
+    //    RemoveFromView(Globals.getAppContext().getString(R.string.strRmvFrmView), 16), //replace with isDelete
     TotallyRemoved(Globals.getAppContext().getString(R.string.strTtlRmv), 17),
     Reselect(Globals.getAppContext().getString(R.string.strRslt), 18),
     ConfirmRequestNotification(Globals.getAppContext().getString(R.string.strCfmRqtNtf), 19),

@@ -38,7 +38,7 @@ import java.util.List;
 public class CustomerRequestAdapter extends ArrayAdapter<CustomerRequest> {
     TextView tvCustomerRequestId, tvService, tvDescription, tvProjectStatus, tvServiceProviderId, tvQuotation, tvLocBadge;
     TextView lblServiceProviderId, lblQuotation;
-    Button btnEnter, btnRemoveFromView;
+    Button btnEnter, btnDelete;
     private List<CustomerRequest> items;
     private Context mContext;
     private int mUserId = 0;
@@ -80,7 +80,7 @@ public class CustomerRequestAdapter extends ArrayAdapter<CustomerRequest> {
             lblServiceProviderId = (TextView)v.findViewById(R.id.lblServiceProviderId);
             lblQuotation = (TextView)v.findViewById(R.id.lblQuotation);
             btnEnter = (Button) v.findViewById(R.id.btnEnter);
-            btnRemoveFromView = (Button) v.findViewById(R.id.btnRemoveFromView);
+            btnDelete = (Button) v.findViewById(R.id.btnDelete);
 
             if (tvCustomerRequestId != null) {
                 tvCustomerRequestId.setText(Integer.toString((mCustomerRequest.getCustomerRequestId())));
@@ -223,14 +223,18 @@ public class CustomerRequestAdapter extends ArrayAdapter<CustomerRequest> {
                     lblServiceProviderId.setVisibility(View.VISIBLE);
                     lblQuotation.setVisibility(View.VISIBLE);
 
-                    btnRemoveFromView.setVisibility(View.VISIBLE);
+                    if (mCustomerRequest.getUserId() == mUserId) {
+                        btnDelete.setVisibility(View.VISIBLE);
+                    } else {
+                        btnDelete.setVisibility(View.GONE);
+                    }
                     break;
                 default:
                     Toast.makeText(mContext, R.string.strUnknownAction, Toast.LENGTH_LONG).show();
                     break;
             }
 
-            btnRemoveFromView.setOnClickListener(new Button.OnClickListener() {
+            btnDelete.setOnClickListener(new Button.OnClickListener() {
                 public void onClick(final View v) {
                     final View superView = (View) v.getParent();
                     TextView tvCustomerRequestId = (TextView) superView.findViewById(R.id.tvCustomerRequestId);
@@ -241,8 +245,7 @@ public class CustomerRequestAdapter extends ArrayAdapter<CustomerRequest> {
                         public void complete(final CustomerRequest returnedCustomerRequest) {
                             if (returnedCustomerRequest != null) {
                                 final CustomerRequest customerRequest = returnedCustomerRequest;
-                                customerRequest.setProjectStatusId(ProjectStatus.RemoveFromView.getId());
-                                CustomerRequestManager.update(customerRequest, new Callback.GetCustomerRequestCallback() {
+                                CustomerRequestManager.delete(customerRequest.getCustomerRequestId(), 1, new Callback.GetCustomerRequestCallback() {
                                     @Override
                                     public void complete(CustomerRequest returnedCustomerRequest) {
                                         Intent redirect = new Intent(mContext, CustomerRequestList.class);

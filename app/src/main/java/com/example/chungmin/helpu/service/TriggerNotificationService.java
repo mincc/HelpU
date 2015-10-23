@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,7 +29,7 @@ import me.leolin.shortcutbadger.ShortcutBadger;
  */
 
 public class TriggerNotificationService extends Service {
-    private static final String TAG = "MyService";
+    private static final String TAG = "TriggerNotificationService";
     private ProjectStatus mProjectStatus = null;
     private int mCustomerRequestId = 0;
     private double mQuotation = 0.0;
@@ -187,6 +188,8 @@ public class TriggerNotificationService extends Service {
 
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         builder.setContentIntent(contentIntent)
+                .setLights(Color.BLUE, 3000, 3000)
+                .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
                 .setSound(alarmSound)
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setLargeIcon(BitmapFactory.decodeResource(res, R.drawable.ic_launcher))

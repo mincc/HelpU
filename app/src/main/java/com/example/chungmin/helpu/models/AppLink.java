@@ -41,6 +41,14 @@ public class AppLink {
     public static String getCustomerRequestJobOfferUrl() {
         return mServer + "CustomerRequestJobOffer.php";
     }
+
+    public static String getCustomerRequestPushNotificationUrl() {
+        return mServer + "CustomerRequestPushNotification.php";
+    }
+
+    public static String getCustomerRequestDeleteUrl() {
+        return mServer + "CustomerRequestDelete.php";
+    }
     //endregion
 
     //region Service Provider
@@ -133,6 +141,25 @@ public class AppLink {
     }
     //endregion
 
+    //region Chat Message
+    public static String getChatMessageInsertUrl() {
+        return mServer + "ChatMessageInsert.php";
+    }
+
+    public static String getChatMessageGetByIDUrl() {
+        return mServer + "ChatMessageGetByID.php";
+    }
+
+    public static String getChatMessageUpdateUrl() {
+        return mServer + "ChatMessageUpdate.php";
+    }
+
+    public static String getChatMessageDeleteUrl() {
+        return mServer + "ChatMessageDelete.php";
+    }
+
+    //endregion
+
     //region Other
     public static String getAppUrl() {
         return mServer + "app.php";
@@ -146,5 +173,12 @@ public class AppLink {
         return mServer + "AppStatsInfo.php";
     }
 
+    public static String getChatTopicGetListByUserIdUrl() {
+        return mServer + "ChatTopicGetListByUserID.php";
+    }
+
+    public static String getDatabaseSelectUrl() {
+        return mServer + "DatabaseSelect.php";
+    }
     //endregion
 }

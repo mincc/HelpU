@@ -52,6 +52,7 @@ public class UserManager {
         target.setUserEmail(json.getString("userEmail"));
         target.setUsername(json.getString("username"));
         target.setIsAdmin(json.getInt("isAdmin"));
+        target.setGcmRegId(json.getString("gcmRegId"));
         return target;
     }
 
@@ -142,6 +143,7 @@ public class UserManager {
             dataToSend.add(new BasicNameValuePair("password", user.getPassword()));
             dataToSend.add(new BasicNameValuePair("userContact", user.getUserContact()));
             dataToSend.add(new BasicNameValuePair("userEmail", user.getUserEmail()));
+            dataToSend.add(new BasicNameValuePair("gcmRegId", user.getGcmRegId()));
 
             HttpParams httpRequestParams = ServerUtils.getHttpRequestParams();
             HttpClient client = new DefaultHttpClient(httpRequestParams);
@@ -331,6 +333,7 @@ public class UserManager {
             dataToSend.add(new BasicNameValuePair("password", user.getPassword()));
             dataToSend.add(new BasicNameValuePair("userContact", user.getUserContact()));
             dataToSend.add(new BasicNameValuePair("userEmail", user.getUserEmail()));
+            dataToSend.add(new BasicNameValuePair("gcmRegId", user.getGcmRegId()));
             HttpParams httpRequestParams = ServerUtils.getHttpRequestParams();
             HttpClient client = new DefaultHttpClient(httpRequestParams);
             HttpPost post = new HttpPost(url);

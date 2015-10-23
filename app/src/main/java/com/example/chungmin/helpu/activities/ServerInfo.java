@@ -63,7 +63,7 @@ public class ServerInfo extends HelpUBaseActivity implements View.OnClickListene
         mUsername = etUsername.getText().toString();
         mPassword = etPassword.getText().toString();
 
-        User user = new User(0, "", mUsername, mPassword, "", "", 0);
+        User user = new User(0, "", mUsername, mPassword, "", "", 0, "");
         UserManager serverRequest = new UserManager(this);
         serverRequest.login(user, new Callback.GetUserCallback() {
             @Override

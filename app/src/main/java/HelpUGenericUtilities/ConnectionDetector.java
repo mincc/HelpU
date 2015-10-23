@@ -8,14 +8,14 @@ import android.net.NetworkInfo;
  * Created by Chung Min on 10/9/2015.
  */
 public class ConnectionDetector {
-    private Context _context;
+    private Context context;
 
     public ConnectionDetector(Context context) {
-        this._context = context;
+        this.context = context;
     }
 
     public boolean isConnectingToInternet() {
-        ConnectivityManager connectivity = (ConnectivityManager) _context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivity != null) {
             NetworkInfo[] info = connectivity.getAllNetworkInfo();
             if (info != null)
@@ -26,5 +26,11 @@ public class ConnectionDetector {
 
         }
         return false;
+    }
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

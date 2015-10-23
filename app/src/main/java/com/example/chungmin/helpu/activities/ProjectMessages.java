@@ -34,6 +34,8 @@ import com.example.chungmin.helpu.models.UserLocalStore;
 import com.ipay.Ipay;
 import com.ipay.IpayPayment;
 
+import java.util.List;
+
 import fragments.CreateQuotationFragment;
 import fragments.CustomerRequestFragment;
 import fragments.RatingFragment;
@@ -71,11 +73,14 @@ public class ProjectMessages extends HelpUBaseActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project_messages);
         View contentView = (View) findViewById(R.id.rlMainView);
+
         contentView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                mHandler.removeCallbacks(mRunnable);
-                mHandler.postDelayed(mRunnable, mTimer);
+                if (!BuildConfig.DEBUG) {
+                    mHandler.removeCallbacks(mRunnable);
+                    mHandler.postDelayed(mRunnable, mTimer);
+                }
                 return false;
             }
         });
@@ -271,6 +276,25 @@ public class ProjectMessages extends HelpUBaseActivity implements View.OnClickLi
             CustomerRequestManager.update(mCustomerRequest, new Callback.GetCustomerRequestCallback() {
                 @Override
                 public void complete(CustomerRequest returnedCustomerRequest) {
+                    CustomerRequestManager.sendPushNotification(mCustomerRequest.getCustomerRequestId(), new Callback.GetCustomerRequestCallback() {
+                        @Override
+                        public void complete(CustomerRequest data) {
+                            Intent redirect = new Intent(ProjectMessages.this, ProjectMessages.class);
+                            Bundle b = new Bundle();
+                            b.putInt("projectStatusId", mCustomerRequest.getProjectStatusId());
+                            b.putInt("customerRequestId", mCustomerRequest.getCustomerRequestId());
+                            redirect.putExtras(b);
+                            redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(redirect);
+                            finish();
+                        }
+
+                        @Override
+                        public void failure(String msg) {
+                            msg = ((Globals) getApplication()).translateErrorType(msg);
+                            showAlert(msg);
+                        }
+                    });
                 }
 
                 @Override
@@ -279,15 +303,6 @@ public class ProjectMessages extends HelpUBaseActivity implements View.OnClickLi
                     showAlert(msg);
                 }
             });
-
-            Intent redirect = new Intent(ProjectMessages.this, ProjectMessages.class);
-            Bundle b = new Bundle();
-            b.putInt("projectStatusId", mCustomerRequest.getProjectStatusId());
-            b.putInt("customerRequestId", mCustomerRequest.getCustomerRequestId());
-            redirect.putExtras(b);
-            redirect.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(redirect);
-            finish();
 
             //endregion
         } else if (v == btnCancel) {
@@ -497,6 +512,7 @@ public class ProjectMessages extends HelpUBaseActivity implements View.OnClickLi
                 if (mUserId == mCustomerRequest.getUserId()) {
                     setTitle(R.string.strPlsWait);
                     tvMessageBox.setText(R.string.strCustCdtNtfMessage);
+                    tvMessageBox.setVisibility(View.VISIBLE);
                 } else {
                     setTitle(R.string.strCfmJobOfr);
                     tvMessageBox.setVisibility(View.GONE);
@@ -510,6 +526,7 @@ public class ProjectMessages extends HelpUBaseActivity implements View.OnClickLi
                 if (mUserId == mCustomerRequest.getUserId()) {
                     setTitle(R.string.strPlsWait);
                     tvMessageBox.setText(R.string.strCustCfmRqtMessage);
+                    tvMessageBox.setVisibility(View.VISIBLE);
                     notificationManager.cancel(mCustomerRequest.getCustomerRequestId());
                 } else {
                     setTitle(R.string.strCreatQtt);
@@ -523,6 +540,7 @@ public class ProjectMessages extends HelpUBaseActivity implements View.OnClickLi
                 if (mUserId == mCustomerRequest.getUserId()) {
                     setTitle(R.string.strPlsWait);
                     tvMessageBox.setText(R.string.strCustQttMessage);
+                    tvMessageBox.setVisibility(View.VISIBLE);
                     notificationManager.cancel(mCustomerRequest.getCustomerRequestId());
                 } else {
                     setTitle(R.string.strCreatQtt);
@@ -545,6 +563,7 @@ public class ProjectMessages extends HelpUBaseActivity implements View.OnClickLi
                 } else {
                     setTitle(R.string.strPlsWait);
                     tvMessageBox.setText(R.string.strSPdrCfmQttMessage);
+                    tvMessageBox.setVisibility(View.VISIBLE);
                 }
 
                 break;
@@ -553,6 +572,7 @@ public class ProjectMessages extends HelpUBaseActivity implements View.OnClickLi
                 if (mUserId == mCustomerRequest.getUserId()) {
                     setTitle(R.string.strPlsWait);
                     tvMessageBox.setText(R.string.strCustWinAwdNtfMessage);
+                    tvMessageBox.setVisibility(View.VISIBLE);
                 } else {
                     setTitle(R.string.strTitleDDPmt);
                     tvMessageBox.setVisibility(View.GONE);
@@ -566,6 +586,7 @@ public class ProjectMessages extends HelpUBaseActivity implements View.OnClickLi
                 if (mUserId == mCustomerRequest.getUserId()) {
                     setTitle(R.string.strPlsWait);
                     tvMessageBox.setText(R.string.strPlanStartDate);
+                    tvMessageBox.setVisibility(View.VISIBLE);
                     notificationManager.cancel(mCustomerRequest.getCustomerRequestId());
                 } else {
                     setTitle(R.string.strTitleRcvDwnPmt);
@@ -600,6 +621,7 @@ public class ProjectMessages extends HelpUBaseActivity implements View.OnClickLi
 
                 if (mUserId == mCustomerRequest.getUserId()) {
                     tvMessageBox.setText(R.string.strWaitSPdrReply);
+                    tvMessageBox.setVisibility(View.VISIBLE);
                 } else {
                     notificationManager.cancel(mCustomerRequest.getCustomerRequestId());
                 }
@@ -640,6 +662,7 @@ public class ProjectMessages extends HelpUBaseActivity implements View.OnClickLi
                 break;
             default:
                 tvMessageBox.setText(R.string.strUnknownAction);
+                tvMessageBox.setVisibility(View.VISIBLE);
                 break;
         }
         //endregion

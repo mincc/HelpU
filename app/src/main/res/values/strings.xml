@@ -1,9 +1,9 @@
 <resources>
-    <!--<string name="server_uri">http://192.168.1.8/HelpU/</string>-->
+    <string name="server_uri">http://192.168.1.8/HelpU/</string>
     <!--<string name="server_uri">http://helpu.hostei.com/</string>-->
     <!--<string name="server_uri">http://helpu.comuf.com/</string>-->
     <!--<string name="server_uri">http://helpu.byethost33.com/</string> (dun use because not allow call the http from app and just allow using browser) -->
-    <string name="server_uri">http://helpu.hostingsiteforfree.com/</string>
+    <!--<string name="server_uri">http://helpu.hostingsiteforfree.com/</string>-->
 
     <string-array name="hire_list">
         <item>0|Please Select...</item>
@@ -163,7 +163,7 @@
     <string name="strCustPjtDoneMessage">Project done successfully</string>
     <string name="strReSltSPdr">Are you sure you want reselect the service provider?</string>
     <string name="strTitleReSltSPdr">Reselect Service Provider?</string>
-    <string name="strPageRedirect">Laman will redirect after 10 seconds!!</string>
+    <string name="strPageRedirect">Page will redirect after 10 seconds!!</string>
     <string name="strAbtUsHireTitle">Easier way to hire services </string>
     <string name="strAbtUsHireCont">We bring several professionals service to you without any of the work by using HelpU. You can now find, compare and hire the right professional service quickly and reliably.</string>
     <string name="strAbtUsWorkTitle">Increase your customer base</string>
@@ -269,7 +269,7 @@
     <string name="action_change_password">Change Password</string>
     <string name="strInvalidPassword">Invalid Password</string>
     <string name="title_activity_account_recovery">Account Recovery</string>
-    <string name="strSendNewPassword"><![CDATA[Enter your registered email and we&apos;ll send your new password right away.]]></string>
+    <string name="strSendNewPassword"><![CDATA[Enter your registered email and we\'ll send your new password right away.]]></string>
     <string name="strEmailAddress">Email Address :</string>
     <string name="strSendEmail">Send Email</string>
     <string name="strForgetPassword">Forget Password?</string>
@@ -317,6 +317,9 @@
     <string name="strHowLongToGoYears">in %1$s years</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_location">Location</string>
+    <string name="title_activity_chat">Chat Activity</string>
+    <string name="title_activity_chat_user_list">Chat User List</string>
+    <string name="strProjectDiscussion">Project Discussion</string>
 
 
 </resources>

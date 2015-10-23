@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -25,18 +26,20 @@ import com.example.chungmin.helpu.models.UserStats;
 import com.example.chungmin.helpu.serverrequest.UserStatsManager;
 import com.readystatesoftware.viewbadger.BadgeView;
 
+import HelpUGenericUtilities.GCMUtils;
+import HelpUGenericUtilities.SystemUtils;
 import fragments.UserInfoFragment;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
 
 public class MainActivity extends HelpUBaseActivity implements View.OnClickListener {
 
-    UserLocalStore userLocalStore;
-    TextView tvTotalCountHire, tvTotalCountWork, tvTotalCountJobOffer, tvTotalCountJobDone;
-    Button btnLogout, btnHire, btnWork;
-    BadgeView badgeWork, badgeHire;
-
+    private UserLocalStore userLocalStore;
+    private TextView tvTotalCountHire, tvTotalCountWork, tvTotalCountJobOffer, tvTotalCountJobDone;
+    private Button btnLogout, btnHire, btnWork;
+    private BadgeView badgeWork, badgeHire;
     private User mUser = null;
+    private SystemUtils su;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -100,8 +103,12 @@ public class MainActivity extends HelpUBaseActivity implements View.OnClickListe
                 ((Globals) getApplication()).setIsAdmin(mUser.getIsAdmin());
                 ((Globals) this.getApplication()).setUserId(mUser.getUserId());
 
+                //Google gcm
+                GCMUtils.Init(this);
+
                 //restart the auto startup service if being kill before
-                if (!isMyServiceRunning(AutoStartUp.class)) {
+                su = new SystemUtils(this);
+                if (!su.isMyServiceRunning(AutoStartUp.class)) {
                     Intent serviceIntent = new Intent(this, AutoStartUp.class);
                     startService(serviceIntent);
                 }
@@ -157,7 +164,7 @@ public class MainActivity extends HelpUBaseActivity implements View.OnClickListe
                     });
                 }
 
-
+                checkGcmRegId();
             }
         }
 
@@ -169,6 +176,27 @@ public class MainActivity extends HelpUBaseActivity implements View.OnClickListe
         ((Globals) getApplication()).setBadgeCount(0);
         ShortcutBadger.with(getApplicationContext()).count(0);
 
+    }
+
+    private void checkGcmRegId() {
+        String newGsmRegId = GCMUtils.getRegistrationId(this);
+        String dbGcmRegId = mUser.getGcmRegId();
+        if (!newGsmRegId.equals(dbGcmRegId) && !TextUtils.isEmpty(newGsmRegId)) {
+            UserManager serverRequest = new UserManager(this);
+            mUser.setGcmRegId(newGsmRegId);
+            serverRequest.update(mUser, new Callback.GetUserCallback() {
+                @Override
+                public void complete(User returnedUser) {
+
+                }
+
+                @Override
+                public void failure(String msg) {
+                    msg = ((Globals) getApplication()).translateErrorType(msg);
+                    showAlert(msg);
+                }
+            });
+        }
     }
 
     @Override
@@ -207,7 +235,6 @@ public class MainActivity extends HelpUBaseActivity implements View.OnClickListe
         });
     }
 
-
     private boolean authenticate() {
         if (userLocalStore.getLoggedInUser() == null) {
             Intent intent = new Intent(this, Login.class);
@@ -230,16 +257,6 @@ public class MainActivity extends HelpUBaseActivity implements View.OnClickListe
                         finish();
                     }
                 }).create().show();
-    }
-
-    private boolean isMyServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
     }
 
 }

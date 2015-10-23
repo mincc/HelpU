@@ -123,7 +123,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/strDelete"
-        android:id="@+id/btnRemoveFromView"
+        android:id="@+id/btnDelete"
         android:layout_below="@+id/btnEnter"
         android:layout_alignLeft="@+id/btnEnter"
         android:layout_alignStart="@+id/btnEnter"

@@ -57,7 +57,8 @@
                 android:textColor="#000000"
                 android:textStyle="bold"
                 android:padding="20dp"
-                android:layout_alignBottom="@+id/llWaitingConfirmation" />
+                android:layout_alignBottom="@+id/llWaitingConfirmation"
+                android:visibility="gone" />
         </LinearLayout>
 
         <Button
@@ -138,15 +139,6 @@
             android:visibility="gone"
             android:background="#000000"
             android:textColor="#00ff00" />
-
-        <!--<ProgressBar-->
-        <!--android:id="@+id/progressBar"-->
-        <!--style="?android:attr/progressBarStyleInverse"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:visibility="visible"-->
-        <!--android:indeterminateDrawable="@drawable/progress"-->
-        <!--android:layout_gravity="right" />-->
 
     </RelativeLayout>
 
